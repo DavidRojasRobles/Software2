@@ -5,7 +5,7 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class OrdenRemision
+public class OrdenRemision extends Orden
 {
     // instance variables - replace the example below with your own
     private int x;
@@ -13,7 +13,7 @@ public class OrdenRemision
     /**
      * Constructor for objects of class OrdenRemision
      */
-    public OrdenRemision() extends Orden
+    public OrdenRemision()
     {
         // initialise instance variables
         x = 0;

@@ -1,22 +1,24 @@
-
-/**
- * Write a description of class Usuario here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
+package pgrado;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Usuario
-{
-    // instance variables - replace the example below with your own
+/**
+ *
+ * @author DELL
+ */
+public class Usuario {
     private String nombre;
     private String cedula;
     private String direccion;
     private String telefono;
     private ArrayList<CitaMedica> citas;
-    private ArrayList<Orden> orden;
+    private ArrayList<Orden> ordenes;
 
     /**
      * Constructor for objects of class Usuario
@@ -80,6 +82,7 @@ public class Usuario
     public void cancelarCita(CitaMedica cita){
         citas.remove(cita);
     }
+    
     
     
 }

@@ -5,7 +5,7 @@
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class OrdenProcedimiento
+public class OrdenProcedimiento extends Orden
 {
     // instance variables - replace the example below with your own
     private int x;
@@ -13,7 +13,7 @@ public class OrdenProcedimiento
     /**
      * Constructor for objects of class OrdenProcedimiento
      */
-    public OrdenProcedimiento() extends Orden
+    public OrdenProcedimiento()
     {
         // initialise instance variables
         x = 0;

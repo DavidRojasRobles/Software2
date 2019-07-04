@@ -1,13 +1,17 @@
+package pgrado;
 
-/**
- * Write a description of class CItaMedica here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
+/**
+ *
+ * @author DELL
+ */
 import java.util.*;
-import java.util.Date;
+import java.time.LocalDate; // import the LocalDate class
 
 public class CitaMedica
 {
@@ -45,8 +49,9 @@ public class CitaMedica
     {
         // put your code here
         Date today = new Date();
-        if(today == this.fecha){ //FIX!!!!!!!!!
+        if(equals(today == this.fecha)){
             System.out.println("Usted tiene una cita de " + this.especialidad + " a las " + this.hora + " en el consultorio " + this.consultorio + " de BU.");
         }
     }
 }
+
