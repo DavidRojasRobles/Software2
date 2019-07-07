@@ -10,33 +10,55 @@ package pgrado;
  *
  * @author DELL
  */
-import java.util.*;
-import java.time.LocalDate; // import the LocalDate class
+import java.time.LocalDate; // import the LocalLocalDate class
+import java.time.LocalTime;
 
 public class CitaMedica
 {
     // instance variables - replace the example below with your own
-    private String nombre;
-    private String cedula;
-    private Date fecha;
-    private String hora;
-    private String doctor;
-    private int consultorio;
-    private String especialidad;
+    private final Usuario usuario;
+    private final LocalDate fecha;
+    private final LocalTime hora;
+    private final Doctor doctor;
 
     /**
      * Constructor for objects of class CItaMedica
      */
-    public CitaMedica(String nombre, String cedula, Date fecha, String hora, String doctor, int consultorio, String especialidad)
-    {
+    
+    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor){
         // initialise instance variables
-        this.nombre = nombre;
-        this.cedula = cedula;
+        this.usuario = usuario;
         this.fecha = fecha;
         this.hora = hora;
         this.doctor = doctor;
-        this.consultorio = consultorio;
-        this.especialidad = especialidad;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+    
+    public String getDatos(){
+        String datos = "Especialidad: " + doctor.getEspecialidad()+ "\n"
+                + "Fecha: " + fecha + "\n"
+                + "Hora: " + hora + "\n"
+                + "Consultorio: " + doctor.getConsultorio() + "\n" + 
+                "Doctor: " + doctor.getNombre() + "\n\n";
+
+        return datos;
     }
 
     /**
@@ -48,9 +70,9 @@ public class CitaMedica
     public void notificar()
     {
         // put your code here
-        Date today = new Date();
-        if(equals(today == this.fecha)){
-            System.out.println("Usted tiene una cita de " + this.especialidad + " a las " + this.hora + " en el consultorio " + this.consultorio + " de BU.");
+        LocalDate today = LocalDate.now();
+        if(fecha.compareTo(today) == 0){
+            System.out.println("Usted tiene una cita de " + doctor.getEspecialidad() + " a las " + hora + " en el consultorio " + doctor.getEspecialidad() + " de BU.");
         }
     }
 }

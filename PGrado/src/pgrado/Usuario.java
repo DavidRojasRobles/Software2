@@ -6,25 +6,26 @@
 package pgrado;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  *
  * @author DELL
  */
 public class Usuario {
-    private String nombre;
-    private String cedula;
-    private String direccion;
-    private String telefono;
-    private ArrayList<CitaMedica> citas;
-    private ArrayList<Orden> ordenes;
+
+    private final String nombre;
+    private final String cedula;
+    private final String direccion;
+    private final String telefono;
+    private ArrayList<CitaMedica> citas = new ArrayList<>();
+    private ArrayList<Orden> ordenes = new ArrayList<>();
 
     /**
      * Constructor for objects of class Usuario
      */
-    public Usuario(String nombre, String cedula, String direccion, String telefono)
-    {
+    public Usuario(String nombre, String cedula, String direccion, String telefono) {
         // initialise instance variables
         this.nombre = nombre;
         this.cedula = cedula;
@@ -47,42 +48,45 @@ public class Usuario {
     public String getTelefono() {
         return telefono;
     }
-    
-    public String consultar_datos_personales(){  
+
+    //Imprime datos personales del usuario
+    public String getDatosPersonales() {
 
         String datos = "Nombre: " + getNombre() + "\n"
-                        + "Cedula: " + getCedula() + "\n"
-                        + "DIreccion: " + getDireccion() + "\n"
-                        + "Telefono: " + getTelefono() + "\n"; 
+                + "Cedula: " + getCedula() + "\n"
+                + "Direccion: " + getDireccion() + "\n"
+                + "Telefono: " + getTelefono() + "\n\n";
 
-        return datos; 
+        return datos;
 
-    }  
+    }
+
     //Devuelve todas las citas
-    public ArrayList<CitaMedica> consultarCitas(){ 
+    public void consultarCitas() {
+        if(citas.isEmpty()) System.out.println("El usuario " + nombre + " no tiene citas reservadas\n\n");
+        else{
+            for(CitaMedica c: citas){
+                System.out.println(c.getDatos());
+            }
+        }
+    }
 
-        return citas; 
+    public ArrayList<CitaMedica> consultarCitas(String filtro) {
 
-    } 
-    
-    public ArrayList<CitaMedica> consultarCitas(String filtro){ 
-       
         ArrayList<CitaMedica> citasFiltradas = new ArrayList<CitaMedica>();
         //Filtrar citas
 
-        return citasFiltradas; 
-    }  
-    
-    public void solicitarCita(Usuario user, Date fecha, String hora, String doctor, int consultorio, String especialidad){
-        
-        CitaMedica cita = new CitaMedica(user.getNombre(), user.getCedula(), fecha, hora, doctor, consultorio, especialidad);
+        return citasFiltradas;
+    }
+
+    public void solicitarCita(Usuario user, LocalDate fecha, LocalTime hora, Doctor doctor) {
+
+        CitaMedica cita = new CitaMedica(user, fecha, hora, doctor);
         citas.add(cita);
     }
-    
-    public void cancelarCita(CitaMedica cita){
+
+    public void cancelarCita(CitaMedica cita) {
         citas.remove(cita);
     }
-    
-    
-    
+
 }
