@@ -5,15 +5,32 @@
  */
 package pgrado;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
+ * Esta clase representa los doctores que prestan servicios en UISALUD.
  *
- * @author DELL
+ * De cada doctor se almacena su nombre, consultorio, especialidad y su horario
+ * de atención semanal.
+ *
+ * Este horario se guarda como un HashMap que consta de una llave con el nombre
+ * del día de la semana y un arreglo con 10 variables que corresponden a las
+ * horas de atención (de 8 am a 6 pm).
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
  */
 public class Doctor {
+
     private String nombre;
     private String consultorio;
     private String especialidad;
+    private HashMap<String, boolean[]> horario = new HashMap<>();
 
+    /**
+     * Constructor para los objetos de la clase Doctor.
+     */
     public Doctor(String nombre, String consultorio, String especialidad) {
         this.nombre = nombre;
         this.consultorio = consultorio;
@@ -31,16 +48,43 @@ public class Doctor {
     public String getEspecialidad() {
         return especialidad;
     }
-    
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    /**
+     * Añade un registro al horario de atención.
+     *
+     * @param key Dia de la semana a añadir.
+     * @param horas Horas de 8:00 a 18:00, true si atiende.
+     */
+    public void anadirDia(String key, boolean[] horas) {
+        horario.put(key, horas);
     }
 
-    public void setConsultorio(String consultorio) {
-        this.consultorio = consultorio;
+    /**
+     * Elimina un registro al horario de atención.
+     *
+     * @param key Dia de la semana a eliminar.
+     */
+    public void eliminarDia(String key) {
+        horario.remove(key);
     }
 
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+    /**
+     * Imprime el horario del médico en formato humano. Toma el arreglo de
+     * valores boolean y les da un formato de horas de reloj digital.
+     */
+    public void printHorario() {
+
+        for (HashMap.Entry<String, boolean[]> entry : horario.entrySet()) {
+            String dia = entry.getKey();
+            boolean[] horas = entry.getValue();
+
+            String formatoHoras = "";
+            for (int i = 0; i < horas.length; i++) {
+                if (horas[i] == true) {
+                    formatoHoras += (8 + i) + ":00\t";
+                }
+            }
+            System.out.println(dia + ": " + formatoHoras);
+        }
     }
 }

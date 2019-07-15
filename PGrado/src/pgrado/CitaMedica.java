@@ -5,28 +5,28 @@ package pgrado;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-/**
- *
- * @author DELL
- */
-import java.time.LocalDate; // import the LocalLocalDate class
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class CitaMedica
-{
-    // instance variables - replace the example below with your own
+/**
+ * Esta clase representa las citas médicas asignadas a usuarios.
+ *
+ * Depende de un usuario, una fecha, una hora y un doctor.
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
+ */
+public class CitaMedica {
+
     private final Usuario usuario;
     private final LocalDate fecha;
     private final LocalTime hora;
     private final Doctor doctor;
 
     /**
-     * Constructor for objects of class CItaMedica
+     * Constructor para los objetos de la clase CitaMedica.
      */
-    
-    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor){
-        // initialise instance variables
+    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor) {
         this.usuario = usuario;
         this.fecha = fecha;
         this.hora = hora;
@@ -41,39 +41,36 @@ public class CitaMedica
         return fecha;
     }
 
-
     public LocalTime getHora() {
         return hora;
     }
 
-
     public Doctor getDoctor() {
         return doctor;
     }
-    
-    public String getDatos(){
-        String datos = "Especialidad: " + doctor.getEspecialidad()+ "\n"
+
+    /**
+     * Retorna cadena con los datos de la cita.
+     *
+     * @return datos de la cita médica como único String
+     */
+    public String getDatos() {
+        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
                 + "Fecha: " + fecha + "\n"
                 + "Hora: " + hora + "\n"
-                + "Consultorio: " + doctor.getConsultorio() + "\n" + 
-                "Doctor: " + doctor.getNombre() + "\n\n";
+                + "Consultorio: " + doctor.getConsultorio() + "\n"
+                + "Doctor: " + doctor.getNombre() + "\n\n";
 
         return datos;
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Imprime un recordatorio cuando el momento de la cita se aproxima.
      */
-    public void notificar()
-    {
-        // put your code here
-        LocalDate today = LocalDate.now();
-        if(fecha.compareTo(today) == 0){
-            System.out.println("Usted tiene una cita de " + doctor.getEspecialidad() + " a las " + hora + " en el consultorio " + doctor.getEspecialidad() + " de BU.");
-        }
+    public void notificar() {
+//        LocalDate today = LocalDate.now();
+//        if(fecha.compareTo(today) == 0){
+//            System.out.println("Usted tiene una cita de " + doctor.getEspecialidad() + " a las " + hora + " en el consultorio " + doctor.getEspecialidad() + " de BU.");
+//        }
     }
 }
-

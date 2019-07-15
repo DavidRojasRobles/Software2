@@ -8,11 +8,19 @@ package pgrado;
 import java.time.LocalDate;
 
 /**
+ * Esta clase representa las órdenes de Remisión prescritas a los usuarios
+ * por los doctores tras una cita médica.
  *
- * @author DELL
+ * Con remisión se refiere a una cita medica de cualquier especialidad.
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
  */
 public class OrdenRemision extends Orden {
-
+    
+    /**
+     * Constructor para los objetos de la clase OrdenRemision.
+     */
     public OrdenRemision(Usuario usuario, CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
         super(usuario, cita, observaciones, fechaVigencia);
     }
