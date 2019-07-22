@@ -19,12 +19,12 @@ import java.time.LocalDate;
 public class OrdenMedicamento extends Orden {
 
     private Boolean reclamado;
-    
+
     /**
      * Constructor para los objetos de la clase OrdenMedicamentoS.
      */
-    public OrdenMedicamento(String estado, Usuario usuario, CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
-        super(usuario, cita, observaciones, fechaVigencia);
+    public OrdenMedicamento(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
+        super(cita, observaciones, fechaVigencia);
         this.reclamado = false;
     }
 

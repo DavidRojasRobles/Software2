@@ -12,14 +12,15 @@ import java.time.LocalDate;
  * tras una cita médica.
  *
  * Cada orden cuenta con una fecha máxima de vigencia y un campo de
- * observaciones escritas por el médico.
+ * observaciones escritas por el médico. Estas observaciones pueden corresponder
+ * al nombre de algún medicamento, un exámem que se debe realizar o la
+ * especialidad a la cual se remite al usuario.
  *
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
 public class Orden {
 
-    private final Usuario usuario;
     private final CitaMedica cita;
     private final String observaciones;
     private final LocalDate fechaVigencia;
@@ -28,8 +29,7 @@ public class Orden {
     /**
      * Constructor para los objetos de la clase Orden.
      */
-    public Orden(Usuario usuario, CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
-        this.usuario = usuario;
+    public Orden(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
         this.cita = cita;
         this.observaciones = observaciones;
         this.fechaVigencia = fechaVigencia;
@@ -40,12 +40,31 @@ public class Orden {
         return vigencia;
     }
 
+    public String getObservaciones() {
+        return observaciones;
+    }
+
     public Usuario getUsuario() {
-        return usuario;
+        return cita.getUsuario();
     }
 
     public CitaMedica getCita() {
         return cita;
+    }
+
+    /**
+     * Retorna cadena con los datos de la orden.
+     *
+     * @return datos de la orden como único String
+     */
+    public String getDatos() {
+        String datos = "Doctor: " + cita.getDoctor()
+                + "Especialidad: " + cita.getDoctor().getEspecialidad() + "\n"
+                + "Ordenado: " + cita.getFecha() + "\n"
+                + "Observaciones: " + observaciones + "\n"
+                + "VIgente hasta: " + fechaVigencia + "\n\n";
+
+        return datos;
     }
 
     /**

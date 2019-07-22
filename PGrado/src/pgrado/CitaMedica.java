@@ -11,66 +11,37 @@ import java.time.LocalTime;
 /**
  * Esta clase representa las citas médicas asignadas a usuarios.
  *
- * Depende de un usuario, una fecha, una hora y un doctor.
+ * Depende de un usuario, una fecha, una hora y un doctor. Si no se tiene una
+ * orden, sólo se pueden crear citas con un médico general.
+ *
+ * Las citas médicas pueden o no generar órdenes.
  *
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class CitaMedica {
-
-    private final Usuario usuario;
-    private final LocalDate fecha;
-    private final LocalTime hora;
-    private final Doctor doctor;
+public class CitaMedica extends Procedimiento {
 
     /**
-     * Constructor para los objetos de la clase CitaMedica.
+     * Constructor para los objetos de la clase CitaMedica con orden.
+     */
+    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
+        super(usuario, fecha, hora, doctor, orden);
+    }
+
+    /**
+     * Constructor para los objetos de la clase CitaMedica sin orden.
      */
     public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor) {
-        this.usuario = usuario;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.doctor = doctor;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
+        super(usuario, fecha, hora, doctor);
     }
 
     /**
-     * Retorna cadena con los datos de la cita.
-     *
-     * @return datos de la cita médica como único String
+     * Genera una órden y la registra en la lista de órdenes del usuario y en su
+     * historia clínica.
      */
-    public String getDatos() {
-        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
-                + "Fecha: " + fecha + "\n"
-                + "Hora: " + hora + "\n"
-                + "Consultorio: " + doctor.getConsultorio() + "\n"
-                + "Doctor: " + doctor.getNombre() + "\n\n";
-
-        return datos;
-    }
-
-    /**
-     * Imprime un recordatorio cuando el momento de la cita se aproxima.
-     */
-    public void notificar() {
-//        LocalDate today = LocalDate.now();
-//        if(fecha.compareTo(today) == 0){
-//            System.out.println("Usted tiene una cita de " + doctor.getEspecialidad() + " a las " + hora + " en el consultorio " + doctor.getEspecialidad() + " de BU.");
-//        }
+    public void generarOrden(String observaciones, LocalDate fechaVigencia) {
+        Orden orden = new Orden(this, observaciones, fechaVigencia);
+        getUsuario().ordenar(orden);
+        getUsuario().archivar(orden.getDatos());
     }
 }
