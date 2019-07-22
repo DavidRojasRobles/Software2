@@ -93,7 +93,7 @@ public class Usuario {
      */
     public void consultarCitas() {
         if (citas.isEmpty()) {
-            System.out.println("El usuario " + nombre + " no tiene citas reservadas\n\n");
+            System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
         } else {
             for (CitaMedica c : citas) {
                 System.out.println(c.getDatos());
@@ -119,9 +119,9 @@ public class Usuario {
     /**
      * Crea la cita médica y la añade a la lista de citas pendientes.
      */
-    public void solicitarCita(Usuario user, LocalDate fecha, LocalTime hora, Doctor doctor) {
+    public void solicitarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
 
-        CitaMedica cita = new CitaMedica(user, fecha, hora, doctor);
+        CitaMedica cita = new CitaMedica(this, fecha, hora, doctor);
         citas.add(cita);
     }
 
