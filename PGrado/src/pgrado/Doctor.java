@@ -5,8 +5,9 @@
  */
 package pgrado;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Esta clase representa los doctores que prestan servicios en UISALUD.
@@ -27,6 +28,8 @@ public class Doctor {
     private String consultorio;
     private String especialidad;
     private HashMap<String, boolean[]> horario = new HashMap<>();
+    private HashMap<LocalDate, LocalTime> agenda = new HashMap<>();
+    
 
     /**
      * Constructor para los objetos de la clase Doctor.
@@ -86,5 +89,9 @@ public class Doctor {
             }
             System.out.println(dia + ": " + formatoHoras);
         }
+    }
+    
+    public void agendar(LocalDate fecha, LocalTime hora){
+        agenda.put(fecha, hora);
     }
 }

@@ -120,6 +120,8 @@ public class Usuario {
      * Crea la cita médica y la añade a la lista de citas pendientes.
      */
     public void solicitarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
+        
+        
 
         CitaMedica cita = new CitaMedica(this, fecha, hora, doctor);
         citas.add(cita);
