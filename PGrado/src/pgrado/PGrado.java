@@ -46,14 +46,14 @@ public class PGrado {
         Doctor d2 = new Doctor("Dr. Two", "102", "Cardiologia");
         d2.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
             false, true, true, true, true, true});
-        d2.anadirDia("wEDNESDAY", new boolean[]{true, true, true, true, true,
+        d2.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
             false, false, false, false, false, false});
         doctores.add(d2);
 
         Doctor d3 = new Doctor("Dr. Three", "103", "Odontologia");
         d3.anadirDia("MONDAY", new boolean[]{false, false, false, false, false,
             false, true, true, true, true, true});
-        d3.anadirDia("wEDNESDAY", new boolean[]{true, true, true, true, true,
+        d3.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
             false, false, false, false, false, false});
         d3.anadirDia("FRIDAY", new boolean[]{true, true, true, true, true,
             false, false, false, false, false, false});
@@ -132,7 +132,7 @@ public class PGrado {
 
         for(Doctor i : list){
             System.out.println(i.getNombre() + " esta disponible los dias: ");
-            i.printHorario();
+            i.printHorarioSemanal();
             System.out.println("------------");            
         }
     }
@@ -178,7 +178,7 @@ public class PGrado {
         
         int hora = 8; // La hora que quiere el usuario
         
-        doctores.get(0).agendar(fecha, LocalTime.of(hora, 0)); 
+        doctores.get(0).modificarAgenda(fecha, LocalTime.of(hora, 0)); 
         
         System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
 

@@ -127,7 +127,7 @@ public class Doctor {
      * 
      * Cuando la fecha ya existe, se reserva la hora cambiando el campo a false.
      */
-    public void agendar(LocalDate fecha, LocalTime hora){
+    public void modificarAgenda(LocalDate fecha, LocalTime hora){
         enterAgenda(fecha);
         //Revisa si es un horario de trabajo del doctor
         if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true)

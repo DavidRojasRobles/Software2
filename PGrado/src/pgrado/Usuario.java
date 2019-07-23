@@ -115,18 +115,16 @@ public class Usuario {
 
         return citasFiltradas;
     }
-
+    
     /**
-     * Crea la cita médica y la añade a la lista de citas pendientes.
+     * Crea la cita médica, la añade a la lista de citas pendientes y modifica la agenda del doctor.
      */
-    public void solicitarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
-        
-        
-
-        CitaMedica cita = new CitaMedica(this, fecha, hora, doctor);
-        citas.add(cita);
+    public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
+        doctor.modificarAgenda(fecha, hora);
+        citas.add(new CitaMedica(this, fecha, hora, doctor));
     }
-
+    
+    
     /**
      * Elimina una cita de la lista de citas pendientes.
      *
