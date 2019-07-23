@@ -5,12 +5,11 @@
  */
 package pgrado;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Set;
 
 /**
  * Clase principal de la aplicación UISalud Móvil.
@@ -162,19 +161,30 @@ public class PGrado {
 //        System.out.println(b);
 //        System.out.println(b.getHour() == 10);
 //        
-        Scanner scan = new Scanner(System.in);
-        Usuario ana = afiliados.get(0);
-        Set<String> especialidades = new HashSet<>(directorio.values());
-        //Solicitar cita
-        System.out.println("Digite especialidad que desea:");
-        for (int i = 0; i < especialidades.size(); i++) {
-            System.out.println("1. " + especialidades.hashCode());
-        }
-        printDoctores(filtrarEsp(directorio, "General"));
+//        Scanner scan = new Scanner(System.in);
+//        Usuario ana = afiliados.get(0);
+//        Set<String> especialidades = new HashSet<>(directorio.values());
+//        //Solicitar cita
+//        System.out.println("Digite especialidad que desea:");
+//        for (int i = 0; i < especialidades.size(); i++) {
+//            System.out.println("1. " + especialidades.hashCode());
+//        }
+//        printDoctores(filtrarEsp(directorio, "General"));
 //        printMap(directorio);
         
+        doctores.get(0).printHorarioSemanal();
+        LocalDate fecha = LocalDate.of(2019, 7, 22);
+        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
         
+        int hora = 8; // La hora que quiere el usuario
+        
+        doctores.get(0).agendar(fecha, LocalTime.of(hora, 0)); 
+        
+        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
 
+        doctores.get(0).cancelar(fecha, LocalTime.of(hora, 0));
+        
+        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
     }
 
 }
