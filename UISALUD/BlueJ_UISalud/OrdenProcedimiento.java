@@ -1,33 +1,30 @@
+import java.time.LocalDate;
 
 /**
- * Write a description of class OrdenProcedimiento here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Esta clase representa las órdenes de procedimientos prescritas a los usuarios
+ * por los doctores tras una cita médica.
+ *
+ * Con procedimiento se refiere a exámenes y otras citas médicas que requieren
+ * una orden, como una cita con un especialista.
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
  */
-public class OrdenProcedimiento extends Orden
-{
-    // instance variables - replace the example below with your own
-    private int x;
+public class OrdenProcedimiento extends Orden {
+
+    private String especialidad;
 
     /**
-     * Constructor for objects of class OrdenProcedimiento
+     * Constructor para los objetos de la clase OrdenProcedimiento.
      */
-    public OrdenProcedimiento()
-    {
-        // initialise instance variables
-        x = 0;
+    public OrdenProcedimiento(CitaMedica cita, String especialidad, String observaciones, LocalDate fechaVigencia) {
+        super(cita, observaciones, fechaVigencia);
+
+        this.especialidad = especialidad.substring(0, 1).toUpperCase()
+                + especialidad.substring(1);
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public String getEspecialidad() {
+        return especialidad;
     }
 }

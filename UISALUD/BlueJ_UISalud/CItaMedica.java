@@ -1,52 +1,40 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
- * Write a description of class CItaMedica here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Esta clase representa las citas médicas asignadas a usuarios.
+ *
+ * Depende de un usuario, una fecha, una hora y un doctor. Si no se tiene una
+ * orden, sólo se pueden crear citas con un médico general.
+ *
+ * Las citas médicas pueden o no generar órdenes.
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
  */
-
-import java.util.*;
-import java.util.Date;
-
-public class CitaMedica
-{
-    // instance variables - replace the example below with your own
-    private String nombre;
-    private String cedula;
-    private Date fecha;
-    private String hora;
-    private String doctor;
-    private int consultorio;
-    private String especialidad;
+public class CitaMedica extends Procedimiento {
 
     /**
-     * Constructor for objects of class CItaMedica
+     * Constructor para los objetos de la clase CitaMedica con orden.
      */
-    public CitaMedica(String nombre, String cedula, Date fecha, String hora, String doctor, int consultorio, String especialidad)
-    {
-        // initialise instance variables
-        this.nombre = nombre;
-        this.cedula = cedula;
-        this.fecha = fecha;
-        this.hora = hora;
-        this.doctor = doctor;
-        this.consultorio = consultorio;
-        this.especialidad = especialidad;
+    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
+        super(usuario, fecha, hora, doctor, orden);
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
+     * Constructor para los objetos de la clase CitaMedica sin orden.
      */
-    public void notificar()
-    {
-        // put your code here
-        Date today = new Date();
-        if(today == this.fecha){ //FIX!!!!!!!!!
-            System.out.println("Usted tiene una cita de " + this.especialidad + " a las " + this.hora + " en el consultorio " + this.consultorio + " de BU.");
-        }
+    public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor) {
+        super(usuario, fecha, hora, doctor);
+    }
+
+    /**
+     * Genera una órden y la registra en la lista de órdenes del usuario y en su
+     * historia clínica.
+     */
+    public void generarOrden(String observaciones, LocalDate fechaVigencia) {
+        Orden orden = new Orden(this, observaciones, fechaVigencia);
+        getUsuario().ordenar(orden);
+        getUsuario().archivar(orden.getDatos());
     }
 }

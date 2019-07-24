@@ -1,33 +1,32 @@
+import java.time.LocalDate;
 
 /**
- * Write a description of class OrdenMedicamento here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Esta clase representa las órdenes de medicamentos prescritas a los usuarios
+ * por los doctores tras una cita médica.
+ *
+ * Cada una guarda el registro de si el medicamento fue reclamado o no.
+ *
+ * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
+ * @version 14 / 07 / 2019
  */
-public class OrdenMedicamento extends Orden
-{
-    // instance variables - replace the example below with your own
-    private int x;
+public class OrdenMedicamento extends Orden {
+
+    private Boolean reclamado;
 
     /**
-     * Constructor for objects of class OrdenMedicamento
+     * Constructor para los objetos de la clase OrdenMedicamentoS.
      */
-    public OrdenMedicamento()
-    {
-        // initialise instance variables
-        x = 0;
+    public OrdenMedicamento(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
+        super(cita, observaciones, fechaVigencia);
+        this.reclamado = false;
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    public Boolean getReclamado() {
+        return reclamado;
     }
+
+    public void setReclamado(Boolean reclamado) {
+        this.reclamado = reclamado;
+    }
+
 }
