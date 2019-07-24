@@ -87,6 +87,14 @@ public class Usuario {
     public void archivar(String informe) {
         historia.add(informe);
     }
+    
+    public String imprimirHistoria(){
+        String salida = "";
+        for(int i=0; i<historia.size(); i++){
+            salida = salida+historia.get(i)+"\n\n";
+        }
+        return salida;
+    }
 
     public void ordenar(Orden orden) {
         ordenes.add(orden);
@@ -231,8 +239,9 @@ public class Usuario {
      */
     private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
         if (doctor.getEspecialidad().equals("General")) {
-            doctor.modificarAgenda(fecha, hora);
-            citas.add(new CitaMedica(this, fecha, hora, doctor));
+            CitaMedica c = new CitaMedica(this, fecha, hora, doctor);
+            doctor.modificarAgenda(c, fecha, hora);
+            citas.add(c);            
         } else {
             System.out.println("La cita no fue agendada.\n");
             System.out.println("Necesita una orden para obtener citas con "
@@ -247,7 +256,8 @@ public class Usuario {
      */
     public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
         if (orden != null) {
-            doctor.modificarAgenda(fecha, hora);
+            CitaMedica c = new CitaMedica(this, fecha, hora, doctor);
+            doctor.modificarAgenda(c, fecha, hora);
             citas.add(new CitaMedica(this, fecha, hora, doctor));
         } else {
             System.out.println("La orden es nula");

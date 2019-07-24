@@ -7,11 +7,9 @@ package pgrado;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
-
+import java.util.Scanner;
 /**
  * Esta clase representa los doctores que prestan servicios en UISALUD.
  *
@@ -29,6 +27,7 @@ import java.util.Locale;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
+
 public class Doctor {
 
     private String nombre;
@@ -37,6 +36,7 @@ public class Doctor {
     private HashMap<String, boolean[]> horario = new HashMap<>();
 //    private Agenda agenda;
     private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
+    private ArrayList<CitaMedica> citas = new ArrayList<CitaMedica>();
     
     
 
@@ -127,11 +127,29 @@ public class Doctor {
      * 
      * Cuando la fecha ya existe, se reserva la hora cambiando el campo a false.
      */
-    public void modificarAgenda(LocalDate fecha, LocalTime hora){
+    public void modificarAgenda(CitaMedica c, LocalDate fecha, LocalTime hora){
         enterAgenda(fecha);
         //Revisa si es un horario de trabajo del doctor
-        if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true)
-                agenda.get(fecha)[hora.getHour()-8] = false;
+        if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true){
+            agenda.get(fecha)[hora.getHour()-8] = false;
+            citas.add(c);
+        }         
+    }
+    
+    public void crearEvolucion(String texto){
+        Scanner scan = new Scanner(System.in);
+        System.out.println(mostrarPacientes());
+        String p = scan.nextLine();
+        citas.get(Integer.parseInt(p)-1).getUsuario().archivar(texto);
+    }
+    
+    public String mostrarPacientes(){
+//        System.out.println("Sus citas Médicas por atender:\n");
+        String salida = "Sus citas Médicas por atender:\n";
+        for(int i=0; i<citas.size(); i++){
+            salida = salida+(i+1)+". "+citas.get(i).getFecha().toString()+" "+citas.get(i).getUsuario().getNombre()+"\n";
+        }
+        return salida;
     }
     
     /**
