@@ -40,8 +40,8 @@ public class PGrado {
      */
     public static void onStart() {
         Doctor d1 = new Doctor("Dr. One", "101", "General");
-        d1.anadirDia("MONDAY", new boolean[]{true, true, true, false, false,
-            false, false, false, true, true, false});
+        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
+            false, false, false, false, false, false});
         d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
             false, false, false, true, true, false});
         doctores.add(d1);
@@ -113,9 +113,16 @@ public class PGrado {
 
         onStart();
         
+        afiliados.get(0).consultarCitas();
         afiliados.get(0).solicitarCita(doctores, especialidades);
-        afiliados.get(1).solicitarCita(doctores, especialidades);
-        afiliados.get(2).solicitarCita(doctores, especialidades);
+        afiliados.get(0).consultarCitas();
+        
+//        afiliados.get(0).solicitarCita(doctores, especialidades);
+//        afiliados.get(1).solicitarCita(doctores, especialidades);
+//        afiliados.get(2).solicitarCita(doctores, especialidades);
+//        afiliados.get(3).solicitarCita(doctores, especialidades);
+//        afiliados.get(4).solicitarCita(doctores, especialidades);
+//        afiliados.get(5).solicitarCita(doctores, especialidades);
 
 		
 		//        doctores.get(0).printHorarioSemanal();

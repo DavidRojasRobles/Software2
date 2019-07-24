@@ -19,11 +19,19 @@ import java.time.LocalDate;
  */
 public class OrdenProcedimiento extends Orden {
 
+    private String especialidad;
+
     /**
      * Constructor para los objetos de la clase OrdenProcedimiento.
      */
-    public OrdenProcedimiento(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
+    public OrdenProcedimiento(CitaMedica cita, String especialidad, String observaciones, LocalDate fechaVigencia) {
         super(cita, observaciones, fechaVigencia);
+
+        this.especialidad = especialidad.substring(0, 1).toUpperCase()
+                + especialidad.substring(1);
     }
 
+    public String getEspecialidad() {
+        return especialidad;
+    }
 }

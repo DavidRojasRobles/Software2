@@ -9,6 +9,7 @@ import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.TreeSet;
 
@@ -133,16 +134,36 @@ public class Usuario {
 
         System.out.println("Bienvenido, " + this.nombre + "!\n");
 
-        do {
+        do { // solicitar cita
+            boolean remitido = false;
             String esp;
-            do {
-                System.out.println("Elija una especialidad: ");
-                for (String e : especialidades) {
-                    System.out.println("- " + e);
+            OrdenProcedimiento orden = null;
+            do { // tiene orden
+                do { // la especialidad existe
+                    System.out.println("Elija una especialidad: ");
+                    for (String e : especialidades) {
+                        System.out.println("- " + e);
+                    }
+                    esp = scan.nextLine();
+                    esp = esp.substring(0, 1).toUpperCase() + esp.substring(1);
+                } while (!especialidades.contains(esp));
+
+                if (!esp.equals("General")) {
+                    for (OrdenProcedimiento ord : ordenesPro()) {
+                        if (ord.getEspecialidad().equals(esp)) {
+                            remitido = true;
+                            orden = ord;
+                        }
+                    }
+                    if (!remitido) {
+                        System.out.println("\nNecesita una orden para obtener "
+                                + "para citas con especialistas. Por favor, "
+                                + "solicite una cita con un médico general para "
+                                + "que lo remita.\n");
+
+                    }
                 }
-                esp = scan.nextLine();
-                esp = esp.substring(0, 1).toUpperCase() + esp.substring(1);
-            } while (!especialidades.contains(esp));
+            } while (!remitido && !esp.equals("General"));
 
             do {
                 System.out.println("\nElija un doctor (#): ");
@@ -154,37 +175,36 @@ public class Usuario {
             } while (!(abs(d) < docs.size()));
 
             docs.get(d).printHorarioSemanal();
-
             String f;
-            boolean valido = false;
-            do {
-                System.out.println("\nElija una fecha (dd/mm/aa): ");
-                f = scan.nextLine();
-                String[] farr = f.replaceAll("\\s+", "").split("/");
-
-                fecha = LocalDate.of(
-                        Integer.parseInt(farr[2]),
-                        Integer.parseInt(farr[1]),
-                        Integer.parseInt(farr[0]));
-                if (docs.get(d).verificarFecha(fecha)) {
-                    valido = true;
-                } else {
-                    System.out.println("\nNo hay citas disponibles para esta fecha.\n\n");
-                }
-
-            } while (!valido);
-
-            System.out.println("\nPara este dia, las horas disponibles son: \n");
-            System.out.println(docs.get(d).disponibilidadStr(fecha));
-
             String h;
-            do{
+            do {
+                boolean valido = false;
+                do {
+                    System.out.println("\nElija una fecha (dd/mm/aa): ");
+                    f = scan.nextLine();
+                    String[] farr = f.replaceAll("\\s+", "").split("/");
+
+                    fecha = LocalDate.of(
+                            Integer.parseInt(farr[2]),
+                            Integer.parseInt(farr[1]),
+                            Integer.parseInt(farr[0]));
+                    if (docs.get(d).verificarFecha(fecha)) {
+                        valido = true;
+                    } else {
+                        System.out.println("\nNo hay citas disponibles para esta fecha.\n\n");
+                    }
+
+                } while (!valido);
+
+                System.out.println("\nPara este dia, las horas disponibles son: \n");
+                System.out.println(docs.get(d).disponibilidadStr(fecha));
+
                 System.out.println("\nElija una hora:");
                 h = scan.nextLine();
 
                 hora = LocalTime.of(
                         Integer.parseInt(h.replaceAll(":00", "")), 0);
-            }while(!docs.get(d).verificarHora(fecha, hora));
+            } while (!docs.get(d).verificarHora(fecha, hora));
 
             System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
                     + "\nFecha: " + f + "\nHora: " + h + ":00");
@@ -192,7 +212,11 @@ public class Usuario {
             conm = scan.nextLine();
 
             if (conm.equals("s")) {
-                AgendarCita(fecha, hora, docs.get(d));
+                if (!remitido) {
+                    AgendarCita(fecha, hora, docs.get(d));
+                } else {
+                    AgendarCita(fecha, hora, docs.get(d), orden);
+                }
                 System.out.println("\nCita agendada correctamente.\n");
             } else {
                 System.out.println("No se agendó la cita.\n\n");
@@ -205,9 +229,29 @@ public class Usuario {
      * Crea la cita médica, la añade a la lista de citas pendientes y modifica
      * la agenda del doctor.
      */
-    public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
-        doctor.modificarAgenda(fecha, hora);
-        citas.add(new CitaMedica(this, fecha, hora, doctor));
+    private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
+        if (doctor.getEspecialidad().equals("General")) {
+            doctor.modificarAgenda(fecha, hora);
+            citas.add(new CitaMedica(this, fecha, hora, doctor));
+        } else {
+            System.out.println("La cita no fue agendada.\n");
+            System.out.println("Necesita una orden para obtener citas con "
+                    + "especialistas. Por favor, solicite una cita con un médico"
+                    + "general para que lo remita.\n");
+        }
+    }
+
+    /**
+     * Crea la cita médica, la añade a la lista de citas pendientes y modifica
+     * la agenda del doctor.
+     */
+    public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
+        if (orden != null) {
+            doctor.modificarAgenda(fecha, hora);
+            citas.add(new CitaMedica(this, fecha, hora, doctor));
+        } else {
+            System.out.println("La orden es nula");
+        }
     }
 
     /**
@@ -235,6 +279,51 @@ public class Usuario {
             }
         }
         return docEsp;
+    }
+
+    private OrdenProcedimiento solicitarEspecialidad(TreeSet<String> especialidades) {
+        Scanner scan = new Scanner(System.in);
+        boolean remitido = false;
+        String esp;
+        OrdenProcedimiento orden = null;
+        do { // tiene orden
+            do { // la especialidad existe
+                System.out.println("Elija una especialidad: ");
+                for (String e : especialidades) {
+                    System.out.println("- " + e);
+                }
+                esp = scan.nextLine();
+                esp = esp.substring(0, 1).toUpperCase() + esp.substring(1);
+            } while (!especialidades.contains(esp));
+
+            if (!esp.equals("General")) {
+                for (OrdenProcedimiento ord : ordenesPro()) {
+                    if (ord.getEspecialidad().equals(esp)) {
+                        remitido = true;
+                        orden = ord;
+                    }
+                }
+                if (!remitido) {
+                    System.out.println("\nNecesita una orden para obtener "
+                            + "para citas con especialistas. Por favor, "
+                            + "solicite una cita con un médico general para "
+                            + "que lo remita.\n");
+
+                }
+            }
+        } while (!remitido && !esp.equals("General"));
+
+        return orden;
+    }
+
+    private ArrayList<OrdenProcedimiento> ordenesPro() {
+        ArrayList<OrdenProcedimiento> ordenesPro = new ArrayList<>();
+        for (Orden ord : ordenes) {
+            if (ord.getClass() == OrdenProcedimiento.class) {
+                ordenesPro.add((OrdenProcedimiento) ord);
+            }
+        }
+        return ordenesPro;
     }
 
 }
