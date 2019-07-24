@@ -6,10 +6,14 @@
 package pgrado;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
+
 /**
  * Esta clase representa los doctores que prestan servicios en UISALUD.
  *
@@ -27,16 +31,14 @@ import java.util.Scanner;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-
 public class Doctor {
 
     private String nombre;
     private String consultorio;
     private String especialidad;
     private HashMap<String, boolean[]> horario = new HashMap<>();
-//    private Agenda agenda;
+    private ArrayList<CitaMedica> citas = new ArrayList<>();
     private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
-    private ArrayList<CitaMedica> citas = new ArrayList<CitaMedica>();
     
     
 
@@ -190,10 +192,25 @@ public class Doctor {
     }
     
     public boolean verificarFecha(LocalDate fecha){
-        return horario.containsKey(fecha.getDayOfWeek().toString());
+        return ((horario.containsKey(fecha.getDayOfWeek().toString())) &&
+                !fecha.isBefore(LocalDate.now()));
     }
     
     public boolean verificarHora(LocalDate fecha, LocalTime hora){
-        return agenda.get(fecha)[hora.getHour()-8] == true;
+        return ((agenda.get(fecha)[hora.getHour()-8] == true) && !LocalDateTime.of(fecha, hora).isBefore(LocalDateTime.now()));
+    }
+    
+    public void ordenarFechaHora(){
+        Comparator<CitaMedica> byDate = new Comparator<CitaMedica>() {
+            public int compare(CitaMedica left, CitaMedica right) {
+                if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        };
+
+        Collections.sort(citas, byDate);
     }
 }

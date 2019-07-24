@@ -116,7 +116,7 @@ public class PGrado {
         afiliados.get(0).consultarCitas();
         afiliados.get(0).solicitarCita(doctores, especialidades);
         afiliados.get(0).consultarCitas();
-        doctores.get(4).crearEvolucion("Tiene diarrea");
+        doctores.get(0).crearEvolucion("Tiene diarrea");
         System.out.println(afiliados.get(0).imprimirHistoria());
         
 //        afiliados.get(0).solicitarCita(doctores, especialidades);
