@@ -8,6 +8,8 @@ package pgrado;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Scanner;
+import java.util.TreeSet;
 
 /**
  * Esta clase gestiona las funciones del usuario de UISALUD.
@@ -115,16 +117,69 @@ public class Usuario {
 
         return citasFiltradas;
     }
-    
+
     /**
-     * Crea la cita médica, la añade a la lista de citas pendientes y modifica la agenda del doctor.
+     * Solicita los datos necesarios para crear la cita médica.
+     */
+    public void solicitarCita(ArrayList<Doctor> doctores, TreeSet<String> especialidades) {
+        Scanner scan = new Scanner(System.in);
+        Scanner scanInt = new Scanner(System.in);
+        ArrayList<Doctor> docs = new ArrayList<>();
+        int d;
+        LocalTime hora;
+        LocalDate fecha;
+        
+        String confirmacion = "";
+        do{
+            System.out.println("Elija una especialidad: \n");
+            for (String e : especialidades) {
+                System.out.println("- " + e);
+            }
+            String esp = scan.nextLine();
+
+            System.out.println("\nElija un doctor (#): \n");
+            docs = filtrarEsp(doctores, esp);
+            for (int i = 0; i < docs.size(); i++) {
+                System.out.println((i+1) + ". " + docs.get(i).getNombre());
+            }
+            d = scanInt.nextInt()-1;
+
+            System.out.println("\nElija una fecha (dd/mm/aa): \n");
+            String f = scan.nextLine();
+            String[] farr = f.replaceAll("\\s+", "").split("/");
+			
+            fecha = LocalDate.of(
+                    Integer.parseInt(farr[2]),
+                    Integer.parseInt(farr[1]),
+                    Integer.parseInt(farr[0]));
+
+            System.out.println("\nPara este dia, las horas disponibles son: \n");
+            System.out.println(docs.get(d).disponibilidadStr(fecha));
+
+            System.out.println("\nElija una hora:");
+            String h = scan.nextLine();
+
+            hora = LocalTime.of(
+                    Integer.parseInt(h.replaceAll(":00", "")),0);
+
+            System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
+                    + "\nFecha: " + f + "\nHora: " + h + ":00");
+            System.out.println("\nConfirma estos datos? (s/n)");
+            confirmacion = scan.nextLine();
+        }while(!confirmacion.equals("s"));
+		
+            AgendarCita(fecha, hora, docs.get(d));
+    }
+	
+    /**
+     * Crea la cita médica, la añade a la lista de citas pendientes y modifica
+     * la agenda del doctor.
      */
     public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
         doctor.modificarAgenda(fecha, hora);
         citas.add(new CitaMedica(this, fecha, hora, doctor));
     }
-    
-    
+
     /**
      * Elimina una cita de la lista de citas pendientes.
      *
@@ -133,5 +188,25 @@ public class Usuario {
     public void cancelarCita(CitaMedica cita) {
         citas.remove(cita);
     }
+    
+    
+     /**
+     * Filtra un listado de doctores por especialidad.
+     *
+     * @param ArrayList<Doctor> La lista de todos los doctores.
+     * @param String La especialidad para filtrar.
+     * @return ArrayList<Doctor> La lista de doctores filtrada por especialidad.
+     */
+    public static ArrayList<Doctor> filtrarEsp(ArrayList<Doctor> doctores, String esp) {
+
+        ArrayList<Doctor> docEsp = new ArrayList<>();
+        for (Doctor doc : doctores) {
+            if (doc.getEspecialidad().equals(esp)) {
+                docEsp.add(doc);
+            }
+        }
+        return docEsp;
+    }
+
 
 }

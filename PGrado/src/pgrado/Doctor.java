@@ -154,10 +154,21 @@ public class Doctor {
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
      */
-    public String disponibilidad(LocalDate fecha){
+    public boolean[] disponibilidad(LocalDate fecha){
         enterAgenda(fecha);
-        boolean[] horasDisp = agenda.get(fecha);
-        return parseHorario(horasDisp);
+        return agenda.get(fecha);
+    }
+    
+    /**
+     * Devuelve los horarios disponibles de un médico en cierta fecha como Str.
+     * 
+     * @param fecha en la que se desea consultar la disponibilidad como String.
+     * 
+     * @return arreglo con el horario de atención del doctor esa fecha. Dirá
+     * true si está disponible.
+     */
+    public String disponibilidadStr(LocalDate fecha){
+        return parseHorario(disponibilidad(fecha));
     }
     
     

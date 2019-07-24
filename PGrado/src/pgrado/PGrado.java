@@ -7,9 +7,12 @@ package pgrado;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
+import java.util.TreeSet;
 
 /**
  * Clase principal de la aplicación UISalud Móvil.
@@ -29,7 +32,7 @@ public class PGrado {
 
     private static ArrayList<Usuario> afiliados = new ArrayList<>();
     private static ArrayList<Doctor> doctores = new ArrayList<>();
-    private static HashMap<Integer, String> directorio = new HashMap<>();
+    private static TreeSet<String> especialidades = new TreeSet<>();
 
     /**
      * Crea datos iniciales para pruebas. Demo final probablemente no creará los
@@ -81,7 +84,7 @@ public class PGrado {
         doctores.add(d6);
 
         for (int i = 0; i < doctores.size(); i++) {
-            directorio.put(i, doctores.get(i).getEspecialidad());
+            especialidades.add(doctores.get(i).getEspecialidad());
         }
 
         afiliados.add(new Usuario("User1", "123", "Cll 1 #2-3", "1234"));
@@ -91,38 +94,7 @@ public class PGrado {
         afiliados.add(new Usuario("User5", "567", "Cll 5 #6-7", "5678"));
 
     }
-
-    /**
-     * Filtra el directorio de doctores por especialidad.
-     * 
-     * @return lista con los doctores de dicha especialidad.
-     */
-    public static ArrayList<Doctor> filtrarEsp(HashMap map, String esp) {
-        ArrayList<Doctor> docEsp = new ArrayList<>();
-        Iterator it = map.entrySet().iterator();
-        while (it.hasNext()) {
-            HashMap.Entry pair = (HashMap.Entry) it.next();
-            if (pair.getValue() == esp) {
-//                System.out.println(doctores.get((Integer) pair.getKey()).getNombre());
-                docEsp.add(doctores.get((Integer) pair.getKey()));
-            }
-            it.remove();
-        }
-        return docEsp;
-    }
-
-    /**
-     * Imprime un HashMap.
-     *
-     * @param map El HashMap a imprimir.
-     */
-    public static void printDirectorio(HashMap<Integer, String> map) {
-
-        for (HashMap.Entry<Integer, String> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
-    }
-
+    
     /**
      * Imprime una lista de doctores con sus horarios.
      *
@@ -130,61 +102,33 @@ public class PGrado {
      */
     public static void printDoctores(ArrayList<Doctor> list) {
 
-        for(Doctor i : list){
+        for (Doctor i : list) {
             System.out.println(i.getNombre() + " esta disponible los dias: ");
             i.printHorarioSemanal();
-            System.out.println("------------");            
+            System.out.println("------------");
         }
     }
 
-    
-    
     public static void main(String[] args) {
 
         onStart();
-
-//        Usuario ana = afiliados.get(0);
-//        Usuario lin = afiliados.get(1);
-//
-//        ana.solicitarCita(ana, LocalDate.of(2019, 7, 10),LocalTime.of(14, 30), doctores.get(0));
-//
-//        ana.consultarCitas();
-//        lin.consultarCitas();
-//        filtrarEsp(directorio, "General");
-//        LocalDate a = LocalDate.of(2014, 6, 30);
-//
-//        System.out.println(a.getDayOfWeek().name() == "MONDAY");
-//
-//        doctores.get(5).printHorario();
         
-//        LocalTime b = LocalTime.of(10,0,0);
-//        System.out.println(b);
-//        System.out.println(b.getHour() == 10);
+        afiliados.get(0).solicitarCita(doctores, especialidades);
+		
+		//        doctores.get(0).printHorarioSemanal();
+//        LocalDate fecha = LocalDate.of(2019, 7, 22);
+//        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
 //        
-//        Scanner scan = new Scanner(System.in);
-//        Usuario ana = afiliados.get(0);
-//        Set<String> especialidades = new HashSet<>(directorio.values());
-//        //Solicitar cita
-//        System.out.println("Digite especialidad que desea:");
-//        for (int i = 0; i < especialidades.size(); i++) {
-//            System.out.println("1. " + especialidades.hashCode());
-//        }
-//        printDoctores(filtrarEsp(directorio, "General"));
-//        printMap(directorio);
+//        int hora = 8; // La hora que quiere el usuario
+//        
+//        doctores.get(0).modificarAgenda(fecha, LocalTime.of(hora, 0)); 
+//        
+//        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
+//
+//        doctores.get(0).cancelar(fecha, LocalTime.of(hora, 0));
+//        
+//        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
         
-        doctores.get(0).printHorarioSemanal();
-        LocalDate fecha = LocalDate.of(2019, 7, 22);
-        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
-        
-        int hora = 8; // La hora que quiere el usuario
-        
-        doctores.get(0).modificarAgenda(fecha, LocalTime.of(hora, 0)); 
-        
-        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
-
-        doctores.get(0).cancelar(fecha, LocalTime.of(hora, 0));
-        
-        System.out.println("\n" + doctores.get(0).disponibilidad(fecha));
-    }
+      }
 
 }
