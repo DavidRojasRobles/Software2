@@ -5,6 +5,7 @@
  */
 package pgrado;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -129,59 +130,77 @@ public class Usuario {
         LocalTime hora;
         LocalDate fecha;
         String conm = "n";
-        
-        do {
-            System.out.println("Elija una especialidad: ");
-            for (String e : especialidades) {
-                System.out.println("- " + e);
-            }
-            String esp = scan.nextLine();
 
-            System.out.println("\nElija un doctor (#): ");
-            docs = filtrarEsp(doctores, esp);
-            for (int i = 0; i < docs.size(); i++) {
-                System.out.println((i+1) + ". " + docs.get(i).getNombre());
-            }
-            d = scanInt.nextInt()-1;
+        System.out.println("Bienvenido, " + this.nombre + "!\n");
+
+        do {
+            String esp;
+            do {
+                System.out.println("Elija una especialidad: ");
+                for (String e : especialidades) {
+                    System.out.println("- " + e);
+                }
+                esp = scan.nextLine();
+                esp = esp.substring(0, 1).toUpperCase() + esp.substring(1);
+            } while (!especialidades.contains(esp));
+
+            do {
+                System.out.println("\nElija un doctor (#): ");
+                docs = filtrarEsp(doctores, esp);
+                for (int i = 0; i < docs.size(); i++) {
+                    System.out.println((i + 1) + ". " + docs.get(i).getNombre());
+                }
+                d = scanInt.nextInt() - 1;
+            } while (!(abs(d) < docs.size()));
 
             docs.get(d).printHorarioSemanal();
 
-            System.out.println("\nElija una fecha (dd/mm/aa): ");
-            String f = scan.nextLine();
-            String[] farr = f.replaceAll("\\s+", "").split("/");
+            String f;
+            boolean valido = false;
+            do {
+                System.out.println("\nElija una fecha (dd/mm/aa): ");
+                f = scan.nextLine();
+                String[] farr = f.replaceAll("\\s+", "").split("/");
 
-            fecha = LocalDate.of(
-                    Integer.parseInt(farr[2]),
-                    Integer.parseInt(farr[1]),
-                    Integer.parseInt(farr[0]));
+                fecha = LocalDate.of(
+                        Integer.parseInt(farr[2]),
+                        Integer.parseInt(farr[1]),
+                        Integer.parseInt(farr[0]));
+                if (docs.get(d).verificarFecha(fecha)) {
+                    valido = true;
+                } else {
+                    System.out.println("\nNo hay citas disponibles para esta fecha.\n\n");
+                }
 
-            if (docs.get(d).verificarFecha(fecha)){
-                System.out.println("\nPara este dia, las horas disponibles son: \n");
-                System.out.println(docs.get(d).disponibilidadStr(fecha));
+            } while (!valido);
 
+            System.out.println("\nPara este dia, las horas disponibles son: \n");
+            System.out.println(docs.get(d).disponibilidadStr(fecha));
+
+            String h;
+            do{
                 System.out.println("\nElija una hora:");
-                String h = scan.nextLine();
+                h = scan.nextLine();
 
                 hora = LocalTime.of(
-                      Integer.parseInt(h.replaceAll(":00", "")),0);
+                        Integer.parseInt(h.replaceAll(":00", "")), 0);
+            }while(!docs.get(d).verificarHora(fecha, hora));
 
-                System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
-                        + "\nFecha: " + f + "\nHora: " + h + ":00");
-                System.out.println("¿Desea agendar la cita?: s: Sí  n: No");
-                conm = scan.nextLine();
-                
-                if(conm.equals("s")) {
-                   AgendarCita(fecha, hora, docs.get(d));
-                    System.out.println("\nCita agendada correctamente.\n");
-                } else {
-                    System.out.println("No se agendó la cita.\n\n");
-                }
+            System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
+                    + "\nFecha: " + f + "\nHora: " + h + ":00");
+            System.out.println("¿Desea agendar la cita?: s: Sí  n: No");
+            conm = scan.nextLine();
+
+            if (conm.equals("s")) {
+                AgendarCita(fecha, hora, docs.get(d));
+                System.out.println("\nCita agendada correctamente.\n");
             } else {
-                System.out.println("No hay citas disponibles para esta fecha.\n\n");
+                System.out.println("No se agendó la cita.\n\n");
             }
-        } while(!conm.equals("s"));
+
+        } while (!conm.equals("s"));
     }
-	
+
     /**
      * Crea la cita médica, la añade a la lista de citas pendientes y modifica
      * la agenda del doctor.
@@ -199,9 +218,8 @@ public class Usuario {
     public void cancelarCita(CitaMedica cita) {
         citas.remove(cita);
     }
-    
-    
-     /**
+
+    /**
      * Filtra un listado de doctores por especialidad.
      *
      * @param ArrayList<Doctor> La lista de todos los doctores.
@@ -218,6 +236,5 @@ public class Usuario {
         }
         return docEsp;
     }
-
 
 }

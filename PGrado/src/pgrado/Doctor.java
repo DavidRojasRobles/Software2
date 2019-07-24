@@ -176,6 +176,6 @@ public class Doctor {
     }
     
     public boolean verificarHora(LocalDate fecha, LocalTime hora){
-        return true;
+        return agenda.get(fecha)[hora.getHour()-8] == true;
     }
 }

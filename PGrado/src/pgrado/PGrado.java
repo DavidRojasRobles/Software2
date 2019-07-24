@@ -114,6 +114,9 @@ public class PGrado {
         onStart();
         
         afiliados.get(0).solicitarCita(doctores, especialidades);
+        afiliados.get(1).solicitarCita(doctores, especialidades);
+        afiliados.get(2).solicitarCita(doctores, especialidades);
+
 		
 		//        doctores.get(0).printHorarioSemanal();
 //        LocalDate fecha = LocalDate.of(2019, 7, 22);
