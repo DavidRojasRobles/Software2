@@ -171,6 +171,11 @@ public class Doctor {
         return parseHorario(disponibilidad(fecha));
     }
     
+    public boolean verificarFecha(LocalDate fecha){
+        return horario.containsKey(fecha.getDayOfWeek().toString());
+    }
     
-    
+    public boolean verificarHora(LocalDate fecha, LocalTime hora){
+        return true;
+    }
 }

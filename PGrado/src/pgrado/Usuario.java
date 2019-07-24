@@ -128,47 +128,58 @@ public class Usuario {
         int d;
         LocalTime hora;
         LocalDate fecha;
+        String conm = "n";
         
-        String confirmacion = "";
-        do{
-            System.out.println("Elija una especialidad: \n");
+        do {
+            System.out.println("Elija una especialidad: ");
             for (String e : especialidades) {
                 System.out.println("- " + e);
             }
             String esp = scan.nextLine();
 
-            System.out.println("\nElija un doctor (#): \n");
+            System.out.println("\nElija un doctor (#): ");
             docs = filtrarEsp(doctores, esp);
             for (int i = 0; i < docs.size(); i++) {
                 System.out.println((i+1) + ". " + docs.get(i).getNombre());
             }
             d = scanInt.nextInt()-1;
 
-            System.out.println("\nElija una fecha (dd/mm/aa): \n");
+            docs.get(d).printHorarioSemanal();
+
+            System.out.println("\nElija una fecha (dd/mm/aa): ");
             String f = scan.nextLine();
             String[] farr = f.replaceAll("\\s+", "").split("/");
-			
+
             fecha = LocalDate.of(
                     Integer.parseInt(farr[2]),
                     Integer.parseInt(farr[1]),
                     Integer.parseInt(farr[0]));
 
-            System.out.println("\nPara este dia, las horas disponibles son: \n");
-            System.out.println(docs.get(d).disponibilidadStr(fecha));
+            if (docs.get(d).verificarFecha(fecha)){
+                System.out.println("\nPara este dia, las horas disponibles son: \n");
+                System.out.println(docs.get(d).disponibilidadStr(fecha));
 
-            System.out.println("\nElija una hora:");
-            String h = scan.nextLine();
+                System.out.println("\nElija una hora:");
+                String h = scan.nextLine();
 
-            hora = LocalTime.of(
-                    Integer.parseInt(h.replaceAll(":00", "")),0);
+                hora = LocalTime.of(
+                      Integer.parseInt(h.replaceAll(":00", "")),0);
 
-            System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
-                    + "\nFecha: " + f + "\nHora: " + h + ":00");
-            System.out.println("\nConfirma estos datos? (s/n)");
-            confirmacion = scan.nextLine();
-        }while(!confirmacion.equals("s"));
-		
-            AgendarCita(fecha, hora, docs.get(d));
+                System.out.println("\nSu cita será: \n\nDoctor: " + docs.get(d).getNombre()
+                        + "\nFecha: " + f + "\nHora: " + h + ":00");
+                System.out.println("¿Desea agendar la cita?: s: Sí  n: No");
+                conm = scan.nextLine();
+                
+                if(conm.equals("s")) {
+                   AgendarCita(fecha, hora, docs.get(d));
+                    System.out.println("\nCita agendada correctamente.\n");
+                } else {
+                    System.out.println("No se agendó la cita.\n\n");
+                }
+            } else {
+                System.out.println("No hay citas disponibles para esta fecha.\n\n");
+            }
+        } while(!conm.equals("s"));
     }
 	
     /**
