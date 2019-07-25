@@ -1,13 +1,11 @@
 #BlueJ class context
-comment0.target=CitaMedica
-comment0.text=\r\n\ Esta\ clase\ representa\ las\ citas\ m\u00E9dicas\ asignadas\ a\ usuarios.\r\n\r\n\ Depende\ de\ un\ usuario,\ una\ fecha,\ una\ hora\ y\ un\ doctor.\ Si\ no\ se\ tiene\ una\r\n\ orden,\ s\u00F3lo\ se\ pueden\ crear\ citas\ con\ un\ m\u00E9dico\ general.\r\n\r\n\ Las\ citas\ m\u00E9dicas\ pueden\ o\ no\ generar\ \u00F3rdenes.\r\n\r\n\ @author\ Marianne\ Solangel\ Rojas\ Robles\ &\ Fredy\ Emanuel\ Mogoll\u00F3n\ Velandia\r\n\ @version\ 14\ /\ 07\ /\ 2019\r\n
-comment1.params=usuario\ fecha\ hora\ doctor\ orden
-comment1.target=CitaMedica(Usuario,\ java.time.LocalDate,\ java.time.LocalTime,\ Doctor,\ Orden)
-comment1.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ CitaMedica\ con\ orden.\r\n
-comment2.params=usuario\ fecha\ hora\ doctor
-comment2.target=CitaMedica(Usuario,\ java.time.LocalDate,\ java.time.LocalTime,\ Doctor)
-comment2.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ CitaMedica\ sin\ orden.\r\n
-comment3.params=observaciones\ fechaVigencia
-comment3.target=void\ generarOrden(java.lang.String,\ java.time.LocalDate)
-comment3.text=\r\n\ Genera\ una\ \u00F3rden\ y\ la\ registra\ en\ la\ lista\ de\ \u00F3rdenes\ del\ usuario\ y\ en\ su\r\n\ historia\ cl\u00EDnica.\r\n
-numComments=4
+comment0.params=usuario\ fecha\ hora\ doctor\ orden
+comment0.target=CitaMedica(Usuario,\ java.time.LocalDate,\ java.time.LocalTime,\ Doctor,\ Orden)
+comment0.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ CitaMedica\ con\ orden.\r\n
+comment1.params=usuario\ fecha\ hora\ doctor
+comment1.target=CitaMedica(Usuario,\ java.time.LocalDate,\ java.time.LocalTime,\ Doctor)
+comment1.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ CitaMedica\ sin\ orden.\r\n
+comment2.params=observaciones\ fechaVigencia
+comment2.target=void\ generarOrden(java.lang.String,\ java.time.LocalDate)
+comment2.text=\r\n\ Genera\ una\ \u00F3rden\ y\ la\ registra\ en\ la\ lista\ de\ \u00F3rdenes\ del\ usuario\ y\ en\ su\r\n\ historia\ cl\u00EDnica.\r\n
+numComments=3

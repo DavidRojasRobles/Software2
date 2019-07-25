@@ -30,7 +30,7 @@ public class Doctor {
     private String consultorio;
     private String especialidad;
     private HashMap<String, boolean[]> horario = new HashMap<>();
-    private ArrayList<CitaMedica> citas = new ArrayList<>();
+    private ArrayList<Procedimiento> citas = new ArrayList<>();
     private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
     
     
@@ -122,7 +122,7 @@ public class Doctor {
      * 
      * Cuando la fecha ya existe, se reserva la hora cambiando el campo a false.
      */
-    public void modificarAgenda(CitaMedica c, LocalDate fecha, LocalTime hora){
+    public void modificarAgenda(Procedimiento c, LocalDate fecha, LocalTime hora){
         enterAgenda(fecha);
         //Revisa si es un horario de trabajo del doctor
         if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true){
@@ -194,8 +194,8 @@ public class Doctor {
     }
     
     public void ordenarFechaHora(){
-        Comparator<CitaMedica> byDate = new Comparator<CitaMedica>() {
-            public int compare(CitaMedica left, CitaMedica right) {
+        Comparator<Procedimiento> byDate = new Comparator<Procedimiento>() {
+            public int compare(Procedimiento left, Procedimiento right) {
                 if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
                     return -1;
                 } else {
@@ -206,4 +206,17 @@ public class Doctor {
 
         Collections.sort(citas, byDate);
     }
+    
+    public void crearOrdenProcedimiento(int nro_usuario, String esp, String obs, LocalDate fecha){
+        Procedimiento cita = citas.get(nro_usuario);
+        OrdenProcedimiento ord = new OrdenProcedimiento(cita, esp, obs, fecha);
+        cita.getUsuario().ordenar(ord);
+    }
+    
+    public void crearOrdenMedicamento(int nro_usuario, String obs, LocalDate fecha){
+        Procedimiento cita = citas.get(nro_usuario);
+        OrdenMedicamento ord = new OrdenMedicamento(cita, obs, fecha);
+        cita.getUsuario().ordenar(ord);
+    }
+        
 }

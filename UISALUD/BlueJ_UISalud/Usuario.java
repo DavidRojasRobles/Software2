@@ -26,10 +26,11 @@ public class Usuario {
     private final String cedula;
     private final String direccion;
     private final String telefono;
-    private ArrayList<CitaMedica> citas = new ArrayList<>(); //citas pendientes
+    private ArrayList<Procedimiento> citas = new ArrayList<>(); //citas pendientes
     private ArrayList<Orden> ordenes = new ArrayList<>();
     private ArrayList<String> historia = new ArrayList<>();
-
+    
+    Scanner scan = new Scanner(System.in);
     /**
      * Constructor para objetos de la clase Usuario.
      */
@@ -80,8 +81,8 @@ public class Usuario {
     public void archivar(String informe) {
         historia.add(informe);
     }
-	
-	public String imprimirHistoria(){
+    
+    public String imprimirHistoria(){
         String salida = "";
         for(int i=0; i<historia.size(); i++){
             salida = salida+historia.get(i)+"\n\n";
@@ -100,7 +101,7 @@ public class Usuario {
         if (citas.isEmpty()) {
             System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
         } else {
-            for (CitaMedica c : citas) {
+            for (Procedimiento c : citas) {
                 System.out.println(c.getDatos());
             }
         }
@@ -125,7 +126,6 @@ public class Usuario {
      * Solicita los datos necesarios para crear la cita médica.
      */
     public void solicitarCita(ArrayList<Doctor> doctores, TreeSet<String> especialidades) {
-        Scanner scan = new Scanner(System.in);
         String esp;
         OrdenProcedimiento orden = null;
         Doctor doctor;
@@ -178,7 +178,7 @@ public class Usuario {
 
     private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
         if (doctor.getEspecialidad().equals("General")) {
-            CitaMedica c = new CitaMedica(this, fecha, hora, doctor);
+            Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(c);
         } else {
@@ -195,14 +195,33 @@ public class Usuario {
      */
     public void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
         if (orden != null) {
-            CitaMedica c = new CitaMedica(this, fecha, hora, doctor);
+            Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(new CitaMedica(this, fecha, hora, doctor));
+            ordenes.remove(orden);
         } else {
             System.out.println("La orden es nula");
         }
     }
-
+    
+    public void mostrarListaMedicamentos(){
+        String salida = "";
+        
+        for(int i=0; i<ordenes.size(); i++){
+            salida = salida+"\n\n"+(i+1)+"- "+ordenesPro().get(i);
+        }
+        System.out.println(salida);
+    }
+    
+    public void reclamarMedicamento(){
+        System.out.println("Elija el nro de orden de medicamento que desea reclamar: ");
+        mostrarListaMedicamentos();
+        int opc = scan.nextInt();
+        historia.add("El medicamento:\n"+ordenesPro().get(opc-1).getObservaciones()+"\nFecha de Entrega: "+LocalDate.now()+"\nHora: "+LocalTime.now()+"\n");
+        ordenes.remove(ordenesPro().get(opc-1));
+        System.out.println("El Medicamento se entregó al usuario\n");
+    }
+    
     /**
      * Elimina una cita de la lista de citas pendientes.
      *
@@ -260,7 +279,6 @@ public class Usuario {
     }
 
     private String verificarEspecialidad(TreeSet<String> especialidades) {
-        Scanner scan = new Scanner(System.in);
         String esp;
         do { // la especialidad existe
             System.out.println("Elija una especialidad: ");
@@ -276,7 +294,6 @@ public class Usuario {
     }
 
     private Doctor selecDoctor(ArrayList<Doctor> doctores, String esp) {
-        Scanner scan = new Scanner(System.in);
         int d;
         ArrayList<Doctor> docs;
         do {
@@ -287,12 +304,11 @@ public class Usuario {
             }
             d = scan.nextInt() - 1;
         } while (!(abs(d) < docs.size()));
-        return doctores.get(d);
+        return docs.get(d);
 
     }
 
     private LocalDate selecFecha(Doctor doctor) {
-        Scanner scan = new Scanner(System.in);
         String f, h;
         LocalDate fecha;
         boolean valido = false;
@@ -316,7 +332,6 @@ public class Usuario {
     }
 
     private LocalTime selecHora(Doctor doctor, LocalDate fecha) {
-        Scanner scan = new Scanner(System.in);
         System.out.println("\nPara este dia, las horas disponibles son: \n");
         System.out.println(doctor.disponibilidadStr(fecha));
 

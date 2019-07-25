@@ -1,11 +1,9 @@
 #BlueJ class context
-comment0.target=OrdenMedicamento
-comment0.text=\r\n\ Esta\ clase\ representa\ las\ \u00F3rdenes\ de\ medicamentos\ prescritas\ a\ los\ usuarios\r\n\ por\ los\ doctores\ tras\ una\ cita\ m\u00E9dica.\r\n\r\n\ Cada\ una\ guarda\ el\ registro\ de\ si\ el\ medicamento\ fue\ reclamado\ o\ no.\r\n\r\n\ @author\ Marianne\ Solangel\ Rojas\ Robles\ &\ Fredy\ Emanuel\ Mogoll\u00F3n\ Velandia\r\n\ @version\ 14\ /\ 07\ /\ 2019\r\n
-comment1.params=cita\ observaciones\ fechaVigencia
-comment1.target=OrdenMedicamento(CitaMedica,\ java.lang.String,\ java.time.LocalDate)
-comment1.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ OrdenMedicamentoS.\r\n
-comment2.params=
-comment2.target=java.lang.Boolean\ getReclamado()
-comment3.params=reclamado
-comment3.target=void\ setReclamado(java.lang.Boolean)
-numComments=4
+comment0.params=cita\ observaciones\ fechaVigencia
+comment0.target=OrdenMedicamento(Procedimiento,\ java.lang.String,\ java.time.LocalDate)
+comment0.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ OrdenMedicamentoS.\r\n
+comment1.params=
+comment1.target=java.lang.Boolean\ getReclamado()
+comment2.params=reclamado
+comment2.target=void\ setReclamado(java.lang.Boolean)
+numComments=3

@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.params=
+comment0.target=SetUp()
+comment0.text=\r\n\ Crea\ datos\ iniciales\ para\ pruebas.\ Demo\ final\ probablemente\ no\ crear\u00E1\ los\r\n\ datos\ iniciales\ de\ esta\ forma.\r\n
+comment1.params=
+comment1.target=void\ populate()
+comment2.params=
+comment2.target=void\ run()
+numComments=3

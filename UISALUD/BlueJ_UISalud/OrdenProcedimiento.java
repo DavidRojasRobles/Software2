@@ -17,7 +17,7 @@ public class OrdenProcedimiento extends Orden {
     /**
      * Constructor para los objetos de la clase OrdenProcedimiento.
      */
-    public OrdenProcedimiento(CitaMedica cita, String especialidad, String observaciones, LocalDate fechaVigencia) {
+    public OrdenProcedimiento(Procedimiento cita, String especialidad, String observaciones, LocalDate fechaVigencia) {
         super(cita, observaciones, fechaVigencia);
 
         this.especialidad = especialidad.substring(0, 1).toUpperCase()
