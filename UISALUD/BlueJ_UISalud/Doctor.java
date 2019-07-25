@@ -32,8 +32,7 @@ public class Doctor {
     private HashMap<String, boolean[]> horario = new HashMap<>();
     private ArrayList<Procedimiento> citas = new ArrayList<>();
     private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
-    
-    
+
 
     /**
      * Constructor para los objetos de la clase Doctor.
@@ -89,7 +88,7 @@ public class Doctor {
             System.out.println(dia + ": " + formatoHoras);
         }
     }
-    
+
     /**
      * Devuelve un String con las horas de atención en formato de reloj digital.
      * 
@@ -100,20 +99,20 @@ public class Doctor {
      */    
     public String parseHorario(boolean[] horas){
         String formatoHoras = "";
-            for (int i = 0; i < horas.length; i++) {
-                if (horas[i] == true) {
-                    formatoHoras += (8 + i) + ":00\t";
-                }
+        for (int i = 0; i < horas.length; i++) {
+            if (horas[i] == true) {
+                formatoHoras += (8 + i) + ":00\t";
             }
+        }
         return formatoHoras;
     }
-    
+
     private void enterAgenda(LocalDate fecha){
         if(!agenda.containsKey(fecha)){
             agenda.put(fecha, horario.get(fecha.getDayOfWeek().toString()).clone());
         }
     }
-    
+
     /**
      * Agenda las citas del medico.
      * 
@@ -130,23 +129,23 @@ public class Doctor {
             citas.add(c);
         }         
     }
-    
+
     public void crearEvolucion(String texto){
         Scanner scan = new Scanner(System.in);
         System.out.println(mostrarPacientes());
         String p = scan.nextLine();
         citas.get(Integer.parseInt(p)-1).getUsuario().archivar(texto);
     }
-    
+
     public String mostrarPacientes(){
-//        System.out.println("Sus citas Médicas por atender:\n");
+        //        System.out.println("Sus citas Médicas por atender:\n");
         String salida = "Sus citas Médicas por atender:\n";
         for(int i=0; i<citas.size(); i++){
             salida = salida+(i+1)+". "+citas.get(i).getFecha().toString()+" "+citas.get(i).getUsuario().getNombre()+"\n";
         }
         return salida;
     }
-    
+
     /**
      * Cancela las citas del medico.
      * 
@@ -154,11 +153,11 @@ public class Doctor {
      */
     public void cancelar(LocalDate fecha, LocalTime hora){
         if(agenda.containsKey(fecha) &&
-                horario.get(fecha.getDayOfWeek().toString())[hora.getHour()-8] == true){
-                agenda.get(fecha)[hora.getHour()-8] = true;
+        horario.get(fecha.getDayOfWeek().toString())[hora.getHour()-8] == true){
+            agenda.get(fecha)[hora.getHour()-8] = true;
         }
     }
-    
+
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha.
      * 
@@ -171,7 +170,7 @@ public class Doctor {
         enterAgenda(fecha);
         return agenda.get(fecha);
     }
-    
+
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha como Str.
      * 
@@ -183,40 +182,47 @@ public class Doctor {
     public String disponibilidadStr(LocalDate fecha){
         return parseHorario(disponibilidad(fecha));
     }
-    
+
     public boolean verificarFecha(LocalDate fecha){
         return ((horario.containsKey(fecha.getDayOfWeek().toString())) &&
-                !fecha.isBefore(LocalDate.now()));
+            !fecha.isBefore(LocalDate.now()) &&
+            verificarDisp(disponibilidad(fecha)));
     }
-    
+
     public boolean verificarHora(LocalDate fecha, LocalTime hora){
         return ((agenda.get(fecha)[hora.getHour()-8] == true) && !LocalDateTime.of(fecha, hora).isBefore(LocalDateTime.now()));
     }
-    
-    public void ordenarFechaHora(){
+
+    private boolean verificarDisp(boolean[] disp){
+        for(boolean d : disp){
+            if(d) return true;
+        }
+        return false;
+    }
+
+    private void ordenarFechaHora(){
         Comparator<Procedimiento> byDate = new Comparator<Procedimiento>() {
-            public int compare(Procedimiento left, Procedimiento right) {
-                if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
-                    return -1;
-                } else {
-                    return 1;
+                public int compare(Procedimiento left, Procedimiento right) {
+                    if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
                 }
-            }
-        };
+            };
 
         Collections.sort(citas, byDate);
     }
-    
-    public void crearOrdenProcedimiento(int nro_usuario, String esp, String obs, LocalDate fecha){
+	
+	public void crearOrdenProcedimiento(int nro_usuario, String esp, String obs, LocalDate fecha){
         Procedimiento cita = citas.get(nro_usuario);
-        OrdenProcedimiento ord = new OrdenProcedimiento(cita, esp, obs, fecha);
+        OrdenProcedimiento ord = new OrdenProcedimiento((CitaMedica)cita, esp, obs, fecha);
         cita.getUsuario().ordenar(ord);
     }
     
     public void crearOrdenMedicamento(int nro_usuario, String obs, LocalDate fecha){
         Procedimiento cita = citas.get(nro_usuario);
-        OrdenMedicamento ord = new OrdenMedicamento(cita, obs, fecha);
+        OrdenMedicamento ord = new OrdenMedicamento((CitaMedica)cita, obs, fecha);
         cita.getUsuario().ordenar(ord);
     }
-        
 }

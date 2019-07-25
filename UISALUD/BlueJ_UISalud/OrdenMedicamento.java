@@ -16,7 +16,7 @@ public class OrdenMedicamento extends Orden {
     /**
      * Constructor para los objetos de la clase OrdenMedicamentoS.
      */
-    public OrdenMedicamento(Procedimiento cita, String observaciones, LocalDate fechaVigencia) {
+    public OrdenMedicamento(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
         super(cita, observaciones, fechaVigencia);
         this.reclamado = false;
     }

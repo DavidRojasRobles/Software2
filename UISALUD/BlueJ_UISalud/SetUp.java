@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -19,16 +20,16 @@ public class SetUp
     private static ArrayList<Usuario> afiliados = new ArrayList<>();
     private static ArrayList<Doctor> doctores = new ArrayList<>();
     private static TreeSet<String> especialidades = new TreeSet<>();
-    Scanner scan = new Scanner(System.in);
+
     /**
-     * Crea datos iniciales para pruebas. Demo final probablemente no creará los
+     * Crea datos iniciales para pruebas. Demo final probablemente no crearĂ¡ los
      * datos iniciales de esta forma.
      */
     SetUp() {
         
     }
     
-    public void populate(){
+    private void populate(){
         Doctor d1 = new Doctor("Dr. One", "101", "General");
         d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
             false, false, false, false, false, false});
@@ -85,29 +86,25 @@ public class SetUp
     }
     
     public void run(){
-        Usuario user1 = afiliados.get(0);
-        Usuario user2 = afiliados.get(1);
         populate();
-        do{
-            System.out.println("Elija la opción que desea:\n"+
-            "USUARIOS:  1- Consultar citas  2-Solicitar cita  3-Cancelar cita  4-Reclamar Medicamento  5-Imprimir Historia Clínica  6-Ver mis datos\n"+
-            "DOCTORES:  7-Escribir Evolución  8-Crear OrdenProcedimiento  9- Crear Orden Medicamento\n"+
-            "           10-Salir");
-            int opc = scan.nextInt();
-            switch(opc){
-                case 1: user1.consultarCitas(); break;
-                case 2: user1.solicitarCita(doctores, especialidades); break;
-                case 3: user1.cancelarCita(); break;
-                case 4: user1.reclamarMedicamento(); break;
-                case 5: break;
-                case 6: break;
-                case 7: break;
-                case 8: break;
-                case 9: break;
-                case 10: break;
-                default: System.out.println("opción inválida");
-            }
-        }while(opc != 10);
+        Usuario user0 = afiliados.get(0);
+        Usuario user1 = afiliados.get(1);
+        Usuario user2 = afiliados.get(2);
+        
+        // user0.consultarOrdenes();
+        
+        // System.out.println("-------------");
+        
+        // CitaMedica cita = new CitaMedica(user0, LocalDate.of(2019,7,22), LocalTime.of(8,0), doctores.get(0));
+        // // user0.solicitarCita(doctores, especialidades);
+        // user0.ordenar(new OrdenProcedimiento(cita,"Cardiologia", "Meh observaciones card", LocalDate.of(2019,10,20)));
+        // user0.ordenar(new OrdenProcedimiento(cita,"Ginecologia", "Meh observaciones gin", LocalDate.of(2019,10,30)));
+        // user0.ordenar(new OrdenProcedimiento(cita,"Cardiologia", "Meh observaciones card2", LocalDate.of(2019,10,21)));
+        
+        // user0.consultarOrdenes();
+        
+        // user1.solicitarCita(doctores, especialidades);
+        // user2.solicitarCita(doctores, especialidades);
     }
     /*
     public void crearUsuarios(){

@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 public class Orden {
 
-    private final Procedimiento cita;
+    private final CitaMedica cita;
     private final String observaciones;
     private final LocalDate fechaVigencia;
     private final Boolean vigencia;
@@ -22,7 +22,7 @@ public class Orden {
     /**
      * Constructor para los objetos de la clase Orden.
      */
-    public Orden(Procedimiento cita, String observaciones, LocalDate fechaVigencia) {
+    public Orden(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
         this.cita = cita;
         this.observaciones = observaciones;
         this.fechaVigencia = fechaVigencia;
@@ -41,8 +41,12 @@ public class Orden {
         return cita.getUsuario();
     }
 
-    public Procedimiento getCita() {
+    public CitaMedica getCita() {
         return cita;
+    }
+    
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
     }
 
     /**
@@ -51,12 +55,23 @@ public class Orden {
      * @return datos de la orden como único String
      */
     public String getDatos() {
-        String datos = "Doctor: " + cita.getDoctor()
-                + "Especialidad: " + cita.getDoctor().getEspecialidad() + "\n"
+        String datos = "Doctor: " + cita.getDoctor().getNombre() + "\n"
+                + "Especialidad Dr: " + cita.getDoctor().getEspecialidad() + "\n"
                 + "Ordenado: " + cita.getFecha() + "\n"
                 + "Observaciones: " + observaciones + "\n"
-                + "VIgente hasta: " + fechaVigencia + "\n\n";
+                + "Vigente hasta: " + fechaVigencia + "\n\n";
 
         return datos;
+    }
+
+    /**
+     * Imprime un recordatorio cuando se aproxime la fecha máxima de vigencia de
+     * la orden.
+     */
+    public void notificar() {
+//        java.time.LocalDate today = java.time.LocalDate.now();
+//        if(fechaVigencia.compareTo(today) == 0){
+//            //NOTIFY
+//        }
     }
 }
