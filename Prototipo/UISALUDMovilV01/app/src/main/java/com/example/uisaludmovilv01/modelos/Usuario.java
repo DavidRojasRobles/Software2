@@ -1,18 +1,15 @@
-package pgrado;
+package com.example.uisaludmovilv01.modelos;
 
-import static java.lang.Math.abs;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Scanner;
-import java.util.TreeSet;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import pgrado.CitaMedica;
-import pgrado.Doctor;
-import pgrado.Orden;
-import pgrado.OrdenProcedimiento;
-import pgrado.Procedimiento;
+import java.util.Scanner;
+import java.util.TreeSet;
+import java.lang.Math;
+
+import static java.lang.Math.abs;
 
 /**
  * Esta clase gestiona las funciones del usuario de UISALUD.
@@ -41,6 +38,15 @@ public class Usuario {
     /**
      * Constructor para objetos de la clase Usuario.
      */
+
+    public Usuario() {
+        // initialise instance variables
+        this.nombre = "Fredy";
+        this.cedula = "12345";
+        this.direccion = "Calle 1 # 2-3";
+        this.telefono = "61234567";
+    }
+
     public Usuario(String nombre, String cedula, String direccion, String telefono) {
         // initialise instance variables
         this.nombre = nombre;
@@ -89,10 +95,10 @@ public class Usuario {
         historia.add(informe);
     }
 
-    public String imprimirHistoria() {
+    public String imprimirHistoria(){
         String salida = "";
-        for (int i = 0; i < historia.size(); i++) {
-            salida = salida + historia.get(i) + "\n\n";
+        for(int i=0; i<historia.size(); i++){
+            salida = salida+historia.get(i)+"\n\n";
         }
         return salida;
     }
@@ -104,43 +110,30 @@ public class Usuario {
     /**
      * Imprime lista de citas pendientes.
      */
-    public ArrayList<String> consultarCitas() {
-        ArrayList<String> conCitas = new ArrayList<>();
-        for (Procedimiento c : citas) {
-            conCitas.add(c.getDatos());
+    public void consultarCitas() {
+        if (citas.isEmpty()) {
+            System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
+        } else {
+            for (Procedimiento c : citas) {
+                System.out.println(c.getDatos());
+            }
         }
-
-        return conCitas;
-//        if (citas.isEmpty()) {
-//            System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
-//        } else {
-//            for (Procedimiento c : citas) {
-//                System.out.println(c.getDatos());
-//            }
-//        }
     }
 
     /**
      * Imprime lista de ordenes pendientes vigentes.
      */
-    public ArrayList<String> consultarOrdenes() {
-        
-        ArrayList<String> conOrdenes = new ArrayList<>();
-        ordenarFechaVigencia();
-        for (Orden o : ordenes) {
-            conOrdenes.add(o.getDatos());
+    public void consultarOrdenes() {
+        if (ordenes.isEmpty()) {
+            System.out.println("El usuario " + nombre + " no tiene órdenes pendientes vigentes\n\n");
+        } else {
+            ordenarFechaVigencia();
+            for (Orden o : ordenes) {
+                System.out.println(o.getDatos());
+            }
         }
-        return conOrdenes;
-        
-//        if (ordenes.isEmpty()) {
-//            System.out.println("El usuario " + nombre + " no tiene órdenes pendientes vigentes\n\n");
-//        } else {
-//            ordenarFechaVigencia();
-//            for (Orden o : ordenes) {
-//                System.out.println(o.getDatos());
-//            }
-//        }
     }
+
 
     /**
      * Solicita los datos necesarios para crear la cita médica.
@@ -195,16 +188,17 @@ public class Usuario {
      * Crea la cita médica, la añade a la lista de citas pendientes y modifica
      * la agenda del doctor.
      */
-    private String AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
+
+    private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
         if (doctor.getEspecialidad().equals("General")) {
             Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(c);
-            return "La cita fue agendada exitosamente.\n";
         } else {
-            return "La cita no fue agendada.\n\nNecesita una orden para" +
-                    "obtener citas con especialistas. Por favor, solicite" +
-                    "una cita con un médico general para que lo remita.\n";
+            System.out.println("La cita no fue agendada.\n");
+            System.out.println("Necesita una orden para obtener citas con "
+                    + "especialistas. Por favor, solicite una cita con un médico"
+                    + "general para que lo remita.\n");
         }
     }
 
@@ -212,15 +206,14 @@ public class Usuario {
      * Crea la cita médica, la añade a la lista de citas pendientes y modifica
      * la agenda del doctor.
      */
-    private String AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
+    private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
         if (orden != null) {
             Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(new CitaMedica(this, fecha, hora, doctor));
             ordenes.remove(orden);
-            return "La cita fue agendada exitosamente.\n";
         } else {
-            return "La cita no fue agendada. La orden es nula.\n";
+            System.out.println("La orden es nula");
         }
     }
 
@@ -229,16 +222,15 @@ public class Usuario {
      *
      * @param cita La cita médica a eliminar de las citas pendientes.
      */
-    public String cancelarCita(Procedimiento cita) {
+    public void cancelarCita(Procedimiento cita) {
         citas.remove(cita);
-        return "La cita fue cancelada.\n";
     }
 
-    public Procedimiento cancelar() {
+    public Procedimiento cancelar(){
         Scanner scan = new Scanner(System.in);
         int op;
         System.out.println("Elija una cita para cancelar (#):\n");
-        for (int i = 0; i < citas.size(); i++) {
+        for(int i = 0; i < citas.size(); i++){
             System.out.println(i + ". " + citas.get(i).getDatos());
         }
         op = scan.nextInt();
@@ -248,8 +240,7 @@ public class Usuario {
     /**
      * Filtra un listado de doctores por especialidad.
      *
-     * @param ArrayList<Doctor> La lista de todos los doctores.
-     * @param String La especialidad para filtrar.
+     *
      * @return ArrayList<Doctor> La lista de doctores filtrada por especialidad.
      */
     private ArrayList<Doctor> filtrarEsp(ArrayList<Doctor> doctores, String esp) {
@@ -362,7 +353,7 @@ public class Usuario {
         return hora;
     }
 
-    private void ordenarFechaVigencia() {
+    private void ordenarFechaVigencia(){
         Comparator<Orden> byDate = new Comparator<Orden>() {
             public int compare(Orden left, Orden right) {
                 if (left.getFechaVigencia().isBefore(right.getFechaVigencia())) {

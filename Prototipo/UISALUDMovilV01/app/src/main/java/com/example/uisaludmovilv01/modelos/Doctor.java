@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package pgrado;
+package com.example.uisaludmovilv01.modelos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -23,7 +18,7 @@ import java.util.Scanner;
  * Este horario se guarda como un HashMap que consta de una llave con el nombre
  * del día de la semana y un arreglo con 11 variables que corresponden a las
  * horas de atención (de 8 am a 6 pm).
- * 
+ *
  * La agenda se guarda como un HashMap que consta de una llace con una fecha y
  * un arreglo boolean con 11 variables que corresponden a las horas de atención.
  * Estas horas de atención dirán false si ya están agendadas.
@@ -98,12 +93,12 @@ public class Doctor {
 
     /**
      * Devuelve un String con las horas de atención en formato de reloj digital.
-     * 
+     *
      * @param arreglo bool con las 11 horas de trabajo posibles. Dirá true si
      * esta disponible para agendar.
-     * 
+     *
      * @return String con horas en formato de reloj digita.
-     */    
+     */
     public String parseHorario(boolean[] horas){
         String formatoHoras = "";
         for (int i = 0; i < horas.length; i++) {
@@ -122,10 +117,10 @@ public class Doctor {
 
     /**
      * Agenda las citas del medico.
-     * 
+     *
      * Si la fecha no se encuentra en la agenda, se crea una nueva entrada con
      * las horas que el medico atiende.
-     * 
+     *
      * Cuando la fecha ya existe, se reserva la hora cambiando el campo a false.
      */
     public void modificarAgenda(Procedimiento c, LocalDate fecha, LocalTime hora){
@@ -134,7 +129,7 @@ public class Doctor {
         if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true){
             agenda.get(fecha)[hora.getHour()-8] = false;
             citas.add(c);
-        }         
+        }
     }
 
     public void crearEvolucion(String texto){
@@ -155,21 +150,21 @@ public class Doctor {
 
     /**
      * Cancela las citas del medico.
-     * 
+     *
      * Se cancela la cita cambiando el campo de la hora a false.
      */
     public void cancelar(LocalDate fecha, LocalTime hora){
         if(agenda.containsKey(fecha) &&
-        horario.get(fecha.getDayOfWeek().toString())[hora.getHour()-8] == true){
+                horario.get(fecha.getDayOfWeek().toString())[hora.getHour()-8] == true){
             agenda.get(fecha)[hora.getHour()-8] = true;
         }
     }
 
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha.
-     * 
+     *
      * @param fecha en la que se desea consultar la disponibilidad.
-     * 
+     *
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
      */
@@ -180,9 +175,9 @@ public class Doctor {
 
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha como Str.
-     * 
+     *
      * @param fecha en la que se desea consultar la disponibilidad como String.
-     * 
+     *
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
      */
@@ -192,8 +187,8 @@ public class Doctor {
 
     public boolean verificarFecha(LocalDate fecha){
         return ((horario.containsKey(fecha.getDayOfWeek().toString())) &&
-            !fecha.isBefore(LocalDate.now()) &&
-            verificarDisp(disponibilidad(fecha)));
+                !fecha.isBefore(LocalDate.now()) &&
+                verificarDisp(disponibilidad(fecha)));
     }
 
     public boolean verificarHora(LocalDate fecha, LocalTime hora){
@@ -209,24 +204,24 @@ public class Doctor {
 
     private void ordenarFechaHora(){
         Comparator<Procedimiento> byDate = new Comparator<Procedimiento>() {
-                public int compare(Procedimiento left, Procedimiento right) {
-                    if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
+            public int compare(Procedimiento left, Procedimiento right) {
+                if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
+                    return -1;
+                } else {
+                    return 1;
                 }
-            };
+            }
+        };
 
         Collections.sort(citas, byDate);
     }
-	
-	public void crearOrdenProcedimiento(Procedimiento cita, String esp, String obs, LocalDate fecha){
+
+    public void crearOrdenProcedimiento(Procedimiento cita, String esp, String obs, LocalDate fecha){
         // Procedimiento cita = citas.get(nro_usuario);
         OrdenProcedimiento ord = new OrdenProcedimiento((CitaMedica)cita, esp, obs, fecha);
         cita.getUsuario().ordenar(ord);
     }
-    
+
     public void crearOrdenMedicamento(int nro_usuario, String obs, LocalDate fecha){
         Procedimiento cita = citas.get(nro_usuario);
         OrdenMedicamento ord = new OrdenMedicamento((CitaMedica)cita, obs, fecha);

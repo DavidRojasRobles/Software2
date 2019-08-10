@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package pgrado;
+package com.example.uisaludmovilv01.modelos;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -82,7 +77,6 @@ public class Procedimiento {
 
         return datos;
     }
-    
 
     /**
      * Archiva un informe en la historia clínica del usuario.

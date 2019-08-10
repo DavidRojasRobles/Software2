@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package pgrado;
+package com.example.uisaludmovilv01.modelos;
 
 import java.time.LocalDate;
 
@@ -51,7 +46,7 @@ public class Orden {
     public CitaMedica getCita() {
         return cita;
     }
-    
+
     public LocalDate getFechaVigencia() {
         return fechaVigencia;
     }

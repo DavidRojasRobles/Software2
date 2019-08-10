@@ -1,12 +1,13 @@
-package pgrado;
-import java.time.LocalDate;
-import java.time.LocalTime;
+package com.example.uisaludmovilv01.modelos;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * Esta clase representa las citas médicas asignadas a usuarios.
