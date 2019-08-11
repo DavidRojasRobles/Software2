@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListaCitasActivity">
+    tools:context=".ListaCitasActivity"
+    android:layout_gravity="center_horizontal">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/citasRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/citasRV"
         android:padding="5dp"
-        >
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="145dp">
 
     </android.support.v7.widget.RecyclerView>
 

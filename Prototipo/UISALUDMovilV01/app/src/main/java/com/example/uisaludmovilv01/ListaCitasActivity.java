@@ -62,9 +62,21 @@ public class ListaCitasActivity extends AppCompatActivity {
                 LocalDate.of(2019, 8,26),
                 LocalTime.of(9,0),
                 d1);
+        Procedimiento cita4 = new CitaMedica(
+                user1,
+                LocalDate.of(2019, 8,26),
+                LocalTime.of(8,0),
+                d1);
+        Procedimiento cita5 = new CitaMedica(
+                user1,
+                LocalDate.of(2019, 8,29),
+                LocalTime.of(16,0),
+                d1);
         citas.add(cita1);
         citas.add(cita2);
         citas.add(cita3);
+        citas.add(cita4);
+        citas.add(cita5);
 
         citasRecyclerAdapter.notifyDataSetChanged();
     }
