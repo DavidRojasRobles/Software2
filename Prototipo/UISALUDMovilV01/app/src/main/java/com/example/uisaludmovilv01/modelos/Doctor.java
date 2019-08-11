@@ -1,8 +1,8 @@
 package com.example.uisaludmovilv01.modelos;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

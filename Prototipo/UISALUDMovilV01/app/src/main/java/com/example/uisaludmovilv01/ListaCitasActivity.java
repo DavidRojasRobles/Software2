@@ -11,9 +11,10 @@ import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 
 public class ListaCitasActivity extends AppCompatActivity {

@@ -1,7 +1,7 @@
 package com.example.uisaludmovilv01.modelos;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
 /**
  * Esta clase representa los procedimientos que puede agendar el usuario.

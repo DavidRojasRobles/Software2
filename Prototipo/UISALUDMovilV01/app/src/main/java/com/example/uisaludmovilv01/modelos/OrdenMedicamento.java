@@ -1,6 +1,6 @@
 package com.example.uisaludmovilv01.modelos;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
 
 /**
  * Esta clase representa las órdenes de medicamentos prescritas a los usuarios

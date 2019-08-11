@@ -6,8 +6,8 @@ package com.example.uisaludmovilv01.modelos;
  * and open the template in the editor.
  */
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 
 /**
  * Esta clase representa las citas médicas asignadas a usuarios.
