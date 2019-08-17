@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.uisaludmovilv01.R;
 import com.example.uisaludmovilv01.modelos.Orden;
+import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
+import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 
 import java.util.ArrayList;
@@ -32,9 +34,11 @@ public class OrdenesRecyclerAdapter extends RecyclerView.Adapter<OrdenesRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+
         viewHolder.orden_fecha.setText(ordenes.get(i).getCita().getFecha().toString());
-        if (ordenes.get(i).getClass().equals("OrdenMedicamento")) {
-            viewHolder.orden_tipo.setText("Medicamento");
+
+        if (ordenes.get(i).getClass() == OrdenMedicamento.class) {
+            viewHolder.orden_tipo.setText("Medicina");
             viewHolder.orden_icon.setImageResource(R.drawable.ic_healing_black_24dp);
         } else {
             viewHolder.orden_tipo.setText("Remisión");

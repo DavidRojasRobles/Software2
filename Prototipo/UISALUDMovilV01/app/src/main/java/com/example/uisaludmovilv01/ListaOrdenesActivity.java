@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.uisaludmovilv01.adaptadores.CitasRecyclerAdapter;
 import com.example.uisaludmovilv01.adaptadores.OrdenesRecyclerAdapter;
@@ -11,6 +12,7 @@ import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
+import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 
@@ -40,6 +42,9 @@ public class ListaOrdenesActivity extends AppCompatActivity {
         initRecyclerView();
         insertarOrdenesFalsas();
 
+        setSupportActionBar((Toolbar)findViewById(R.id.ordenes_toolbar));
+        setTitle("Ordenes");
+
 
     }
 
@@ -62,13 +67,16 @@ public class ListaOrdenesActivity extends AppCompatActivity {
                 LocalDate.of(2019, 8, 15),
                 LocalTime.of(10, 0),
                 d1);
-        Orden orden1 = new OrdenMedicamento(cita1, "Dolex", LocalDate.of(2019, 9, 12), true);
+        Orden orden1 = new OrdenMedicamento((CitaMedica)cita1, "Dolex", LocalDate.of(2019, 9, 12));
+        Orden orden2 = new OrdenProcedimiento((CitaMedica)cita1, "Odontologia", "Remisión por caries", LocalDate.of(2019, 9, 12));
+        Orden orden3 = new OrdenMedicamento((CitaMedica)cita2, "Corticoide", LocalDate.of(2019, 8, 15));
+        Orden orden4 = new OrdenProcedimiento((CitaMedica)cita2, "Dermatologia", "Test alergicos", LocalDate.of(2019, 9, 12));
 
-        ordenes.add(cita1);
-        ordenes.add(cita2);
-        ordenes.add(cita3);
-        ordenes.add(cita4);
-        ordenes.add(cita5);
+        ordenes.add(orden1);
+        ordenes.add(orden2);
+        ordenes.add(orden3);
+        ordenes.add(orden4);
+        ordenes.add(orden1);
 
         ordenesRecyclerAdapter.notifyDataSetChanged();
     }

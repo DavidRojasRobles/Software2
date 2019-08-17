@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.example.uisaludmovilv01.adaptadores.CitasRecyclerAdapter;
@@ -36,6 +37,8 @@ public class ListaCitasActivity extends AppCompatActivity {
         initRecyclerView();
         insertarCitasFalsas();
 
+        setSupportActionBar((Toolbar)findViewById(R.id.citas_toolbar));
+        setTitle("Citas");
 
     }
 
