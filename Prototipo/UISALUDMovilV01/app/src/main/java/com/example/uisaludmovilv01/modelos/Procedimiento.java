@@ -1,5 +1,8 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
@@ -13,12 +16,12 @@ import org.threeten.bp.LocalTime;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class Procedimiento {
+public class Procedimiento implements Parcelable {
 
-    private final Usuario usuario;
-    private final LocalDate fecha;
-    private final LocalTime hora;
-    private final Doctor doctor;
+    private Usuario usuario;
+    private LocalDate fecha;
+    private LocalTime hora;
+    private Doctor doctor;
     private Orden orden;
 
     /**
@@ -42,6 +45,21 @@ public class Procedimiento {
         this.hora = hora;
         this.doctor = doctor;
     }
+
+    protected Procedimiento(Parcel in) {
+    }
+
+    public static final Creator<Procedimiento> CREATOR = new Creator<Procedimiento>() {
+        @Override
+        public Procedimiento createFromParcel(Parcel in) {
+            return new Procedimiento(in);
+        }
+
+        @Override
+        public Procedimiento[] newArray(int size) {
+            return new Procedimiento[size];
+        }
+    };
 
     public Usuario getUsuario() {
         return usuario;
@@ -93,5 +111,14 @@ public class Procedimiento {
 //        if(fecha.compareTo(today) == 0){
 //            System.out.println("Usted tiene una cita de " + doctor.getEspecialidad() + " a las " + hora + " en el consultorio " + doctor.getEspecialidad() + " de BU.");
 //        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
     }
 }

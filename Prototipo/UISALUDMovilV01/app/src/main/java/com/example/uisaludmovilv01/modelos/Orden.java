@@ -16,10 +16,10 @@ import org.threeten.bp.LocalDate;
  */
 public class Orden {
 
-    private final CitaMedica cita;
-    private final String observaciones;
-    private final LocalDate fechaVigencia;
-    private final Boolean vigencia;
+    private CitaMedica cita;
+    private String observaciones;
+    private LocalDate fechaVigencia;
+    private Boolean vigencia;
 
     /**
      * Constructor para los objetos de la clase Orden.

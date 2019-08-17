@@ -1,5 +1,8 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
@@ -25,12 +28,12 @@ import static java.lang.Math.abs;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class Usuario {
+public class Usuario implements Parcelable {
 
-    private final String nombre;
-    private final String cedula;
-    private final String direccion;
-    private final String telefono;
+    private String nombre;
+    private String cedula;
+    private String direccion;
+    private String telefono;
     private ArrayList<Procedimiento> citas = new ArrayList<>(); //citas pendientes
     private ArrayList<Orden> ordenes = new ArrayList<>();
     private ArrayList<String> historia = new ArrayList<>();
@@ -54,6 +57,27 @@ public class Usuario {
         this.direccion = direccion;
         this.telefono = telefono;
     }
+
+    protected Usuario(Parcel in) {
+        nombre = in.readString();
+        cedula = in.readString();
+        direccion = in.readString();
+        telefono = in.readString();
+        citas = in.createTypedArrayList(Procedimiento.CREATOR);
+        historia = in.createStringArrayList();
+    }
+
+    public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
+        @Override
+        public Usuario createFromParcel(Parcel in) {
+            return new Usuario(in);
+        }
+
+        @Override
+        public Usuario[] newArray(int size) {
+            return new Usuario[size];
+        }
+    };
 
     public String getNombre() {
         return nombre;
@@ -367,4 +391,18 @@ public class Usuario {
         Collections.sort(ordenes, byDate);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(nombre);
+        dest.writeString(cedula);
+        dest.writeString(direccion);
+        dest.writeString(telefono);
+        dest.writeTypedList(citas);
+        dest.writeStringList(historia);
+    }
 }

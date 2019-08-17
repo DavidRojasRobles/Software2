@@ -99,6 +99,7 @@ public class ListaCitasActivity extends AppCompatActivity implements CitasRecycl
         Log.i(TAG, "onCitaClick: clicked i.");
 
         Intent intent = new Intent(this, SingleCitaActivity.class);
+        intent.putExtra("selected_cita", citas.get(position));
         startActivity(intent);
     }
 }

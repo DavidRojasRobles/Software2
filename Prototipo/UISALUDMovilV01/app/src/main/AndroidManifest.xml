@@ -24,8 +24,12 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ListaOrdenesActivity"></activity>
-        <activity android:name=".SingleCitaActivity"></activity>
+        <activity
+            android:name=".ListaOrdenesActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".SingleCitaActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

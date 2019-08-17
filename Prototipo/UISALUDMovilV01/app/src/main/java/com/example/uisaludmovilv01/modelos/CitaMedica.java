@@ -6,6 +6,8 @@ package com.example.uisaludmovilv01.modelos;
  * and open the template in the editor.
  */
 
+import android.os.Parcelable;
+
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
@@ -20,7 +22,7 @@ import org.threeten.bp.LocalTime;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class CitaMedica extends Procedimiento {
+public class CitaMedica extends Procedimiento implements Parcelable {
 
     /**
      * Constructor para los objetos de la clase CitaMedica con orden.
