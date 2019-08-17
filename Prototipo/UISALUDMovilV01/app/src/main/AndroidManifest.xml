@@ -14,7 +14,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".ListaOrdenesActivity"
+            android:name=".ListaCitasActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,6 +24,9 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".ListaOrdenesActivity"></activity>
+        <activity android:name=".SingleCitaActivity"></activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

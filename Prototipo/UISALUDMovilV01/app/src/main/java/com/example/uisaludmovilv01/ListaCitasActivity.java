@@ -1,5 +1,6 @@
 package com.example.uisaludmovilv01;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 
-public class ListaCitasActivity extends AppCompatActivity {
+public class ListaCitasActivity extends AppCompatActivity implements CitasRecyclerAdapter.OnCitaListener {
     private static final String TAG = "ListaCitasActivity";
 
     // Ui components
@@ -88,8 +89,16 @@ public class ListaCitasActivity extends AppCompatActivity {
     private void initRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        citasRecyclerAdapter = new CitasRecyclerAdapter(citas);
+        citasRecyclerAdapter = new CitasRecyclerAdapter(citas, this);
         recyclerView.setAdapter(citasRecyclerAdapter);
     }
 
+    @Override
+    public void onCitaClick(int position) {
+        Log.d(TAG, "onCitaClick: clicked d.");
+        Log.i(TAG, "onCitaClick: clicked i.");
+
+        Intent intent = new Intent(this, SingleCitaActivity.class);
+        startActivity(intent);
+    }
 }
