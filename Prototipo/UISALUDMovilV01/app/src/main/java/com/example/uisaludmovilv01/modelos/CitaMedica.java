@@ -6,10 +6,13 @@ package com.example.uisaludmovilv01.modelos;
  * and open the template in the editor.
  */
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
+
+import java.io.Serializable;
 
 /**
  * Esta clase representa las citas médicas asignadas a usuarios.
@@ -22,7 +25,7 @@ import org.threeten.bp.LocalTime;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class CitaMedica extends Procedimiento implements Parcelable {
+public class CitaMedica extends Procedimiento  implements Serializable {
 
     /**
      * Constructor para los objetos de la clase CitaMedica con orden.
@@ -37,6 +40,8 @@ public class CitaMedica extends Procedimiento implements Parcelable {
     public CitaMedica(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor) {
         super(usuario, fecha, hora, doctor);
     }
+
+
 
     /**
      * Genera una órden y la registra en la lista de órdenes del usuario y en su

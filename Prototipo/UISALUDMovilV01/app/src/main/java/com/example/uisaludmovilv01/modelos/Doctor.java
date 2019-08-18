@@ -1,8 +1,13 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +31,7 @@ import java.util.Scanner;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class Doctor {
+public class Doctor implements Serializable {
 
     private String nombre;
     private String consultorio;
@@ -44,6 +49,9 @@ public class Doctor {
         this.consultorio = consultorio;
         this.especialidad = especialidad;
     }
+
+
+
 
     public String getNombre() {
         return nombre;
@@ -94,8 +102,7 @@ public class Doctor {
     /**
      * Devuelve un String con las horas de atención en formato de reloj digital.
      *
-     * @param arreglo bool con las 11 horas de trabajo posibles. Dirá true si
-     * esta disponible para agendar.
+     *
      *
      * @return String con horas en formato de reloj digita.
      */
@@ -227,4 +234,6 @@ public class Doctor {
         OrdenMedicamento ord = new OrdenMedicamento((CitaMedica)cita, obs, fecha);
         cita.getUsuario().ordenar(ord);
     }
+
+
 }

@@ -95,11 +95,13 @@ public class ListaCitasActivity extends AppCompatActivity implements CitasRecycl
 
     @Override
     public void onCitaClick(int position) {
-        Log.d(TAG, "onCitaClick: clicked d.");
         Log.i(TAG, "onCitaClick: clicked i.");
 
         Intent intent = new Intent(this, SingleCitaActivity.class);
+        Log.i(TAG, "onCitaClick: intent created i.");
         intent.putExtra("selected_cita", citas.get(position));
+
+        Log.i(TAG, "onCitaClick: intent extra added i.");
         startActivity(intent);
     }
 }

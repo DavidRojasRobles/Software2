@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             app:titleTextColor="@color/white">
 
-            <!--<include layout="@layout/layout_single_element_toolbar" />-->
+            <include layout="@layout/layout_single_element_toolbar" />
 
         </android.support.v7.widget.Toolbar>
 

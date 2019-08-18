@@ -2,6 +2,8 @@ package com.example.uisaludmovilv01.modelos;
 
 import org.threeten.bp.LocalDate;
 
+import java.io.Serializable;
+
 /**
  * Esta clase representa las órdenes de procedimientos prescritas a los usuarios
  * por los doctores tras una cita médica.
@@ -12,7 +14,7 @@ import org.threeten.bp.LocalDate;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
-public class OrdenProcedimiento extends Orden {
+public class OrdenProcedimiento extends Orden implements Serializable {
 
     private String especialidad;
 
