@@ -9,6 +9,8 @@
     <color name="darkGray">#808080</color>
     <color name="lightGray">#D9D9D9</color>
     <color name="white">#FBFCFD</color>
+    <color name="black">#000000</color>
+    <color name="trans_black">#80000000</color>
     <color name="blue">#33C4DD</color>
 
 

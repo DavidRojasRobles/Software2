@@ -104,30 +104,31 @@
 
     </LinearLayout>
 
-    <!--<android.support.constraint.ConstraintLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
 
-        <!--<android.support.constraint.ConstraintLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="65dp"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:gravity="end">
 
-            <!--<TextView-->
-                <!--android:id="@+id/sc_cancelar"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="8dp"-->
-                <!--android:layout_marginRight="25dp"-->
-                <!--android:background="?attr/selectableItemBackground"-->
-                <!--android:text="CANCELAR CITA"-->
-                <!--android:textColor="@color/colorPrimary"-->
-                <!--android:textStyle="bold"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintTop_toTopOf="parent" />-->
-        <!--</android.support.constraint.ConstraintLayout>-->
+            <TextView
+                android:id="@+id/sc_cancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="25dp"
+                android:background="?attr/selectableItemBackground"
+                android:text="CANCELAR CITA"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
 
-    <!--</android.support.constraint.ConstraintLayout>-->
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

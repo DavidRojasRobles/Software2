@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdapter.ViewHolder> {
 
     private static final String TAG = "CitasRecyclerAdapter";
-    
+
     private ArrayList<Procedimiento> citas = new ArrayList<>();
     private OnCitaListener onCitaListener;
 
@@ -59,6 +59,7 @@ public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdap
             cita_hora = itemView.findViewById(R.id.cita_hora);
             cita_doctor = itemView.findViewById(R.id.cita_doctor);
             cita_consultorio = itemView.findViewById(R.id.cita_consultorio);
+
             this.onCitaListener = onCitaListener;
 
             itemView.setOnClickListener(this);
