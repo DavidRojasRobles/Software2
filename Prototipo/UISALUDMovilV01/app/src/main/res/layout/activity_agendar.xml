@@ -47,6 +47,7 @@
                 android:id="@+id/ag_esp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
                 android:contextClickable="true"
                 />
 
@@ -67,10 +68,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_face_black_24dp" />
-            <TextView
-                android:id="@+id/single_cita_doctor"
-                android:text="Darla Harris"
-                style="@style/behindSingleMenuItemLabel" />
+            <Spinner
+                android:id="@+id/ag_doctor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:contextClickable="true"
+                />
         </LinearLayout>
 
         <LinearLayout

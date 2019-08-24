@@ -48,14 +48,22 @@
 
 
     <style
-        name="spinnerItemStyle"
-        parent="android:Widget.TextView.SpinnerItem"/>
+        name="spinnerItemStyle">
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textColor">@color/darkGray</item>
+    </style>
 
 
     <style
-        name="spinnerDropDownItemStyle"
-        parent="android:TextAppearance.Widget.TextView.SpinnerItem"
-        >
+        name="spinnerDropDownItemStyle">
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textColor">@color/darkGray</item>
     </style>
 
 
