@@ -34,12 +34,14 @@
             android:name=".SingleOrdenActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Menu1"
+            android:name=".NavigationMenu"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PerfilActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        />
+        <activity
+            android:name=".AgendarActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="preloaded_fonts"

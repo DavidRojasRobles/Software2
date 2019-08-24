@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Menu1">
+    tools:context=".NavigationMenu">
     <solid android:color="#FFFFFF"/>
     <stroke android:width="3dp" android:color="#B1BCBE" />
     <corners android:radius="10dp"/>

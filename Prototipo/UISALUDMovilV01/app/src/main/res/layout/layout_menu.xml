@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/menu_whole"
     android:gravity="bottom"
-    tools:context=".Menu1"
+    tools:context=".NavigationMenu"
     android:orientation="vertical">
 
     <android.support.design.widget.FloatingActionButton

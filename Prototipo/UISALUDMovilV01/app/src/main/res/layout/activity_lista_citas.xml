@@ -34,7 +34,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </android.support.v7.widget.RecyclerView>
 
-    <include layout="@layout/layout_menu" />
+    <!--<include layout="@layout/layout_menu" />-->
 
 
 </android.support.design.widget.CoordinatorLayout>

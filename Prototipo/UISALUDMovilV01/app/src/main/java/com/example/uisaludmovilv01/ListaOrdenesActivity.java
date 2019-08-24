@@ -10,9 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.example.uisaludmovilv01.adaptadores.CitasRecyclerAdapter;
 import com.example.uisaludmovilv01.adaptadores.OrdenesRecyclerAdapter;
 import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
@@ -27,7 +25,7 @@ import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 
-public class ListaOrdenesActivity extends AppCompatActivity implements OrdenesRecyclerAdapter.OnOrdenListener {
+public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyclerAdapter.OnOrdenListener {
 
 
     private static final String TAG = "ListaOrdenesActivity";
@@ -39,7 +37,7 @@ public class ListaOrdenesActivity extends AppCompatActivity implements OrdenesRe
     private ArrayList<Orden> ordenes = new ArrayList<>();
     private OrdenesRecyclerAdapter ordenesRecyclerAdapter;
 
-    Menu1 menu;
+    NavigationMenu menu2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,42 +107,6 @@ public class ListaOrdenesActivity extends AppCompatActivity implements OrdenesRe
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-
-        switch (item.getItemId()){
-            case R.id.menu_agendar:
-                Log.i(TAG, "onClick: menu_btn_agendar i.");
-                return true;
-
-            case R.id.menu_ordenes:
-                Log.i(TAG, "onClick: menu_btn_ordenes i.");
-                intent = new Intent(this, ListaOrdenesActivity.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.menu_perfil:
-                Log.i(TAG, "onClick: menu_btn_perfil i.");
-                intent = new Intent(this, PerfilActivity.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.menu_citas:
-                Log.i(TAG, "onClick: menu_btn_citas i.");
-                intent = new Intent(this, ListaCitasActivity.class);
-                startActivity(intent);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
 
 
