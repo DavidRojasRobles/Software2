@@ -16,6 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    //Configure only for each module that uses Java 8
+    // language features (either in its source code or
+    // through dependencies).
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
 
 }
 
@@ -35,4 +42,8 @@ dependencies {
 
     //design support (for toolbar)
     implementation 'com.android.support:design:28.0.0'
+
+    //Material DateTimePicker
+
+//    implementation 'com.wdullaer:materialdatetimepicker:4.2.2'
 }

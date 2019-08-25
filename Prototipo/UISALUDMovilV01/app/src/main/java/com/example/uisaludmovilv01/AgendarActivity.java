@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,8 +33,7 @@ import java.util.TreeSet;
 
 import javax.security.auth.login.LoginException;
 
-public class AgendarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-        View.OnClickListener {
+public class AgendarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 //    implements AdapterView.OnItemSelectedListener
 
     private static final String TAG = "AgendarActivity";
@@ -46,6 +47,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
 
     //UI elements
+    private ImageButton ag_back;
     private Spinner ag_esp;
     private Spinner ag_doctor;
     private TextView ag_fecha, ag_hora;
@@ -64,25 +66,45 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         setContentView(R.layout.activity_agendar);
 
+        ag_back = findViewById(R.id.set_back_button);
         ag_esp = findViewById(R.id.ag_esp);
         ag_doctor = findViewById(R.id.ag_doctor);
         ag_fecha = findViewById(R.id.ag_fecha);
         ag_hora = findViewById(R.id.ag_hora);
 
 
-        initializeFaxeData();
+        initializeFakeData();
+
+        setListeners();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
 
         Log.i(TAG, "onCreate: Vamos a selectItems() i.");
         selectItems();
+
+
+    }
+
+
+    public void setListeners() {
+
+        ag_back.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: ag_back clicked i.");
+
+                finish();
+
+            }
+        });
 
         ag_fecha.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick: ag_fecha clicked i.");
-                fecha = LocalDate.now();
 
+                fecha = LocalDate.now();
                 datePickerDialog = new DatePickerDialog(AgendarActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -92,9 +114,21 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                                 //colocar restricciones
 
                                 fecha = LocalDate.of(year, month, day);
+                                if (!doctor.verificarFecha(fecha)) {
+                                    Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
+                                }else{
+                                    Log.i(TAG, "onClick: La fecha es valida.");
+                                }
                             }
                         }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
                 datePickerDialog.show();
+
+//                do {
+//                    datePickerDialog.show();
+//                    if (!doctor.verificarFecha(fecha)) {
+//                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
+//                    }
+//                } while (!doctor.verificarFecha(fecha));
             }
         });
 
@@ -115,17 +149,16 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                                 String meridian = hourOfDay > 11 ? " PM" : " AM";
 
-                                hourOfDay = hourOfDay%12 == 0 ? 12 : hourOfDay%12;
+                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
 
                                 ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
 
                             }
-                        },hora.getHour(), hora.getMinute(), false);
+                        }, hora.getHour(), hora.getMinute(), false);
                 timePickerDialog.show();
             }
         });
     }
-
 
     private void selectItems() {
 
@@ -172,7 +205,6 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-
     private void populateEsp() {
 
         Log.i(TAG, "populateEsp: called i.");
@@ -206,7 +238,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void initializeFaxeData() {
+    private void initializeFakeData() {
 
         Log.i(TAG, "llenarArrayDoctores: called i.");
 
@@ -215,6 +247,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                 false, false, false, false, false, false});
         d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
                 false, false, false, true, true, false});
+
+
         doctores.add(d1);
 
         Doctor d2 = new Doctor("Dr. Two", "102", "Cardiologia");
@@ -305,24 +339,5 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         Log.i(TAG, "onNothingSelected: Spinner item not selected i.");
     }
 
-    @Override
-    public void onClick(View v) {
-        Intent intent;
-        switch (v.getId()) {
 
-            case R.id.ag_esp:
-                Log.i(TAG, "onClick: ag_esp");
-
-                Log.i(TAG, "onClick: before selected especialidad = " + ag_esp.getSelectedItem().toString() + " i.");
-
-                ag_esp.setOnItemSelectedListener(this);
-                Log.i(TAG, "onClick: after selected especialidad = " + ag_esp.getSelectedItem().toString() + " i.");
-
-                break;
-
-            case R.id.ag_doctor:
-                Log.i(TAG, "onClick: menu_empty. Close menu i.");
-                break;
-        }
-    }
 }
