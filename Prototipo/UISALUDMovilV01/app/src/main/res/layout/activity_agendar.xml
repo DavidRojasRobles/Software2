@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,11 +8,12 @@
     tools:context=".AgendarActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/ag_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/single_cita_toolbar"
+            android:id="@+id/ag_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleTextColor="@color/white">
@@ -24,9 +25,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/ag_datos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_below="@id/ag_header"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -91,8 +94,8 @@
                 android:src="@drawable/ic_event_black_24dp" />
 
             <TextView
-                android:id="@+id/single_cita_fecha"
-                android:text="25 / 05 / 2019"
+                android:id="@+id/ag_fecha"
+                android:text=" 01 / 01 / 2019"
                 style="@style/behindSingleMenuItemLabel" />
         </LinearLayout>
 
@@ -109,8 +112,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_access_time_black_24dp" />
             <TextView
-                android:id="@+id/single_cita_hora"
-                android:text="3:00 PM"
+                android:id="@+id/ag_hora"
+                android:text="00:00 AM"
                 style="@style/behindSingleMenuItemLabel" />
         </LinearLayout>
 
@@ -122,6 +125,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_below="@id/ag_datos"
         android:gravity="bottom">
 
         <LinearLayout
@@ -136,7 +140,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="25dp"
                 android:background="?attr/selectableItemBackground"
-                android:text="CANCELAR CITA"
+                android:text="AGENGAR CITA"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 />
@@ -145,4 +149,4 @@
 
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

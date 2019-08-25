@@ -1,38 +1,62 @@
 package com.example.uisaludmovilv01;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.uisaludmovilv01.modelos.Doctor;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.TreeSet;
 
 import javax.security.auth.login.LoginException;
 
-public class AgendarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
+public class AgendarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+        View.OnClickListener {
 //    implements AdapterView.OnItemSelectedListener
 
     private static final String TAG = "AgendarActivity";
 
+    //Fake data
     private static TreeSet<String> treeEspecialidades = new TreeSet<>();
-    private ArrayList<String> especialidades;
     private ArrayList<Doctor> doctores = new ArrayList<>();
+
+    //Array Spinners
+    private ArrayList<String> especialidades;
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
+
+    //UI elements
     private Spinner ag_esp;
     private Spinner ag_doctor;
+    private TextView ag_fecha, ag_hora;
+    private DatePickerDialog datePickerDialog;
+    private TimePickerDialog timePickerDialog;
 
+    //Variables
     private String especialidad;
     private Doctor doctor;
+    private LocalDate fecha;
+    private LocalTime hora;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,16 +66,68 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         ag_esp = findViewById(R.id.ag_esp);
         ag_doctor = findViewById(R.id.ag_doctor);
+        ag_fecha = findViewById(R.id.ag_fecha);
+        ag_hora = findViewById(R.id.ag_hora);
+
 
         initializeFaxeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
 
         Log.i(TAG, "onCreate: Vamos a selectItems() i.");
         selectItems();
+
+        ag_fecha.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: ag_fecha clicked i.");
+                fecha = LocalDate.now();
+
+                datePickerDialog = new DatePickerDialog(AgendarActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int day) {
+                                ag_fecha.setText(day + " / " + (month + 1) + " / " + year);
+
+                                //colocar restricciones
+
+                                fecha = LocalDate.of(year, month, day);
+                            }
+                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
+                datePickerDialog.show();
+            }
+        });
+
+        ag_hora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ag_hora clicked i.");
+                hora = LocalTime.now();
+
+                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                                //colocar restricciones
+
+                                hora = LocalTime.of(hourOfDay, minute);
+
+                                String meridian = hourOfDay > 11 ? " PM" : " AM";
+
+                                hourOfDay = hourOfDay%12 == 0 ? 12 : hourOfDay%12;
+
+                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
+
+                            }
+                        },hora.getHour(), hora.getMinute(), false);
+                timePickerDialog.show();
+            }
+        });
     }
 
 
-    private void selectItems(){
+    private void selectItems() {
 
         populateEsp();
 
@@ -86,7 +162,6 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                 Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
 
-
             }
 
             @Override
@@ -98,7 +173,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     }
 
 
-    private void populateEsp(){
+    private void populateEsp() {
 
         Log.i(TAG, "populateEsp: called i.");
 
@@ -112,14 +187,14 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void populateDoctores(String e){
+    private void populateDoctores(String e) {
 
         Log.i(TAG, "populateDoctores: called i.");
 
         filtroDoctores = filtrarEsp(e);
         ArrayList<String> nombresDoctores = new ArrayList<>();
 
-        for (Doctor d : filtroDoctores){
+        for (Doctor d : filtroDoctores) {
             nombresDoctores.add(d.getNombre());
         }
 
@@ -131,10 +206,10 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void initializeFaxeData(){
+    private void initializeFaxeData() {
 
         Log.i(TAG, "llenarArrayDoctores: called i.");
-        
+
         Doctor d1 = new Doctor("Dr. One", "101", "General");
         d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
                 false, false, false, false, false, false});
@@ -199,18 +274,18 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         return docEsp;
     }
 
-    private Doctor findDoctor(String esp){
+    private Doctor findDoctor(String esp) {
 
         Log.i(TAG, "findDoctor: called i.");
-        
+
         Doctor doc = null;
 
-        try{
-            for(Doctor d: filtroDoctores){
+        try {
+            for (Doctor d : filtroDoctores) {
                 if (d.getNombre().equals(esp)) return d;
                 Log.i(TAG, "findDoctor: doctor found i.");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.i(TAG, "findDoctor: doctor not found i.");
         }
 
@@ -221,7 +296,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getApplicationContext(), "Selected User: " +
-                especialidades.get(position) ,Toast.LENGTH_SHORT).show();
+                especialidades.get(position), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -233,7 +308,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.ag_esp:
                 Log.i(TAG, "onClick: ag_esp");
