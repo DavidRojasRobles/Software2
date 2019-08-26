@@ -4,10 +4,16 @@
     tools:context="com.example.uisaludmovilv01.MainActivity"
     >
     <item
-        android:id="@+id/menu_agendar"
+        android:id="@+id/menu_usuario"
         android:orderInCategory="100"
-        android:title="Agendar"
-        app:showAsAction="ifRoom" />
+        android:title="Cambiar usuario"
+        app:showAsAction="never" />
+
+    <!--<item-->
+        <!--android:id="@+id/menu_agendar"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="Agendar"-->
+        <!--app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/menu_citas"

@@ -53,6 +53,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
 
     //UI elements
+    private TextView ag_title;
+    private TextView ag_subtitle;
     private Dialog prompt;
     private TextView pd_title, pd_content;
     private Button pd_cancel_btn, pd_accept_btn;
@@ -82,6 +84,9 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         prompt.setContentView(R.layout.layout_dialog);
         prompt.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        ag_title = findViewById(R.id.single_elem_title);
+        ag_subtitle = findViewById(R.id.single_elem_subtitle);
+
         pd_title = prompt.findViewById(R.id.pd_title);
         pd_content = prompt.findViewById(R.id.pd_content);
         pd_cancel_btn = prompt.findViewById(R.id.pd_cancel_btn);
@@ -94,6 +99,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         ag_hora = findViewById(R.id.ag_hora);
         ag_agendar = findViewById(R.id.ag_agendar);
 
+        ag_title.setText("Agendar");
+        ag_subtitle.setText("");
 
         initializeFakeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
@@ -257,6 +264,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                 Toast.makeText(getApplicationContext(), "Cita agendada",
                         Toast.LENGTH_SHORT).show();
                 prompt.hide();
+                finish();
             }
         });
 

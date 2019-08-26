@@ -1,12 +1,17 @@
 package com.example.uisaludmovilv01;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.uisaludmovilv01.adaptadores.CitasRecyclerAdapter;
 import com.example.uisaludmovilv01.modelos.CitaMedica;
@@ -24,11 +29,13 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
 
     // Ui components
     private RecyclerView recyclerView;
+    private FloatingActionButton citas_agendar;
 //    private NavigationMenu menu;
 
     // variables
     private ArrayList<Procedimiento> citas = new ArrayList<>();
     private CitasRecyclerAdapter citasRecyclerAdapter;
+    private Usuario usuarioRecibido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +43,38 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
         setContentView(R.layout.activity_lista_citas);
         recyclerView = findViewById(R.id.citasRV);
 
+        citas_agendar = findViewById(R.id.citas_agendar);
+
+        if (getIntent().hasExtra("selected_usuario")) {
+            usuarioRecibido = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+
+            Log.i(TAG, "onCreate: has extra i.");
+            Log.i(TAG, "onCreate: " + usuarioRecibido.getNombre());
+        }
+
 
         initRecyclerView();
         insertarCitasFalsas();
+        setAgendarListener();
 
         setSupportActionBar((Toolbar) findViewById(R.id.citas_toolbar));
         setTitle("Citas");
 
+
+    }
+
+    public void setAgendarListener() {
+        citas_agendar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: agendar called i.");
+
+                Intent intent = new Intent(getApplicationContext(), AgendarActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void insertarCitasFalsas() {

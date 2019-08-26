@@ -46,7 +46,7 @@ public class HistoriaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate: iniciated i.");
-        
+
         setContentView(R.layout.activity_historia);
         Log.i(TAG, "onCreate: content view set i.");
 
@@ -70,12 +70,12 @@ public class HistoriaActivity extends AppCompatActivity {
 
 
         }
-        
+
         setBackListener();
-        
+
         initRecyclerView();
-        
-        
+
+
 //        setSupportActionBar((Toolbar) findViewById(R.id.historia_header));
 //        setTitle("Historia");
 

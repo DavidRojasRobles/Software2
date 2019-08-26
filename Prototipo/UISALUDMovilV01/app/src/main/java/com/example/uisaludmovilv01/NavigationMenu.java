@@ -119,9 +119,9 @@ public class NavigationMenu extends AppCompatActivity{
         Intent intent;
 
         switch (item.getItemId()){
-            case R.id.menu_agendar:
+            case R.id.menu_usuario:
                 Log.i(TAG, "onClick: menu_btn_agendar i.");
-                intent = new Intent(this, AgendarActivity.class);
+                intent = new Intent(this, MenuUsuariosActivity.class);
                 startActivity(intent);
                 return true;
 

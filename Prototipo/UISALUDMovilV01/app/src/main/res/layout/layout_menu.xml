@@ -19,6 +19,7 @@
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_menu_black_24dp"
         app:fabSize="normal"
+        android:visibility="visible"
         tools:ignore="VectorDrawableCompat"></android.support.design.widget.FloatingActionButton>
 
 
