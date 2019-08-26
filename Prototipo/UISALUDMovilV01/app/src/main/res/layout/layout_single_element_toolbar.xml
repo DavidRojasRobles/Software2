@@ -5,6 +5,7 @@
     android:layout_height="150dp"
     android:orientation="vertical"
     android:weightSum="100"
+    android:id="@+id/se_toolbar"
     android:background="@color/colorPrimary">
 
     <RelativeLayout

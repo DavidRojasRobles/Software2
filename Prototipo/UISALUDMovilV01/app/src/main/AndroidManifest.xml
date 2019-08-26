@@ -42,6 +42,9 @@
         <activity
             android:name=".AgendarActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".HistoriaActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,11 +1,14 @@
 package com.example.uisaludmovilv01;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.modelos.Orden;
@@ -17,6 +20,7 @@ public class SingleOrdenActivity extends AppCompatActivity {
     private static final String TAG = "SingleOrdenActivity";
 
     //ui components
+    private ImageButton single_elem_back;
     private TextView single_elem_title;
     private TextView single_elem_subtitle;
     private TextView single_orden_fecha;
@@ -35,6 +39,7 @@ public class SingleOrdenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_single_orden);
 
+        single_elem_back = findViewById(R.id.set_back_button);
         single_elem_title = findViewById(R.id.single_elem_title);
         single_elem_subtitle = findViewById(R.id.single_elem_subtitle);
         single_orden_fecha = findViewById(R.id.single_orden_fecha);
@@ -51,9 +56,24 @@ public class SingleOrdenActivity extends AppCompatActivity {
 
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: " + orden.toString());
+
+            setSOBackButtonListener();
             setOrdenProperties();
         }
 
+    }
+
+    private void setSOBackButtonListener() {
+        single_elem_back.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: ag_back clicked i.");
+
+                finish();
+
+            }
+        });
     }
 
     private void setOrdenProperties() {

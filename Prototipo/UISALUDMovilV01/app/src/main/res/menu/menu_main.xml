@@ -10,6 +10,12 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/menu_citas"
+        android:orderInCategory="100"
+        android:title="Citas"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_ordenes"
         android:orderInCategory="100"
         android:title="Órdenes"
@@ -20,13 +26,5 @@
         android:orderInCategory="100"
         android:title="Perfil"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_citas"
-        android:orderInCategory="100"
-        android:title="Citas"
-        app:showAsAction="never" />
-
-
 
 </menu>

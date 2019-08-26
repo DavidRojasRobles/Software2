@@ -1,8 +1,11 @@
 package com.example.uisaludmovilv01;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +23,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
+import com.example.uisaludmovilv01.modelos.Procedimiento;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -47,14 +53,20 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
 
     //UI elements
+    private Dialog prompt;
+    private TextView pd_title, pd_content;
+    private Button pd_cancel_btn, pd_accept_btn;
     private ImageButton ag_back;
     private Spinner ag_esp;
     private Spinner ag_doctor;
     private TextView ag_fecha, ag_hora;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
+    private Button ag_agendar;
 
     //Variables
+
+    private Usuario usuario;
     private String especialidad;
     private Doctor doctor;
     private LocalDate fecha;
@@ -66,20 +78,30 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         setContentView(R.layout.activity_agendar);
 
+        prompt = new Dialog(this);
+        prompt.setContentView(R.layout.layout_dialog);
+        prompt.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        pd_title = prompt.findViewById(R.id.pd_title);
+        pd_content = prompt.findViewById(R.id.pd_content);
+        pd_cancel_btn = prompt.findViewById(R.id.pd_cancel_btn);
+        pd_accept_btn = prompt.findViewById(R.id.pd_accept_btn);
+
         ag_back = findViewById(R.id.set_back_button);
         ag_esp = findViewById(R.id.ag_esp);
         ag_doctor = findViewById(R.id.ag_doctor);
         ag_fecha = findViewById(R.id.ag_fecha);
         ag_hora = findViewById(R.id.ag_hora);
+        ag_agendar = findViewById(R.id.ag_agendar);
 
 
         initializeFakeData();
-
-        setListeners();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
+        populateEsp();
+        setListeners();
+        Log.i(TAG, "onCreate: Listeners set i.");
 
-        Log.i(TAG, "onCreate: Vamos a selectItems() i.");
-        selectItems();
+//        selectItems();
 
 
     }
@@ -94,6 +116,45 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                 Log.i(TAG, "onClick: ag_back clicked i.");
 
                 finish();
+
+            }
+        });
+
+        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
+
+                especialidad = ag_esp.getSelectedItem().toString();
+
+                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
+
+                populateDoctores(especialidad);
+
+                Log.i(TAG, "onItemSelected: Doctores populates i.");
+                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
+
+                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -116,7 +177,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                                 fecha = LocalDate.of(year, month, day);
                                 if (!doctor.verificarFecha(fecha)) {
                                     Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-                                }else{
+                                } else {
                                     Log.i(TAG, "onClick: La fecha es valida.");
                                 }
                             }
@@ -158,50 +219,47 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                 timePickerDialog.show();
             }
         });
+
+        ag_agendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ag_agendar clicked i.");
+
+                setPromptDialog();
+
+                prompt.show();
+
+
+            }
+        });
     }
 
-    private void selectItems() {
 
-        populateEsp();
+    private void setPromptDialog() {
 
-        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
+
+        pd_title.setText("¿AGENDAR ESTA CITA?");
+        pd_content.setText(cita.getDatos());
+
+        pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
-
-                especialidad = ag_esp.getSelectedItem().toString();
-
-                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
-
-                populateDoctores(especialidad);
-
-                Log.i(TAG, "onItemSelected: Doctores populates i.");
-                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
-
+            public void onClick(View v) {
+                prompt.hide();
             }
-
+        });
+        pd_accept_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: cita agendada i.");
 
+                //Guardar cita
+                Toast.makeText(getApplicationContext(), "Cita agendada",
+                        Toast.LENGTH_SHORT).show();
+                prompt.hide();
             }
         });
 
-        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
-
-                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
     }
 
@@ -241,6 +299,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private void initializeFakeData() {
 
         Log.i(TAG, "llenarArrayDoctores: called i.");
+
+        usuario = new Usuario();
 
         Doctor d1 = new Doctor("Dr. One", "101", "General");
         d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,

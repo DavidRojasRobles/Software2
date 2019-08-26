@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/white"
+    android:padding="15dp"
+    android:id="@+id/prompt_dialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pd_title"
+        android:text="WARNING"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/lato"
+        android:textStyle="bold"
+        android:padding="15dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/behindSingleMenuItemLabel"
+        android:id="@+id/pd_content"
+        android:layout_below="@+id/pd_title"
+        android:text="Lorem ipsum dolor sit amet, sapien etiam, nunc amet dolor ac odio mauris justo. Luctus arcu, urna praesent at id quisque ac."
+        android:padding="10dp"
+        android:layout_marginLeft="0dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pd_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+
+    <Button
+        android:id="@+id/pd_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/basicButton"
+        android:text="CANCELAR"/>
+
+    <Button
+        android:id="@+id/pd_accept_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/basicButton"
+        android:text="ACEPTAR"/>
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>
