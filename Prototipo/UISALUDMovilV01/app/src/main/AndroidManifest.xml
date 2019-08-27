@@ -30,6 +30,11 @@
         <activity
             android:name=".SingleCitaActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".AtenderCitaActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".SingleOrdenActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -46,7 +51,12 @@
             android:name=".HistoriaActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".ListaOrdenesActivity"
+        <activity
+            android:name=".ListaOrdenesActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".ListaCitasDoctorActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data

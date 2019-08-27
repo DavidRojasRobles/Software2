@@ -150,7 +150,8 @@ public class Doctor implements Serializable {
         //        System.out.println("Sus citas Médicas por atender:\n");
         String salida = "Sus citas Médicas por atender:\n";
         for(int i=0; i<citas.size(); i++){
-            salida = salida+(i+1)+". "+citas.get(i).getFecha().toString()+" "+citas.get(i).getUsuario().getNombre()+"\n";
+            salida = salida+(i+1)+". "+citas.get(i).getFecha().toString()+
+                    " "+citas.get(i).getUsuario().getNombre()+"\n";
         }
         return salida;
     }
@@ -199,7 +200,8 @@ public class Doctor implements Serializable {
     }
 
     public boolean verificarHora(LocalDate fecha, LocalTime hora){
-        return ((agenda.get(fecha)[hora.getHour()-8] == true) && !LocalDateTime.of(fecha, hora).isBefore(LocalDateTime.now()));
+        return ((agenda.get(fecha)[hora.getHour()-8] == true) &&
+                !LocalDateTime.of(fecha, hora).isBefore(LocalDateTime.now()));
     }
 
     private boolean verificarDisp(boolean[] disp){

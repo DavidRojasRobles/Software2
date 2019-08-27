@@ -98,7 +98,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: doctor 1 clicked i.");
-                Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ListaCitasDoctorActivity.class);
                 //Change for corresponding user
                 intent.putExtra("selected_usuario", usuario);
                 startActivity(intent);
@@ -108,7 +108,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: doctor 2 clicked i.");
-                Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ListaCitasDoctorActivity.class);
                 //Change for corresponding user
                 intent.putExtra("selected_usuario", usuario);
                 startActivity(intent);
