@@ -4,16 +4,12 @@ import android.arch.lifecycle.LiveData;
 import android.content.Context;
 
 import com.example.uisaludmovilv01.modelos.Agenda;
-import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Especialidad;
 import com.example.uisaludmovilv01.modelos.Horario;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
+import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
-
-import org.threeten.bp.LocalDateTime;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,10 +33,10 @@ public class ProjectRepositorio {
     public LiveData<List<Horario>> consultarHorario(int idDoctor, LocalDate fecha) {
         return mProjectDatabase.consultarHorarioDao(idDoctor, fecha).consultarHorario(idDoctor, fecha);
     }
-    public LiveData<List<OrdenMedicamento>> consultarOrdenesMedicamento(int idUsuario) {
+    public LiveData<List<Orden>> consultarOrdenesMedicamento(int idUsuario) {
         return mProjectDatabase.consultarOrdenesMedicamentoDao(idUsuario).consultarOrdenesMedicamento(idUsuario);
     }
-    public LiveData<List<OrdenProcedimiento>> consultarOrdenesProcedimiento(int idUsuario) {
+    public LiveData<List<Orden>> consultarOrdenesProcedimiento(int idUsuario) {
         return mProjectDatabase.consultarOrdenesProcedimientoDao(idUsuario).consultarOrdenesProcedimiento(idUsuario);
     }
     public LiveData<List<Procedimiento>> consultarProcedimientos(int idUsuario) {
@@ -57,10 +53,10 @@ public class ProjectRepositorio {
     public LiveData<List<Doctor>> consultarDoctores() {
         return mProjectDatabase.consultarDoctoresDao().consultarDoctores();
     }
-    public void agregarCitaMedica(CitaMedica cita){}
-    public void borrarCitaMedica(CitaMedica cita){}
-    public LiveData<List<CitaMedica>> consultarCitasMedicas(int idUsuario){
-        return mProjectDatabase.getCitaMedicaDao(idUsuario).getCitasMedicas(idUsuario);
+    public void agregarCitaMedica(int cita){}
+    public void borrarCitaMedica(int cita){}
+    public LiveData<List<Procedimiento>> consultarCitasMedicas(int idUsuario){
+        return mProjectDatabase.consultarCitasMedicasDao(idUsuario).consultarCitasMedicas(idUsuario);
     }
 
     //ESPECIALIDADES

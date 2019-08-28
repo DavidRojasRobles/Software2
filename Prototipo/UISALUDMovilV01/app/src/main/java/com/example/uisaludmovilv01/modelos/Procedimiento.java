@@ -2,6 +2,7 @@ package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -30,6 +31,10 @@ public class Procedimiento implements Serializable {
     private int id;
 
     @NonNull
+    @ColumnInfo(name = "tipo")
+    private int tipo; // 0 si es cita medica general; 1 si es cita especializada y 2 si es procedimiento (Examen médico)
+
+    @NonNull
     @ColumnInfo(name = "usuario")
     private int usuario;
 
@@ -37,7 +42,6 @@ public class Procedimiento implements Serializable {
     @ColumnInfo(name = "doctor")
     private int doctor;
 
-    @NonNull
     @ColumnInfo(name = "orden")
     private int orden;
 
@@ -49,31 +53,29 @@ public class Procedimiento implements Serializable {
     @ColumnInfo(name="hora")
     private LocalTime hora;
 
+    @ColumnInfo(name = "especialidad")
+    private String especialidad;
 
     /**
      * Constructor para los objetos de la clase Procedimiento.
      */
-    public Procedimiento(int usuario, LocalDate fecha, LocalTime hora, int doctor, int orden) {
+    @Ignore
+    public Procedimiento(int tipo, int usuario, int doctor, int orden, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
+        this.tipo = tipo;
         this.usuario = usuario;
-        this.fecha = fecha;
-        this.hora = hora;
         this.doctor = doctor;
         this.orden = orden;
-    }
-
-    /**
-     * Constructor para los objetos de la clase Procedimiento que no requieran
-     * una orden.
-     */
-    public Procedimiento(int usuario, LocalDate fecha, LocalTime hora, int doctor) {
-        this.usuario = usuario;
         this.fecha = fecha;
         this.hora = hora;
-        this.doctor = doctor;
+        this.especialidad = especialidad;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getTipo() {
+        return tipo;
     }
 
     public int getUsuario() {
@@ -96,6 +98,22 @@ public class Procedimiento implements Serializable {
     @NonNull
     public LocalTime getHora() {
         return hora;
+    }
+
+    public String getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setFecha(@NonNull LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public void setHora(@NonNull LocalTime hora) {
+        this.hora = hora;
     }
 
     /**

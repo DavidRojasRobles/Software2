@@ -1,7 +1,12 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import org.threeten.bp.LocalDate;
 
@@ -19,28 +24,104 @@ import java.io.Serializable;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
+
+@Entity(tableName = "Ordenes")
 public class Orden implements Serializable {
 
-    private CitaMedica cita;
-    private String observaciones;
-    private LocalDate fechaVigencia;
-    private Boolean vigencia;
-    int anio;
-    int mes;
-    int dia;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    /**
-     * Constructor para los objetos de la clase Orden.
-     */
-    public Orden(CitaMedica cita, String observaciones, LocalDate fechaVigencia) {
+    @NonNull
+    @ColumnInfo(name = "cita")
+    private int cita;
+
+    @NonNull
+    @ColumnInfo(name = "tipo")
+    private int tipo;  //0 si es de medicamento y 1 si es de procedimiento
+
+    @NonNull
+    @ColumnInfo(name = "observaciones")
+    private String observaciones;
+
+    @NonNull
+    @ColumnInfo(name = "fecha")
+    private LocalDate fechaVigencia;
+
+    @NonNull
+    @ColumnInfo(name = "vigencia")
+    private Boolean vigencia;
+
+    @ColumnInfo(name = "especialidad")
+    private String especialidad;
+
+    @ColumnInfo(name = "reclamado")
+    private boolean reclamado;
+
+    @Ignore
+    public Orden(int cita, int tipo, @NonNull String observaciones, @NonNull LocalDate fechaVigencia, @NonNull Boolean vigencia, String especialidad, boolean reclamado) {
         this.cita = cita;
+        this.tipo = tipo;
         this.observaciones = observaciones;
         this.fechaVigencia = fechaVigencia;
-        this.vigencia = true;
-        int anio = fechaVigencia.getYear();
-        int mes = fechaVigencia.getMonthValue();
-        int dia = fechaVigencia.getDayOfMonth();
+        this.vigencia = vigencia;
+        this.especialidad = especialidad;
+        this.reclamado = reclamado;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getCita() {
+        return cita;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    @NonNull
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    @NonNull
+    public LocalDate getFechaVigencia() {
+        return fechaVigencia;
+    }
+
+    @NonNull
+    public Boolean getVigencia() {
+        return vigencia;
+    }
+
+    public String getEspecialidad() {
+        return especialidad;
+    }
+
+    public boolean isReclamado() {
+        return reclamado;
+    }
+
+    public void setObservaciones(@NonNull String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public void setFechaVigencia(@NonNull LocalDate fechaVigencia) {
+        this.fechaVigencia = fechaVigencia;
+    }
+
+    public void setVigencia(@NonNull Boolean vigencia) {
+        this.vigencia = vigencia;
+    }
+
+    public void setReclamado(boolean reclamado) {
+        this.reclamado = reclamado;
+    }
+
+/**
+     * Constructor para los objetos de la clase Orden.
+     */
 
 
     /**

@@ -7,18 +7,21 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
+import com.example.uisaludmovilv01.modelos.Orden;
 
 import java.util.List;
 
 @Dao
-public interface OrdenProcedimientoDao {
+public interface OrdenDao {
 
     //@Insert
 
 
-    @Query("SELECT * FROM OrdenProcedimiento WHERE id = :idUsuario")
-    LiveData<List<OrdenProcedimiento>> consultarOrdenesProcedimiento(int idUsuario);
+    @Query("SELECT * FROM Ordenes WHERE id = :idUsuario and tipo = 0")
+    LiveData<List<Orden>> consultarOrdenesMedicamento(int idUsuario);
+
+    @Query("SELECT * FROM Ordenes WHERE id = :idUsuario and tipo = 1")
+    LiveData<List<Orden>> consultarOrdenesProcedimiento(int idUsuario);
 
 
     //@Update

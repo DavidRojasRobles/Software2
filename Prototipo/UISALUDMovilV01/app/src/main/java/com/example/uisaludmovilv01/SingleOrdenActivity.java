@@ -12,8 +12,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.modelos.Orden;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
-import com.example.uisaludmovilv01.modelos.Procedimiento;
 
 public class SingleOrdenActivity extends AppCompatActivity {
 

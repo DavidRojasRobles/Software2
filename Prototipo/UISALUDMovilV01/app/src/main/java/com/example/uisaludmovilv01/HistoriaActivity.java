@@ -1,30 +1,18 @@
 package com.example.uisaludmovilv01;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.adaptadores.HistoriaRecyclerAdapter;
-import com.example.uisaludmovilv01.adaptadores.OrdenesRecyclerAdapter;
-import com.example.uisaludmovilv01.modelos.CitaMedica;
-import com.example.uisaludmovilv01.modelos.Doctor;
-import com.example.uisaludmovilv01.modelos.Orden;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
-import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
-
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
 

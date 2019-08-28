@@ -1,8 +1,5 @@
 package com.example.uisaludmovilv01;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -16,9 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.uisaludmovilv01.modelos.CitaMedica;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 
 import org.threeten.bp.LocalDate;

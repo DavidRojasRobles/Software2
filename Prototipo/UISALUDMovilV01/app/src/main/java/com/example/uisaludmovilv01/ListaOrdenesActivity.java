@@ -2,21 +2,14 @@ package com.example.uisaludmovilv01;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.example.uisaludmovilv01.adaptadores.OrdenesRecyclerAdapter;
-import com.example.uisaludmovilv01.modelos.CitaMedica;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Orden;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 

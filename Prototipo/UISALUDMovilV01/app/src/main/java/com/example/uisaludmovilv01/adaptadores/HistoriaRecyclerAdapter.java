@@ -6,12 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.R;
-import com.example.uisaludmovilv01.modelos.Orden;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
 
 import java.util.ArrayList;
 

@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import com.example.uisaludmovilv01.R;
 import com.example.uisaludmovilv01.modelos.Orden;
-import com.example.uisaludmovilv01.modelos.OrdenMedicamento;
-import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
-import com.example.uisaludmovilv01.modelos.Procedimiento;
 
 import java.util.ArrayList;
 
