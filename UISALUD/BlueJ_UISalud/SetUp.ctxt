@@ -1,11 +1,9 @@
 #BlueJ class context
-comment0.target=SetUp
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ SetUp\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.params=
+comment0.target=SetUp()
+comment0.text=\r\n\ Crea\ datos\ iniciales\ para\ pruebas.\ Demo\ final\ probablemente\ no\ crear\u0102\u00A1\ los\r\n\ datos\ iniciales\ de\ esta\ forma.\r\n
 comment1.params=
-comment1.target=SetUp()
-comment1.text=\r\n\ Crea\ datos\ iniciales\ para\ pruebas.\ Demo\ final\ probablemente\ no\ crear\u0102\u00A1\ los\r\n\ datos\ iniciales\ de\ esta\ forma.\r\n
-comment2.params=
-comment2.target=void\ populate()
-comment3.params=
-comment3.target=void\ run()
-numComments=4
+comment1.target=java.util.ArrayList\ crearDoctores()
+comment2.params=doctores
+comment2.target=java.util.TreeSet\ crearEspecialidades(java.util.ArrayList)
+numComments=3

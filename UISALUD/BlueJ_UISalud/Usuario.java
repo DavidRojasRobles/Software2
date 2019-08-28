@@ -23,7 +23,8 @@ import java.util.Comparator;
  * @version 14 / 07 / 2019
  */
 public class Usuario {
-
+    private static ArrayList<Doctor> doctores = SetUp.crearDoctores();
+    private TreeSet<String> especialidades = SetUp.crearEspecialidades(doctores);
     private final String nombre;
     private final String cedula;
     private final String direccion;
@@ -45,7 +46,7 @@ public class Usuario {
     }
 
     public Usuario(String nombre, String cedula, String direccion, String telefono) {
-        // initialise instance variables
+        // initialise instance variables        
         this.nombre = nombre;
         this.cedula = cedula;
         this.direccion = direccion;
@@ -208,7 +209,7 @@ public class Usuario {
             Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(new CitaMedica(this, fecha, hora, doctor));
-			ordenes.remove(orden);
+            ordenes.remove(orden);
         } else {
             System.out.println("La orden es nula");
         }

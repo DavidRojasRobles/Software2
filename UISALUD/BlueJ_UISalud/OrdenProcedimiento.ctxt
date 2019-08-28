@@ -1,9 +1,4 @@
 #BlueJ class context
-comment0.target=OrdenProcedimiento
-comment0.text=\r\n\ Esta\ clase\ representa\ las\ \u00F3rdenes\ de\ procedimientos\ prescritas\ a\ los\ usuarios\r\n\ por\ los\ doctores\ tras\ una\ cita\ m\u00E9dica.\r\n\r\n\ Con\ procedimiento\ se\ refiere\ a\ ex\u00E1menes\ y\ otras\ citas\ m\u00E9dicas\ que\ requieren\r\n\ una\ orden,\ como\ una\ cita\ con\ un\ especialista.\r\n\r\n\ @author\ Marianne\ Solangel\ Rojas\ Robles\ &\ Fredy\ Emanuel\ Mogoll\u00F3n\ Velandia\r\n\ @version\ 14\ /\ 07\ /\ 2019\r\n
-comment1.params=cita\ especialidad\ observaciones\ fechaVigencia
-comment1.target=OrdenProcedimiento(CitaMedica,\ java.lang.String,\ java.lang.String,\ java.time.LocalDate)
-comment1.text=\r\n\ Constructor\ para\ los\ objetos\ de\ la\ clase\ OrdenProcedimiento.\r\n
-comment2.params=
-comment2.target=java.lang.String\ getEspecialidad()
-numComments=3
+comment0.params=
+comment0.target=java.lang.String\ getEspecialidad()
+numComments=1

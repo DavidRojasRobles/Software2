@@ -1,7 +1,11 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -18,18 +22,38 @@ import java.io.Serializable;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
+
+@Entity(tableName = "Procedimientos")
 public class Procedimiento implements Serializable {
 
-    private Usuario usuario;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @NonNull
+    @ColumnInfo(name = "usuario")
+    private int usuario;
+
+    @NonNull
+    @ColumnInfo(name = "doctor")
+    private int doctor;
+
+    @NonNull
+    @ColumnInfo(name = "orden")
+    private int orden;
+
+    @NonNull
+    @ColumnInfo(name = "fecha")
     private LocalDate fecha;
+
+    @NonNull
+    @ColumnInfo(name="hora")
     private LocalTime hora;
-    private Doctor doctor;
-    private Orden orden;
+
 
     /**
      * Constructor para los objetos de la clase Procedimiento.
      */
-    public Procedimiento(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
+    public Procedimiento(int usuario, LocalDate fecha, LocalTime hora, int doctor, int orden) {
         this.usuario = usuario;
         this.fecha = fecha;
         this.hora = hora;
@@ -41,34 +65,37 @@ public class Procedimiento implements Serializable {
      * Constructor para los objetos de la clase Procedimiento que no requieran
      * una orden.
      */
-    public Procedimiento(Usuario usuario, LocalDate fecha, LocalTime hora, Doctor doctor) {
+    public Procedimiento(int usuario, LocalDate fecha, LocalTime hora, int doctor) {
         this.usuario = usuario;
         this.fecha = fecha;
         this.hora = hora;
         this.doctor = doctor;
     }
 
+    public int getId() {
+        return id;
+    }
 
-
-
-    public Usuario getUsuario() {
+    public int getUsuario() {
         return usuario;
     }
 
+    public int getDoctor() {
+        return doctor;
+    }
+
+    public int getOrden() {
+        return orden;
+    }
+
+    @NonNull
     public LocalDate getFecha() {
         return fecha;
     }
 
+    @NonNull
     public LocalTime getHora() {
         return hora;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public Orden getOrden() {
-        return orden;
     }
 
     /**
@@ -76,7 +103,7 @@ public class Procedimiento implements Serializable {
      *
      * @return datos de la cita médica como único String
      */
-    public String getDatos() {
+    /*public String getDatos() {
         String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
                 + "Fecha: " + fecha + "\n"
                 + "Hora: " + hora + "\n"
@@ -84,13 +111,13 @@ public class Procedimiento implements Serializable {
                 + "Doctor: " + doctor.getNombre() + "\n\n";
 
         return datos;
-    }
+    }*/
 
     /**
      * Archiva un informe en la historia clínica del usuario.
      */
-    public void archivarInforme(String informe) {
-        usuario.archivar(getDatos() + informe);
+    public void archivarInforme(int usuario, String informe) {
+        //usuario.archivar(getDatos() + informe);
     }
 
     /**

@@ -1,4 +1,3 @@
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -17,19 +16,18 @@ import java.util.TreeSet;
  */
 public class SetUp
 {
-    private static ArrayList<Usuario> afiliados = new ArrayList<>();
-    private static ArrayList<Doctor> doctores = new ArrayList<>();
-    private static TreeSet<String> especialidades = new TreeSet<>();
+    
 
     /**
      * Crea datos iniciales para pruebas. Demo final probablemente no crearĂ¡ los
      * datos iniciales de esta forma.
      */
     SetUp() {
-        
     }
     
-    private void populate(){
+    public static ArrayList<Doctor> crearDoctores(){
+        ArrayList<Doctor> doctores = new ArrayList<>();
+        
         Doctor d1 = new Doctor("Dr. One", "101", "General");
         d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
             false, false, false, false, false, false});
@@ -73,23 +71,22 @@ public class SetUp
         d6.anadirDia("THURSDAY", new boolean[]{false, false, false, false, false,
             false, true, true, true, true, true});
         doctores.add(d6);
-
-        for (int i = 0; i < doctores.size(); i++) {
-            especialidades.add(doctores.get(i).getEspecialidad());
-        }
-
-        afiliados.add(new Usuario("User1", "123", "Cll 1 #2-3", "1234"));
-        afiliados.add(new Usuario("User2", "234", "Cll 2 #3-4", "2345"));
-        afiliados.add(new Usuario("User3", "345", "Cll 3 #4-5", "3456"));
-        afiliados.add(new Usuario("User4", "456", "Cll 4 #5-6", "4567"));
-        afiliados.add(new Usuario("User5", "567", "Cll 5 #6-7", "5678"));
+        return doctores;
     }
     
-    public void run(){
-        populate();
-        Usuario user0 = afiliados.get(0);
-        Usuario user1 = afiliados.get(1);
-        Usuario user2 = afiliados.get(2);
+    public static TreeSet<String> crearEspecialidades(ArrayList<Doctor> doctores){
+    TreeSet<String> especialidades = new TreeSet<>();
+     for (int i = 0; i < doctores.size(); i++) {
+            especialidades.add(doctores.get(i).getEspecialidad());
+        }   
+        return especialidades;
+    }
+    
+    // public void run(){
+        
+        // Usuario user0 = afiliados.get(0);
+        // Usuario user1 = afiliados.get(1);
+        // Usuario user2 = afiliados.get(2);
         
         // user0.consultarOrdenes();
         
@@ -105,7 +102,7 @@ public class SetUp
         
         // user1.solicitarCita(doctores, especialidades);
         // user2.solicitarCita(doctores, especialidades);
-    }
+    // }
     /*
     public void crearUsuarios(){
         Usuario user1 = new Usuario("User1", "123", "Cll 1 #2-3", "1234");

@@ -43,33 +43,12 @@ public class Orden implements Serializable {
     }
 
 
-
-    public Boolean getVigencia() {
-        return vigencia;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public Usuario getUsuario() {
-        return cita.getUsuario();
-    }
-
-    public CitaMedica getCita() {
-        return cita;
-    }
-
-    public LocalDate getFechaVigencia() {
-        return fechaVigencia;
-    }
-
     /**
      * Retorna cadena con los datos de la orden.
      *
      * @return datos de la orden como único String
      */
-    public String getDatos() {
+    /*public String getDatos() {
         String datos = "Doctor: " + cita.getDoctor().getNombre() + "\n"
                 + "Especialidad Dr: " + cita.getDoctor().getEspecialidad() + "\n"
                 + "Ordenado: " + cita.getFecha() + "\n"
@@ -77,7 +56,7 @@ public class Orden implements Serializable {
                 + "Vigente hasta: " + fechaVigencia + "\n\n";
 
         return datos;
-    }
+    }*/
 
     /**
      * Imprime un recordatorio cuando se aproxime la fecha máxima de vigencia de

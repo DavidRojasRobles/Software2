@@ -1,7 +1,11 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
@@ -31,14 +35,28 @@ import java.util.Scanner;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
+
+@Entity(tableName = "Doctores")
 public class Doctor implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @NonNull
+    @ColumnInfo(name = "nombre")
     private String nombre;
+
+    @NonNull
+    @ColumnInfo(name = "consultorio")
     private String consultorio;
+
+    @NonNull
+    @ColumnInfo(name = "especialidad")
     private String especialidad;
-    private HashMap<String, boolean[]> horario = new HashMap<>();
-    private ArrayList<Procedimiento> citas = new ArrayList<>();
-    private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
+
+    //private HashMap<String, boolean[]> horario = new HashMap<>();
+    //private ArrayList<Procedimiento> citas = new ArrayList<>();
+    //private HashMap<LocalDate, boolean[]> agenda = new HashMap<>();
 
 
     /**
@@ -50,19 +68,35 @@ public class Doctor implements Serializable {
         this.especialidad = especialidad;
     }
 
+    public int getId() {
+        return id;
+    }
 
-
-
+    @NonNull
     public String getNombre() {
         return nombre;
     }
 
+    public void setNombre(@NonNull String nombre) {
+        this.nombre = nombre;
+    }
+
+    @NonNull
     public String getConsultorio() {
         return consultorio;
     }
 
+    public void setConsultorio(@NonNull String consultorio) {
+        this.consultorio = consultorio;
+    }
+
+    @NonNull
     public String getEspecialidad() {
         return especialidad;
+    }
+
+    public void setEspecialidad(@NonNull String especialidad) {
+        this.especialidad = especialidad;
     }
 
     /**
@@ -72,7 +106,8 @@ public class Doctor implements Serializable {
      * @param horas Horas de 8:00 a 18:00, true si atiende.
      */
     public void anadirDia(String key, boolean[] horas) {
-        horario.put(key, horas);
+
+        //horario.put(key, horas);
     }
 
     /**
@@ -81,7 +116,8 @@ public class Doctor implements Serializable {
      * @param key Dia de la semana a eliminar.
      */
     public void eliminarDia(String key) {
-        horario.remove(key);
+
+        //horario.remove(key);
     }
 
     /**
@@ -90,13 +126,13 @@ public class Doctor implements Serializable {
      */
     public void printHorarioSemanal() {
 
-        for (HashMap.Entry<String, boolean[]> entry : horario.entrySet()) {
+        /*for (HashMap.Entry<String, boolean[]> entry : horario.entrySet()) {
             String dia = entry.getKey();
             boolean[] horas = entry.getValue();
 
             String formatoHoras = parseHorario(horas);
             System.out.println(dia + ": " + formatoHoras);
-        }
+        }*/
     }
 
     /**
@@ -106,7 +142,7 @@ public class Doctor implements Serializable {
      *
      * @return String con horas en formato de reloj digita.
      */
-    public String parseHorario(boolean[] horas){
+    /*public String parseHorario(boolean[] horas){
         String formatoHoras = "";
         for (int i = 0; i < horas.length; i++) {
             if (horas[i] == true) {
@@ -114,13 +150,13 @@ public class Doctor implements Serializable {
             }
         }
         return formatoHoras;
-    }
+    }*/
 
-    private void enterAgenda(LocalDate fecha){
+    /*private void enterAgenda(LocalDate fecha){
         if(!agenda.containsKey(fecha)){
             agenda.put(fecha, horario.get(fecha.getDayOfWeek().toString()).clone());
         }
-    }
+    }*/
 
     /**
      * Agenda las citas del medico.
@@ -130,23 +166,23 @@ public class Doctor implements Serializable {
      *
      * Cuando la fecha ya existe, se reserva la hora cambiando el campo a false.
      */
-    public void modificarAgenda(Procedimiento c, LocalDate fecha, LocalTime hora){
+    /*public void modificarAgenda(Procedimiento c, LocalDate fecha, LocalTime hora){
         enterAgenda(fecha);
         //Revisa si es un horario de trabajo del doctor
         if(horario.get(fecha.getDayOfWeek().toString())[(hora.getHour())-8] == true){
             agenda.get(fecha)[hora.getHour()-8] = false;
             citas.add(c);
         }
-    }
+    }*/
 
-    public void crearEvolucion(String texto){
+    /*public void crearEvolucion(String texto){
         Scanner scan = new Scanner(System.in);
         System.out.println(mostrarPacientes());
         String p = scan.nextLine();
         citas.get(Integer.parseInt(p)-1).getUsuario().archivar(texto);
-    }
+    }*/
 
-    public String mostrarPacientes(){
+    /*public String mostrarPacientes(){
         //        System.out.println("Sus citas Médicas por atender:\n");
         String salida = "Sus citas Médicas por atender:\n";
         for(int i=0; i<citas.size(); i++){
@@ -154,19 +190,19 @@ public class Doctor implements Serializable {
                     " "+citas.get(i).getUsuario().getNombre()+"\n";
         }
         return salida;
-    }
+    }*/
 
     /**
      * Cancela las citas del medico.
      *
      * Se cancela la cita cambiando el campo de la hora a false.
      */
-    public void cancelar(LocalDate fecha, LocalTime hora){
+    /*public void cancelar(LocalDate fecha, LocalTime hora){
         if(agenda.containsKey(fecha) &&
                 horario.get(fecha.getDayOfWeek().toString())[hora.getHour()-8] == true){
             agenda.get(fecha)[hora.getHour()-8] = true;
         }
-    }
+    }*/
 
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha.
@@ -176,10 +212,10 @@ public class Doctor implements Serializable {
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
      */
-    public boolean[] disponibilidad(LocalDate fecha){
+    /*public boolean[] disponibilidad(LocalDate fecha){
         enterAgenda(fecha);
         return agenda.get(fecha);
-    }
+    }*/
 
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha como Str.
@@ -189,29 +225,29 @@ public class Doctor implements Serializable {
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
      */
-    public String disponibilidadStr(LocalDate fecha){
+    /*public String disponibilidadStr(LocalDate fecha){
         return parseHorario(disponibilidad(fecha));
-    }
+    }*/
 
-    public boolean verificarFecha(LocalDate fecha){
+    /*public boolean verificarFecha(LocalDate fecha){
         return ((horario.containsKey(fecha.getDayOfWeek().toString())) &&
                 !fecha.isBefore(LocalDate.now()) &&
                 verificarDisp(disponibilidad(fecha)));
-    }
+    }*/
 
-    public boolean verificarHora(LocalDate fecha, LocalTime hora){
+    /*public boolean verificarHora(LocalDate fecha, LocalTime hora){
         return ((agenda.get(fecha)[hora.getHour()-8] == true) &&
                 !LocalDateTime.of(fecha, hora).isBefore(LocalDateTime.now()));
-    }
+    }*/
 
-    private boolean verificarDisp(boolean[] disp){
+    /*private boolean verificarDisp(boolean[] disp){
         for(boolean d : disp){
             if(d) return true;
         }
         return false;
-    }
+    }*/
 
-    private void ordenarFechaHora(){
+    /*private void ordenarFechaHora(){
         Comparator<Procedimiento> byDate = new Comparator<Procedimiento>() {
             public int compare(Procedimiento left, Procedimiento right) {
                 if (LocalDateTime.of(left.getFecha(),left.getHora()).isBefore(LocalDateTime.of(right.getFecha(),right.getHora()))) {
@@ -223,19 +259,19 @@ public class Doctor implements Serializable {
         };
 
         Collections.sort(citas, byDate);
-    }
+    }*/
 
-    public void crearOrdenProcedimiento(Procedimiento cita, String esp, String obs, LocalDate fecha){
+    /*public void crearOrdenProcedimiento(Procedimiento cita, String esp, String obs, LocalDate fecha){
         // Procedimiento cita = citas.get(nro_usuario);
         OrdenProcedimiento ord = new OrdenProcedimiento((CitaMedica)cita, esp, obs, fecha);
         cita.getUsuario().ordenar(ord);
-    }
+    }*/
 
-    public void crearOrdenMedicamento(int nro_usuario, String obs, LocalDate fecha){
+    /*public void crearOrdenMedicamento(int nro_usuario, String obs, LocalDate fecha){
         Procedimiento cita = citas.get(nro_usuario);
         OrdenMedicamento ord = new OrdenMedicamento((CitaMedica)cita, obs, fecha);
         cita.getUsuario().ordenar(ord);
-    }
+    }*/
 
 
 }

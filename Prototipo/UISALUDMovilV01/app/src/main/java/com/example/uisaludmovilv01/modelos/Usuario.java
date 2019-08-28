@@ -1,7 +1,12 @@
 package com.example.uisaludmovilv01.modelos;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -30,56 +35,97 @@ import static java.lang.Math.abs;
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
+
+@Entity(tableName = "Usuarios")
 public class Usuario implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @NonNull
+    @ColumnInfo(name = "nombre")
     private String nombre;
+
+    @NonNull
+    @ColumnInfo(name = "cedula")
     private String cedula;
+
+    @NonNull
+    @ColumnInfo(name = "direccion")
     private String direccion;
-    private String telefono;
-    private ArrayList<Procedimiento> citas = new ArrayList<>(); //citas pendientes
-    private ArrayList<Orden> ordenes = new ArrayList<>();
-    private ArrayList<String> historia = new ArrayList<>();
+
+    @NonNull
+    @ColumnInfo(name = "celular")
+    private String celular;
+
+    //private ArrayList<Procedimiento> citas = new ArrayList<>(); //citas pendientes
+    //private ArrayList<Orden> ordenes = new ArrayList<>();
+    //private ArrayList<String> historia = new ArrayList<>();
 
     /**
      * Constructor para objetos de la clase Usuario.
      */
-
+    @Ignore
     public Usuario() {
         // initialise instance variables
         this.nombre = "Fredy";
         this.cedula = "12345";
         this.direccion = "Calle 1 # 2-3";
-        this.telefono = "61234567";
+        this.celular = "61234567";
     }
 
+    @Ignore
     public Usuario(String nombre, String cedula, String direccion, String telefono) {
         // initialise instance variables
         this.nombre = nombre;
         this.cedula = cedula;
         this.direccion = direccion;
-        this.telefono = telefono;
+        this.celular = telefono;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    @NonNull
     public String getNombre() {
         return nombre;
     }
 
+    public void setNombre(@NonNull String nombre) {
+        this.nombre = nombre;
+    }
+
+    @NonNull
     public String getCedula() {
         return cedula;
     }
 
+    public void setCedula(@NonNull String cedula) {
+        this.cedula = cedula;
+    }
+
+    @NonNull
     public String getDireccion() {
         return direccion;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public void setDireccion(@NonNull String direccion) {
+        this.direccion = direccion;
     }
 
-    public ArrayList<String> getHistoria() {
-        return historia;
+    @NonNull
+    public String getCelular() {
+        return celular;
     }
+
+    public void setCelular(@NonNull String celular) {
+        this.celular = celular;
+    }
+
+    //public ArrayList<String> getHistoria() {
+    //return historia;
+    //}
 
     /**
      * Retorna cadena con los datos personales del usuario.
@@ -91,64 +137,65 @@ public class Usuario implements Serializable {
         String datos = "Nombre: " + getNombre() + "\n"
                 + "Cedula: " + getCedula() + "\n"
                 + "Direccion: " + getDireccion() + "\n"
-                + "Telefono: " + getTelefono() + "\n\n";
+                + "Telefono: " + getCelular() + "\n\n";
 
         return datos;
 
     }
 
+    //guarda evolución o mini historia en la tabla historia
     public void archivar(String informe) {
-        historia.add(informe);
+
     }
 
     public String imprimirHistoria(){
         String salida = "";
-        for(int i=0; i<historia.size(); i++){
+        /*for(int i=0; i<historia.size(); i++){
             salida = salida+historia.get(i)+"\n\n";
-        }
+        }*/
         return salida;
     }
 
-    public void ordenar(Orden orden) {
+    /*public void ordenar(Orden orden) {
         ordenes.add(orden);
-    }
+    }*/
 
     /**
      * Imprime lista de citas pendientes.
      */
     public void consultarCitas() {
-        if (citas.isEmpty()) {
+        /*if (citas.isEmpty()) {
             System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
         } else {
             for (Procedimiento c : citas) {
                 System.out.println(c.getDatos());
             }
-        }
+        }*/
     }
 
     /**
      * Imprime lista de ordenes pendientes vigentes.
      */
     public void consultarOrdenes() {
-        if (ordenes.isEmpty()) {
+        /*if (ordenes.isEmpty()) {
             System.out.println("El usuario " + nombre + " no tiene órdenes pendientes vigentes\n\n");
         } else {
             ordenarFechaVigencia();
             for (Orden o : ordenes) {
                 System.out.println(o.getDatos());
             }
-        }
+        }*/
     }
 
 
     /**
      * Solicita los datos necesarios para crear la cita médica.
      */
-    public void solicitarCita(ArrayList<Doctor> doctores, TreeSet<String> especialidades) {
-        Scanner scan = new Scanner(System.in);
+    public void solicitarCita(int doctor, String especialidad) {
+        /*Scanner scan = new Scanner(System.in);
         String esp;
         OrdenProcedimiento orden = null;
-        Doctor doctor;
+        //Doctor doctor;
         LocalTime hora;
         LocalDate fecha;
         String conm = "n";
@@ -158,7 +205,7 @@ public class Usuario implements Serializable {
         do { // solicitar cita
 
             do { // tiene orden
-                esp = verificarEspecialidad(especialidades);
+                esp = verificarEspecialidad(especialidad);
                 orden = verificarOrden(esp);
 
             } while (orden == null && !esp.equals("General"));
@@ -187,7 +234,7 @@ public class Usuario implements Serializable {
                 System.out.println("No se agendó la cita.\n\n");
             }
 
-        } while (!conm.equals("s"));
+        } while (!conm.equals("s"));*/
     }
 
     /**
@@ -195,8 +242,8 @@ public class Usuario implements Serializable {
      * la agenda del doctor.
      */
 
-    private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor) {
-        if (doctor.getEspecialidad().equals("General")) {
+    private void AgendarCita(int doctor, LocalDate fecha, LocalTime hora) {
+        /*if (doctor.getEspecialidad().equals("General")) {
             Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(c);
@@ -205,7 +252,7 @@ public class Usuario implements Serializable {
             System.out.println("Necesita una orden para obtener citas con "
                     + "especialistas. Por favor, solicite una cita con un médico"
                     + "general para que lo remita.\n");
-        }
+        }*/
     }
 
     /**
@@ -213,14 +260,14 @@ public class Usuario implements Serializable {
      * la agenda del doctor.
      */
     private void AgendarCita(LocalDate fecha, LocalTime hora, Doctor doctor, Orden orden) {
-        if (orden != null) {
+        /*if (orden != null) {
             Procedimiento c = new CitaMedica(this, fecha, hora, doctor);
             doctor.modificarAgenda(c, fecha, hora);
             citas.add(new CitaMedica(this, fecha, hora, doctor));
             ordenes.remove(orden);
         } else {
             System.out.println("La orden es nula");
-        }
+        }*/
     }
 
     /**
@@ -229,10 +276,10 @@ public class Usuario implements Serializable {
      * @param cita La cita médica a eliminar de las citas pendientes.
      */
     public void cancelarCita(Procedimiento cita) {
-        citas.remove(cita);
+        //citas.remove(cita);
     }
 
-    public Procedimiento cancelar(){
+    /*public Procedimiento cancelar(){
         Scanner scan = new Scanner(System.in);
         int op;
         System.out.println("Elija una cita para cancelar (#):\n");
@@ -241,7 +288,7 @@ public class Usuario implements Serializable {
         }
         op = scan.nextInt();
         return citas.get(op);
-    }
+    }*/
 
     /**
      * Filtra un listado de doctores por especialidad.
@@ -249,7 +296,7 @@ public class Usuario implements Serializable {
      *
      * @return ArrayList<Doctor> La lista de doctores filtrada por especialidad.
      */
-    private ArrayList<Doctor> filtrarEsp(ArrayList<Doctor> doctores, String esp) {
+    /*private ArrayList<Doctor> filtrarEsp(ArrayList<Doctor> doctores, String esp) {
 
         ArrayList<Doctor> docEsp = new ArrayList<>();
         docEsp.clear();
@@ -259,9 +306,9 @@ public class Usuario implements Serializable {
             }
         }
         return docEsp;
-    }
+    }*/
 
-    private OrdenProcedimiento verificarOrden(String esp) {
+    /*private OrdenProcedimiento verificarOrden(String esp) {
         OrdenProcedimiento orden = null;
         if (!esp.equals("General")) {
             for (OrdenProcedimiento ord : ordenesPro()) {
@@ -277,9 +324,9 @@ public class Usuario implements Serializable {
             }
         }
         return orden;
-    }
+    }*/
 
-    private ArrayList<OrdenProcedimiento> ordenesPro() {
+    /*private ArrayList<OrdenProcedimiento> ordenesPro() {
         ArrayList<OrdenProcedimiento> ordenesPro = new ArrayList<>();
         ordenarFechaVigencia();
         for (Orden ord : ordenes) {
@@ -288,9 +335,9 @@ public class Usuario implements Serializable {
             }
         }
         return ordenesPro;
-    }
+    }*/
 
-    private String verificarEspecialidad(TreeSet<String> especialidades) {
+    /**private String verificarEspecialidad(TreeSet<String> especialidades) {
         Scanner scan = new Scanner(System.in);
         String esp;
         do { // la especialidad existe
@@ -304,9 +351,9 @@ public class Usuario implements Serializable {
         } while (!especialidades.contains(esp));
 
         return esp;
-    }
+    }*/
 
-    private Doctor selecDoctor(ArrayList<Doctor> doctores, String esp) {
+    /*private Doctor selecDoctor(ArrayList<Doctor> doctores, String esp) {
         Scanner scan = new Scanner(System.in);
         int d;
         ArrayList<Doctor> docs;
@@ -319,10 +366,9 @@ public class Usuario implements Serializable {
             d = scan.nextInt() - 1;
         } while (!(abs(d) < docs.size()));
         return docs.get(d);
+    }*/
 
-    }
-
-    private LocalDate selecFecha(Doctor doctor) {
+    /*private LocalDate selecFecha(Doctor doctor) {
         Scanner scan = new Scanner(System.in);
         String f, h;
         LocalDate fecha;
@@ -344,9 +390,9 @@ public class Usuario implements Serializable {
 
         } while (!valido);
         return fecha;
-    }
+    }*/
 
-    private LocalTime selecHora(Doctor doctor, LocalDate fecha) {
+    /*private LocalTime selecHora(Doctor doctor, LocalDate fecha) {
         Scanner scan = new Scanner(System.in);
         System.out.println("\nPara este dia, las horas disponibles son: \n");
         System.out.println(doctor.disponibilidadStr(fecha));
@@ -357,9 +403,9 @@ public class Usuario implements Serializable {
         LocalTime hora = LocalTime.of(
                 Integer.parseInt(h.replaceAll(":00", "")), 0);
         return hora;
-    }
+    }*/
 
-    private void ordenarFechaVigencia(){
+    /*private void ordenarFechaVigencia(){
         Comparator<Orden> byDate = new Comparator<Orden>() {
             public int compare(Orden left, Orden right) {
                 if (left.getFechaVigencia().isBefore(right.getFechaVigencia())) {
@@ -371,6 +417,6 @@ public class Usuario implements Serializable {
         };
 
         Collections.sort(ordenes, byDate);
-    }
+    }*/
 
 }

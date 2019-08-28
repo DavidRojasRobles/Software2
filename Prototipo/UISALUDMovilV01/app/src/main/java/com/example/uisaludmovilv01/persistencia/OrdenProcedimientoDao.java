@@ -1,0 +1,28 @@
+package com.example.uisaludmovilv01.persistencia;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
+
+import com.example.uisaludmovilv01.modelos.OrdenProcedimiento;
+
+import java.util.List;
+
+@Dao
+public interface OrdenProcedimientoDao {
+
+    //@Insert
+
+
+    @Query("SELECT * FROM OrdenProcedimiento WHERE id = :idUsuario")
+    LiveData<List<OrdenProcedimiento>> consultarOrdenesProcedimiento(int idUsuario);
+
+
+    //@Update
+
+
+    //@Delete
+}
