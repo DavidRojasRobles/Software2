@@ -74,13 +74,12 @@ public class Usuario implements Serializable {
         this.celular = "61234567";
     }
 
-    @Ignore
-    public Usuario(String nombre, String cedula, String direccion, String telefono) {
+    public Usuario(String nombre, String cedula, String direccion, String celular) {
         // initialise instance variables
         this.nombre = nombre;
         this.cedula = cedula;
         this.direccion = direccion;
-        this.celular = telefono;
+        this.celular = celular;
     }
 
     public int getId() {
@@ -137,7 +136,7 @@ public class Usuario implements Serializable {
         String datos = "Nombre: " + getNombre() + "\n"
                 + "Cedula: " + getCedula() + "\n"
                 + "Direccion: " + getDireccion() + "\n"
-                + "Telefono: " + getCelular() + "\n\n";
+                + "celular: " + getCelular() + "\n\n";
 
         return datos;
 

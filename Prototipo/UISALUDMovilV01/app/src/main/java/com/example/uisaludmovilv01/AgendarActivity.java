@@ -95,10 +95,10 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         ag_title.setText("Agendar");
         ag_subtitle.setText("");
 
-        initializeFakeData();
+        //initializeFakeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
-        populateEsp();
-        setListeners();
+        //populateEsp();
+        //setListeners();
         Log.i(TAG, "onCreate: Listeners set i.");
 
 //        selectItems();
@@ -107,162 +107,162 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     }
 
 
-    public void setListeners() {
-
-        ag_back.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick: ag_back clicked i.");
-
-                finish();
-
-            }
-        });
-
-        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
-
-                especialidad = ag_esp.getSelectedItem().toString();
-
-                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
-
-                populateDoctores(especialidad);
-
-                Log.i(TAG, "onItemSelected: Doctores populates i.");
-                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
-
-                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        ag_fecha.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick: ag_fecha clicked i.");
-
-                fecha = LocalDate.now();
-                datePickerDialog = new DatePickerDialog(AgendarActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int day) {
-                                ag_fecha.setText(day + " / " + (month + 1) + " / " + year);
-
-                                //colocar restricciones
-
-                                fecha = LocalDate.of(year, month, day);
-                                if (!doctor.verificarFecha(fecha)) {
-                                    Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-                                } else {
-                                    Log.i(TAG, "onClick: La fecha es valida.");
-                                }
-                            }
-                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
-                datePickerDialog.show();
-
-//                do {
-//                    datePickerDialog.show();
-//                    if (!doctor.verificarFecha(fecha)) {
-//                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-//                    }
-//                } while (!doctor.verificarFecha(fecha));
-            }
-        });
-
-        ag_hora.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ag_hora clicked i.");
-                hora = LocalTime.now();
-
-                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                                //colocar restricciones
-
-                                hora = LocalTime.of(hourOfDay, minute);
-
-                                String meridian = hourOfDay > 11 ? " PM" : " AM";
-
-                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
-
-                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
-
-                            }
-                        }, hora.getHour(), hora.getMinute(), false);
-                timePickerDialog.show();
-            }
-        });
-
-        ag_agendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ag_agendar clicked i.");
-
-                setPromptDialog();
-
-                prompt.show();
-
-
-            }
-        });
-    }
-
-
-    private void setPromptDialog() {
-
-        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
-
-        pd_title.setText("¿AGENDAR ESTA CITA?");
-        pd_content.setText(cita.getDatos());
-
-        pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prompt.hide();
-            }
-        });
-        pd_accept_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: cita agendada i.");
-
-                //Guardar cita
-                Toast.makeText(getApplicationContext(), "Cita agendada",
-                        Toast.LENGTH_SHORT).show();
-                prompt.hide();
-                finish();
-            }
-        });
+//    public void setListeners() {
+//
+//        ag_back.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.N)
+//            @Override
+//            public void onClick(View view) {
+//                Log.i(TAG, "onClick: ag_back clicked i.");
+//
+//                finish();
+//
+//            }
+//        });
+//
+//        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
+//
+//                especialidad = ag_esp.getSelectedItem().toString();
+//
+//                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
+//
+//                populateDoctores(especialidad);
+//
+//                Log.i(TAG, "onItemSelected: Doctores populates i.");
+//                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
+//
+//                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//
+//        ag_fecha.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.N)
+//            @Override
+//            public void onClick(View view) {
+//                Log.i(TAG, "onClick: ag_fecha clicked i.");
+//
+//                fecha = LocalDate.now();
+//                datePickerDialog = new DatePickerDialog(AgendarActivity.this,
+//                        new DatePickerDialog.OnDateSetListener() {
+//                            @Override
+//                            public void onDateSet(DatePicker view, int year, int month, int day) {
+//                                ag_fecha.setText(day + " / " + (month + 1) + " / " + year);
+//
+//                                //colocar restricciones
+//
+//                                fecha = LocalDate.of(year, month, day);
+//                                if (!doctor.verificarFecha(fecha)) {
+//                                    Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
+//                                } else {
+//                                    Log.i(TAG, "onClick: La fecha es valida.");
+//                                }
+//                            }
+//                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
+//                datePickerDialog.show();
+//
+////                do {
+////                    datePickerDialog.show();
+////                    if (!doctor.verificarFecha(fecha)) {
+////                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
+////                    }
+////                } while (!doctor.verificarFecha(fecha));
+//            }
+//        });
+//
+//        ag_hora.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(TAG, "onClick: ag_hora clicked i.");
+//                hora = LocalTime.now();
+//
+//                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
+//                        new TimePickerDialog.OnTimeSetListener() {
+//                            @Override
+//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//
+//                                //colocar restricciones
+//
+//                                hora = LocalTime.of(hourOfDay, minute);
+//
+//                                String meridian = hourOfDay > 11 ? " PM" : " AM";
+//
+//                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
+//
+//                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
+//
+//                            }
+//                        }, hora.getHour(), hora.getMinute(), false);
+//                timePickerDialog.show();
+//            }
+//        });
+//
+//        ag_agendar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(TAG, "onClick: ag_agendar clicked i.");
+//
+//                setPromptDialog();
+//
+//                prompt.show();
+//
+//
+//            }
+//        });
+//    }
 
 
-    }
+//    private void setPromptDialog() {
+//
+//        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
+//
+//        pd_title.setText("¿AGENDAR ESTA CITA?");
+//        pd_content.setText(cita.getDatos());
+//
+//        pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                prompt.hide();
+//            }
+//        });
+//        pd_accept_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(TAG, "onClick: cita agendada i.");
+//
+//                //Guardar cita
+//                Toast.makeText(getApplicationContext(), "Cita agendada",
+//                        Toast.LENGTH_SHORT).show();
+//                prompt.hide();
+//                finish();
+//            }
+//        });
+//
+//
+//    }
 
     private void populateEsp() {
 

@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -33,6 +35,8 @@ public class Evolucion {
     @NonNull
     @ColumnInfo(name = "evolucion")
     private String evolucion;
+
+    private String nombreDoctor;
 
     public int getId() {
         return id;
@@ -63,5 +67,16 @@ public class Evolucion {
 
     public void setEvolucion(@NonNull String evolucion) {
         this.evolucion = evolucion;
+    }
+
+    public void setNombreDoctor(String nombre){
+        nombreDoctor = nombre;
+    }
+
+    public String toString(){
+        return "\nDoctor: " + nombreDoctor +
+                "\nFecha: " + fecha.toString() +
+                "\nHora: " + hora.toString() +
+                "\nObservaciones: " + evolucion;
     }
 }

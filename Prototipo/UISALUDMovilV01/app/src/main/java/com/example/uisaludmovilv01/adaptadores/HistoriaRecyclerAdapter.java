@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.R;
+import com.example.uisaludmovilv01.modelos.Evolucion;
 
 import java.util.ArrayList;
 
@@ -16,9 +17,9 @@ public class HistoriaRecyclerAdapter extends RecyclerView.Adapter<HistoriaRecycl
 
     private static final String TAG = "HistoriaRecyclerAdapter";
 
-    private ArrayList<String> historia = new ArrayList<>();
+    private ArrayList<Evolucion> historia = new ArrayList<>();
 
-    public HistoriaRecyclerAdapter(ArrayList<String> historia) {
+    public HistoriaRecyclerAdapter(ArrayList<Evolucion> historia) {
         Log.i(TAG, "HistoriaRecyclerAdapter: called i.");
         this.historia = historia;
         Log.i(TAG, "HistoriaRecyclerAdapter: succesfully created i.");
@@ -38,7 +39,7 @@ public class HistoriaRecyclerAdapter extends RecyclerView.Adapter<HistoriaRecycl
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Log.i(TAG, "onBindViewHolder: called i.");
 
-        viewHolder.historia_item.setText(historia.get(i));
+        viewHolder.historia_item.setText(historia.get(i).toString());
 
         Log.i(TAG, "onBindViewHolder: succesfully set i.");
     }

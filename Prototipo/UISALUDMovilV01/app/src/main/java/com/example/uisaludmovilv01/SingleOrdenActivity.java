@@ -1,5 +1,6 @@
 package com.example.uisaludmovilv01;
 
+import android.arch.lifecycle.Observer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.uisaludmovilv01.modelos.Orden;
+import com.example.uisaludmovilv01.modelos.Procedimiento;
+import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
 public class SingleOrdenActivity extends AppCompatActivity {
 
@@ -30,6 +34,9 @@ public class SingleOrdenActivity extends AppCompatActivity {
 
     //vars
     private Orden orden;
+    private Procedimiento mCita;
+    private ProjectRepositorio repositorio;
+    private String nombreDoctor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,10 +54,14 @@ public class SingleOrdenActivity extends AppCompatActivity {
         single_orden_vence = findViewById(R.id.single_orden_vence);
         so_bottom = findViewById(R.id.so_bottom);
 
+        repositorio = new ProjectRepositorio(this);
+
         Log.i(TAG, "onCreate: called i.");
 
         if (getIntent().hasExtra("selected_orden")) {
             orden = (Orden) getIntent().getSerializableExtra("selected_orden");
+
+            encontrarCita(orden.getCita());
 
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: " + orden.toString());
@@ -81,23 +92,57 @@ public class SingleOrdenActivity extends AppCompatActivity {
         String title = "Orden: ";
         String x = "Medicamento";
 
-        if(orden.getClass() == OrdenProcedimiento.class){
+        if (orden.getTipo() == 1) {
             title = "Remisión: ";
-            x = ((OrdenProcedimiento)orden).getEspecialidad();
+            x = (orden).getEspecialidad();
             single_orden_esp.setVisibility(View.VISIBLE);
-            if (orden.getVigencia()){
+            if (orden.getVigencia()) {
                 so_bottom.setVisibility(View.VISIBLE);
             }
         }
         single_elem_title.setText(title);
         single_elem_subtitle.setText(x);
-        single_orden_fecha.setText(orden.getCita().getFecha().toString());
-        single_orden_doctor.setText(orden.getCita().getDoctor().getNombre());
+        single_orden_fecha.setText(mCita.getFecha().toString());
+        getNombreDoctor(mCita.getDoctor());
+        single_orden_doctor.setText(nombreDoctor);
         single_orden_esp.setText(x);
         single_orden_obs.setText(orden.getObservaciones());
         single_orden_vence.setText(orden.getFechaVigencia().toString());
 
         Log.i(TAG, "setCitaProperties: set all properties i.");
 
+    }
+
+    private void encontrarCita(int citaId) {
+        try {
+            repositorio.getProcedimientoById(citaId).observe(this, new Observer<Procedimiento>() {
+                @Override
+                public void onChanged(@Nullable Procedimiento procedimiento) {
+                    if (procedimiento != null) {
+                        mCita = procedimiento;
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "No existe el procedimiento", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.i(TAG, "getDoctor: e.toString()");
+        }
+    }
+
+    private void getNombreDoctor(int doctorId) {
+        try {
+            repositorio.getNombreDoctor(doctorId).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(@Nullable String s) {
+                    if (s != null)
+                        nombreDoctor = s;
+                }
+            });
+        } catch (Exception e){
+            Log.i(TAG, "getNombreDoctor: " + e.toString());
+        }
     }
 }

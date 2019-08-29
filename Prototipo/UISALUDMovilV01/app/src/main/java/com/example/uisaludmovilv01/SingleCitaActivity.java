@@ -1,10 +1,12 @@
 package com.example.uisaludmovilv01;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,7 +16,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
+import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
 public class SingleCitaActivity extends AppCompatActivity {
 
@@ -35,6 +39,8 @@ public class SingleCitaActivity extends AppCompatActivity {
 
     //vars
     private Procedimiento mCita;
+    private Doctor mDoctor;
+    private ProjectRepositorio repositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +65,14 @@ public class SingleCitaActivity extends AppCompatActivity {
         single_cita_consultorio = findViewById(R.id.single_cita_consultorio);
         single_cita_cancelar = findViewById(R.id.single_cita_cancelar);
 
+        repositorio = new ProjectRepositorio(this);
+
         Log.i(TAG, "onCreate: called i.");
 
         if (getIntent().hasExtra("selected_cita")) {
             mCita = (Procedimiento) getIntent().getSerializableExtra("selected_cita");
+
+            encontrarDoctor(mCita.getDoctor());
 
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: " + mCita.toString());
@@ -73,7 +83,7 @@ public class SingleCitaActivity extends AppCompatActivity {
     }
 
 
-    private void setListeners(){
+    private void setListeners() {
 
         single_elem_back.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -103,7 +113,7 @@ public class SingleCitaActivity extends AppCompatActivity {
     private void setPromptDialog() {
 
         pd_title.setText("¿CANCELAR ESTA CITA?");
-        pd_content.setText(mCita.getDatos());
+        //pd_content.setText(mCita.getDatos());
 
         pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +128,7 @@ public class SingleCitaActivity extends AppCompatActivity {
 
                 //Cancelar cita
 
-                mCita.getUsuario().cancelarCita(mCita);
+                //mCita.getUsuario().cancelarCita(mCita);
 
                 Toast.makeText(getApplicationContext(), "Cita cancelada",
                         Toast.LENGTH_SHORT).show();
@@ -136,19 +146,38 @@ public class SingleCitaActivity extends AppCompatActivity {
 
         String title = "Cita: ";
 
-        if(mCita.getClass() == Procedimiento.class){
+        if (mCita.getClass() == Procedimiento.class) {
             title = "Procedimiento: ";
         }
 
         single_elem_title.setText(title);
-        single_elem_subtitle.setText(mCita.getDoctor().getEspecialidad());
+        single_elem_subtitle.setText(mDoctor.getEspecialidad());
         single_cita_fecha.setText(mCita.getFecha().toString());
         single_cita_hora.setText(mCita.getHora().toString());
-        single_cita_doctor.setText(mCita.getDoctor().getNombre());
-        single_cita_consultorio.setText(mCita.getDoctor().getConsultorio());
+        single_cita_doctor.setText(mDoctor.getNombre());
+        single_cita_consultorio.setText(mDoctor.getConsultorio());
 
         Log.i(TAG, "setCitaProperties: set all properties i.");
 
+    }
+
+    private void encontrarDoctor(int doctorId) {
+        try {
+            repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
+                @Override
+                public void onChanged(@Nullable Doctor doctor) {
+                    if (doctor != null) {
+                        mDoctor = doctor;
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "No existe el doctor", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Log.i(TAG, "getDoctor: e.toString()");
+        }
     }
 
 

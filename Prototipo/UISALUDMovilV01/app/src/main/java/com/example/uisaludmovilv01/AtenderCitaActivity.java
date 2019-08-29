@@ -58,87 +58,87 @@ public class AtenderCitaActivity extends AppCompatActivity {
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: " + mCita.toString());
 
-            setCitaProperties();
-            setListeners();
+//            setCitaProperties();
+//            setListeners();
         }
     }
 
 
-    private void setListeners() {
-
-        ac_back.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                Log.i(TAG, "onClick: ac_back clicked i.");
-
-                finish();
-
-            }
-        });
-
-        ac_guardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ac_guardar clicked i.");
-
-
-                String obs_rem = ac_obs_remision.getText().toString();
-                String obs_med = ac_obs_medicina.getText().toString();
-
-                Log.i(TAG, "onClick: editText_rem = " + obs_rem);
-
-                if (ac_remision_checkBox.isChecked() && !(obs_rem.equals(""))) {
-
-                    mCita.getUsuario().ordenar(
-                            new OrdenProcedimiento(
-                                    (CitaMedica) mCita, "Ginecologia",
-                                    obs_rem, vigencia_or)
-                    );
-
-                    //Remueva cita del doctor y el usuario
-
-                    Toast.makeText(getApplicationContext(), "Orden de remision añadida",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-                Log.i(TAG, "onClick: editText_med = " + obs_med);
-
-                if (ac_medicina_checkBox.isChecked() && !(obs_med.equals(""))) {
-
-                    mCita.getUsuario().ordenar(
-                            new OrdenMedicamento((CitaMedica) mCita, obs_med, vigencia_om));
-
-                    //Remueva cita del doctor y el usuario
-
-                    Toast.makeText(getApplicationContext(), "Orden de medicina añadida",
-                            Toast.LENGTH_SHORT).show();
-                }
-
-                finish();
-
-            }
-        });
-
-    }
-
-    private void setCitaProperties() {
-
-        Log.i(TAG, "setCitaProperties: called i.");
-
-        vigencia_or = LocalDate.of(mCita.getFecha().getYear(),
-                mCita.getFecha().getMonth().getValue() + 1,
-                mCita.getFecha().getDayOfMonth());
-
-        vigencia_om = vigencia_or;
-
-        ac_usuario.setText(mCita.getUsuario().getNombre());
-        ac_remision_vigencia.setText(vigencia_or.toString());
-        ac_medicina_vigencia.setText(vigencia_om.toString());
-
-        Log.i(TAG, "setCitaProperties: set all properties i.");
-
-    }
+//    private void setListeners() {
+//
+//        ac_back.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.N)
+//            @Override
+//            public void onClick(View view) {
+//                Log.i(TAG, "onClick: ac_back clicked i.");
+//
+//                finish();
+//
+//            }
+//        });
+//
+//        ac_guardar.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(TAG, "onClick: ac_guardar clicked i.");
+//
+//
+//                String obs_rem = ac_obs_remision.getText().toString();
+//                String obs_med = ac_obs_medicina.getText().toString();
+//
+//                Log.i(TAG, "onClick: editText_rem = " + obs_rem);
+//
+//                if (ac_remision_checkBox.isChecked() && !(obs_rem.equals(""))) {
+//
+//                    mCita.getUsuario().ordenar(
+//                            new OrdenProcedimiento(
+//                                    (CitaMedica) mCita, "Ginecologia",
+//                                    obs_rem, vigencia_or)
+//                    );
+//
+//                    //Remueva cita del doctor y el usuario
+//
+//                    Toast.makeText(getApplicationContext(), "Orden de remision añadida",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//
+//                Log.i(TAG, "onClick: editText_med = " + obs_med);
+//
+//                if (ac_medicina_checkBox.isChecked() && !(obs_med.equals(""))) {
+//
+//                    mCita.getUsuario().ordenar(
+//                            new OrdenMedicamento((CitaMedica) mCita, obs_med, vigencia_om));
+//
+//                    //Remueva cita del doctor y el usuario
+//
+//                    Toast.makeText(getApplicationContext(), "Orden de medicina añadida",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//
+//                finish();
+//
+//            }
+//        });
+//
+//    }
+//
+//    private void setCitaProperties() {
+//
+//        Log.i(TAG, "setCitaProperties: called i.");
+//
+//        vigencia_or = LocalDate.of(mCita.getFecha().getYear(),
+//                mCita.getFecha().getMonth().getValue() + 1,
+//                mCita.getFecha().getDayOfMonth());
+//
+//        vigencia_om = vigencia_or;
+//
+//        ac_usuario.setText(mCita.getUsuario().getNombre());
+//        ac_remision_vigencia.setText(vigencia_or.toString());
+//        ac_medicina_vigencia.setText(vigencia_om.toString());
+//
+//        Log.i(TAG, "setCitaProperties: set all properties i.");
+//
+//    }
 
 
 }

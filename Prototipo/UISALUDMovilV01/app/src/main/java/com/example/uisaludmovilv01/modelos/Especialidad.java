@@ -11,6 +11,10 @@ public class Especialidad {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @NonNull
     @ColumnInfo(name = "nombre")
     private String nombre;

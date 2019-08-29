@@ -57,7 +57,7 @@ public class Orden implements Serializable {
     @ColumnInfo(name = "reclamado")
     private boolean reclamado;
 
-    @Ignore
+
     public Orden(int cita, int tipo, @NonNull String observaciones, @NonNull LocalDate fechaVigencia, @NonNull Boolean vigencia, String especialidad, boolean reclamado) {
         this.cita = cita;
         this.tipo = tipo;

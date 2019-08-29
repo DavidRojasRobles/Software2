@@ -9,6 +9,7 @@ import android.arch.persistence.room.Update;
 
 import com.example.uisaludmovilv01.modelos.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -19,6 +20,9 @@ public interface UsuarioDao {
 
     @Query("SELECT * FROM Usuarios")
     LiveData<List<Usuario>> getUsuarios();
+
+    @Query("SELECT * FROM Usuarios WHERE id = :id")
+    LiveData<List<Usuario>> getUnUsuario(int id);
 
 
     //@Update

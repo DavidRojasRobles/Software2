@@ -17,15 +17,24 @@ public interface ProcedimientoDao {
     //@Insert
 
 
-    @Query("SELECT * FROM Procedimientos WHERE id = :idUsuario and tipo in (0,1)")
+    @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario")
+    LiveData<List<Procedimiento>> getProcedimientosUsuario(int idUsuario);
+
+    @Query("SELECT * FROM Procedimientos WHERE doctor = :idDoctor")
+    LiveData<List<Procedimiento>> getProcedimientosDoctor(int idDoctor);
+
+    @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario and tipo in (0,1)")
     LiveData<List<Procedimiento>> consultarCitasMedicas(int idUsuario);
 
-    @Query("SELECT * FROM Procedimientos WHERE id = :idUsuario and tipo = 2")
+    @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario and tipo = 2")
     LiveData<List<Procedimiento>> consultarProcedimientos(int idUsuario);
 
+    @Query("SELECT * FROM Procedimientos WHERE id = :id")
+    LiveData<Procedimiento> getProcedimientosById(int id);
 
     //@Update
 
 
     //@Delete
+
 }

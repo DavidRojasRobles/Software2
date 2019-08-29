@@ -94,7 +94,7 @@
                 android:src="@drawable/ic_phone_black_24dp" />
 
             <TextView
-                android:id="@+id/perfil_telefono"
+                android:id="@+id/perfil_celular"
                 style="@style/behindSingleMenuItemLabel"
                 android:text="6658032" />
         </LinearLayout>

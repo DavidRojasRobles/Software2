@@ -1,7 +1,9 @@
 package com.example.uisaludmovilv01;
 
+import android.arch.lifecycle.Observer;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.uisaludmovilv01.adaptadores.HistoriaRecyclerAdapter;
+import com.example.uisaludmovilv01.modelos.Evolucion;
 import com.example.uisaludmovilv01.modelos.Usuario;
+import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoriaActivity extends AppCompatActivity {
 
@@ -27,8 +33,11 @@ public class HistoriaActivity extends AppCompatActivity {
     private TextView single_elem_title, single_elem_subtitle;
 
     // variables
-    private ArrayList<String> historia = new ArrayList<>();
+    private Usuario mUsuario;
+    private String nombreDoctor;
+    private ArrayList<Evolucion> historia = new ArrayList<>();
     private HistoriaRecyclerAdapter historiaRecyclerAdapter;
+    private ProjectRepositorio repositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,31 +54,70 @@ public class HistoriaActivity extends AppCompatActivity {
         single_elem_title.setText("Usuario");
         single_elem_subtitle.setText(": Historia clínica");
 
+        repositorio = new ProjectRepositorio(this);
+
+        Log.i(TAG, "onCreate: called i.");
         if (getIntent().hasExtra("selected_usuario")) {
-            Usuario usuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+            nombreDoctor = "";
 
-            usuario.archivar("Uh, at least one, I guess.");
+            inicializarHistoria();
 
-            historia = usuario.getHistoria();
-
-            single_elem_title.setText(usuario.getNombre());
+            single_elem_title.setText(mUsuario.getNombre());
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: historia.size() = " + historia.size() + " i.");
-
-
+        } else {
+            Log.i(TAG, "onCreate: no se recibió el usuario.");
+            finish();
         }
 
         setBackListener();
-
         initRecyclerView();
 
-
-//        setSupportActionBar((Toolbar) findViewById(R.id.historia_header));
-//        setTitle("Historia");
 
         Log.i(TAG, "onCreate: SetTitle i.");
 
 
+    }
+
+    private void inicializarHistoria() {
+
+        repositorio.getEvolucionesUsuario(mUsuario.getId()).observe(this, new Observer<List<Evolucion>>() {
+            @Override
+            public void onChanged(@Nullable List<Evolucion> evolucions) {
+
+                if(historia.size() > 0){
+                    historia.clear();
+                }
+                if(evolucions != null){
+                    historia.addAll(evolucions);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "El usuario no tiene historia", Toast.LENGTH_SHORT).show();
+                }
+
+                for(Evolucion ev : historia){
+                    getNombreDoctor(ev.getDoctor());
+                    ev.setNombreDoctor(nombreDoctor);
+                }
+
+            }
+        });
+
+    }
+
+    private void getNombreDoctor(int doctorId) {
+        try {
+            repositorio.getNombreDoctor(doctorId).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(@Nullable String s) {
+                    if (s != null)
+                        nombreDoctor = s;
+                }
+            });
+        } catch (Exception e){
+            Log.i(TAG, "getNombreDoctor: " + e.toString());
+        }
     }
 
     private void setBackListener() {

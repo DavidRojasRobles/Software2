@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "81871db4700e6e0a31bda05fa4400f01",
+    "identityHash": "ffef9291770f10fa23a7d5e8197c968c",
     "entities": [
       {
         "tableName": "Agenda",
@@ -23,68 +23,6 @@
           {
             "fieldPath": "usuario",
             "columnName": "usuario",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "fecha",
-            "columnName": "fecha",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hora",
-            "columnName": "hora",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "Citas",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tipo` INTEGER NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `especialidad` TEXT NOT NULL, `orden` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "tipo",
-            "columnName": "tipo",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "usuario",
-            "columnName": "usuario",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "doctor",
-            "columnName": "doctor",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "especialidad",
-            "columnName": "especialidad",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "orden",
-            "columnName": "orden",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -176,7 +114,7 @@
       },
       {
         "tableName": "Evoluciones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, `evolucion` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, `evolucion` TEXT NOT NULL, `nombreDoctor` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -213,6 +151,12 @@
             "columnName": "evolucion",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "nombreDoctor",
+            "columnName": "nombreDoctor",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -263,12 +207,24 @@
         "foreignKeys": []
       },
       {
-        "tableName": "OrdenMedicamento",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `observaciones` TEXT NOT NULL, `fechavigencia` TEXT NOT NULL, `vigencia` INTEGER NOT NULL, `anio` INTEGER NOT NULL, `mes` INTEGER NOT NULL, `dia` INTEGER NOT NULL, `reclamado` INTEGER NOT NULL)",
+        "tableName": "Ordenes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cita` INTEGER NOT NULL, `tipo` INTEGER NOT NULL, `observaciones` TEXT NOT NULL, `fecha` TEXT NOT NULL, `vigencia` INTEGER NOT NULL, `especialidad` TEXT, `reclamado` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cita",
+            "columnName": "cita",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tipo",
+            "columnName": "tipo",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -280,7 +236,7 @@
           },
           {
             "fieldPath": "fechaVigencia",
-            "columnName": "fechavigencia",
+            "columnName": "fecha",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -291,22 +247,10 @@
             "notNull": true
           },
           {
-            "fieldPath": "anio",
-            "columnName": "anio",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mes",
-            "columnName": "mes",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dia",
-            "columnName": "dia",
-            "affinity": "INTEGER",
-            "notNull": true
+            "fieldPath": "especialidad",
+            "columnName": "especialidad",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "reclamado",
@@ -325,74 +269,18 @@
         "foreignKeys": []
       },
       {
-        "tableName": "OrdenProcedimiento",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `observaciones` TEXT NOT NULL, `fechavigencia` TEXT NOT NULL, `vigencia` INTEGER NOT NULL, `anio` INTEGER NOT NULL, `mes` INTEGER NOT NULL, `dia` INTEGER NOT NULL, `especialidad` TEXT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "observaciones",
-            "columnName": "observaciones",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "fechaVigencia",
-            "columnName": "fechavigencia",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "vigencia",
-            "columnName": "vigencia",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "anio",
-            "columnName": "anio",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mes",
-            "columnName": "mes",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "dia",
-            "columnName": "dia",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "especialidad",
-            "columnName": "especialidad",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "Procedimientos",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `orden` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tipo` INTEGER NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `orden` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, `especialidad` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tipo",
+            "columnName": "tipo",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -425,6 +313,12 @@
             "columnName": "hora",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "especialidad",
+            "columnName": "especialidad",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -483,7 +377,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"81871db4700e6e0a31bda05fa4400f01\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ffef9291770f10fa23a7d5e8197c968c\")"
     ]
   }
 }

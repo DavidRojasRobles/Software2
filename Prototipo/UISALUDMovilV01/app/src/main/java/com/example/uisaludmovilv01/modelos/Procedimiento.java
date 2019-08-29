@@ -121,15 +121,15 @@ public class Procedimiento implements Serializable {
      *
      * @return datos de la cita médica como único String
      */
-    /*public String getDatos() {
-        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
-                + "Fecha: " + fecha + "\n"
-                + "Hora: " + hora + "\n"
-                + "Consultorio: " + doctor.getConsultorio() + "\n"
-                + "Doctor: " + doctor.getNombre() + "\n\n";
-
-        return datos;
-    }*/
+//    public String getDatos() {
+//        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
+//                + "Fecha: " + fecha + "\n"
+//                + "Hora: " + hora + "\n"
+//                + "Consultorio: " + doctor.getConsultorio() + "\n"
+//                + "Doctor: " + doctor.getNombre() + "\n\n";
+//
+//        return datos;
+//    }
 
     /**
      * Archiva un informe en la historia clínica del usuario.

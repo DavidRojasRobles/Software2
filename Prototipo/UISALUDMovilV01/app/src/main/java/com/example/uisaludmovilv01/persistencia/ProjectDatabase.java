@@ -1,4 +1,5 @@
 package com.example.uisaludmovilv01.persistencia;
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
@@ -31,18 +32,28 @@ public abstract class ProjectDatabase extends RoomDatabase {
         return instance;
     }
 
-    //USUARIOS
+
+//    public abstract AgendaDao getAgendaDao();
+    public abstract DoctorDao getDoctorDao();
+//    public abstract EspecialidadDao getEspecialidadDao();
+    public abstract EvolucionDao getEvolucionDao();
+//    public abstract HorarioDao getHorarioDao();
+    public abstract OrdenDao getOrdenDao();
+    public abstract ProcedimientoDao getProcedimientoDao();
     public abstract UsuarioDao getUsuarioDao();
-    public abstract ProcedimientoDao consultarCitasMedicasDao(int idUsuario);
-    public abstract HorarioDao consultarHorarioDao(int idDoctor, LocalDate fecha);
-    public abstract OrdenDao consultarOrdenesMedicamentoDao(int idUsuario);
-    public abstract OrdenDao consultarOrdenesProcedimientoDao(int idUsuario);
-    public abstract ProcedimientoDao consultarProcedimientoDao(int idUsuario);
+
+    //USUARIOS
+//    public abstract UsuarioDao getUsuarioDao();
+//    public abstract ProcedimientoDao consultarCitasMedicasDao(int idUsuario);
+//    public abstract HorarioDao consultarHorarioDao(int idDoctor, LocalDate fecha);
+//    public abstract OrdenDao consultarOrdenesMedicamentoDao(int idUsuario);
+//    public abstract OrdenDao consultarOrdenesProcedimientoDao(int idUsuario);
+//    public abstract ProcedimientoDao consultarProcedimientoDao(int idUsuario);
 
     //DOCTORES
-    public abstract DoctorDao consultarDoctoresDao();
-    public abstract AgendaDao consultarAgendaDao(int idDoctor, LocalDate fecha);
-
-    //ESPECIALIDADES
-    public abstract EspecialidadDao consultarEspecialidadesDao();
+//    public abstract DoctorDao consultarDoctoresDao();
+//    public abstract AgendaDao consultarAgendaDao(int idDoctor, LocalDate fecha);
+//
+//    //ESPECIALIDADES
+//    public abstract EspecialidadDao consultarEspecialidadesDao();
 }
