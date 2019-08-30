@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ffef9291770f10fa23a7d5e8197c968c",
+    "identityHash": "4250085189711e525e9c905ee9912f6b",
     "entities": [
       {
         "tableName": "Agenda",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `usuario` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -17,12 +17,6 @@
           {
             "fieldPath": "doctor",
             "columnName": "doctor",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "usuario",
-            "columnName": "usuario",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -114,7 +108,7 @@
       },
       {
         "tableName": "Evoluciones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, `evolucion` TEXT NOT NULL, `nombreDoctor` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT, `hora` TEXT NOT NULL, `evolucion` TEXT NOT NULL, `nombreDoctor` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -138,7 +132,7 @@
             "fieldPath": "fecha",
             "columnName": "fecha",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "hora",
@@ -170,7 +164,7 @@
       },
       {
         "tableName": "Horarios",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `diaSemana` TEXT NOT NULL, `mananaTarde` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -185,15 +179,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "fecha",
-            "columnName": "fecha",
+            "fieldPath": "diaSemana",
+            "columnName": "diaSemana",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "hora",
-            "columnName": "hora",
-            "affinity": "TEXT",
+            "fieldPath": "mananaTarde",
+            "columnName": "mananaTarde",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -377,7 +371,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ffef9291770f10fa23a7d5e8197c968c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4250085189711e525e9c905ee9912f6b\")"
     ]
   }
 }

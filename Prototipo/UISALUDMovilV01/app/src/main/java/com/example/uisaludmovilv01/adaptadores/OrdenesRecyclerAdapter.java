@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.uisaludmovilv01.R;
+import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Orden;
+import com.example.uisaludmovilv01.modelos.Procedimiento;
 
 import java.util.ArrayList;
 
@@ -19,10 +21,14 @@ public class OrdenesRecyclerAdapter extends RecyclerView.Adapter<OrdenesRecycler
     private static final String TAG = "OrdenesRecyclerAdapter";
 
     private ArrayList<Orden> ordenes = new ArrayList<>();
+    private ArrayList<Doctor> mDoctores = new ArrayList<>();
+    private ArrayList<Procedimiento> mCitas = new ArrayList<>();
     private OnOrdenListener onOrdenListener;
 
-    public OrdenesRecyclerAdapter(ArrayList<Orden> ordenes, OnOrdenListener onOrdenListener) {
+    public OrdenesRecyclerAdapter(ArrayList<Orden> ordenes, ArrayList<Doctor> mDoctores, ArrayList<Procedimiento> mCitas, OnOrdenListener onOrdenListener) {
         this.ordenes = ordenes;
+        this.mDoctores = mDoctores;
+        this.mCitas = mCitas;
         this.onOrdenListener = onOrdenListener;
     }
 
@@ -37,9 +43,9 @@ public class OrdenesRecyclerAdapter extends RecyclerView.Adapter<OrdenesRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        viewHolder.orden_fecha.setText(ordenes.get(i).getCita().getFecha().toString());
+        viewHolder.orden_fecha.setText(mCitas.get(i).getFecha().toString());
 
-        if (ordenes.get(i).getClass() == OrdenMedicamento.class) {
+        if (ordenes.get(i).getTipo() == 0) {
             viewHolder.orden_tipo.setText("Medicina");
             viewHolder.orden_icon.setImageResource(R.drawable.ic_healing_black_24dp);
         } else {
@@ -47,7 +53,7 @@ public class OrdenesRecyclerAdapter extends RecyclerView.Adapter<OrdenesRecycler
             viewHolder.orden_icon.setImageResource(R.drawable.ic_content_paste_black_24dp);
 
         }
-        viewHolder.orden_doctor.setText(ordenes.get(i).getCita().getDoctor().getNombre());
+        viewHolder.orden_doctor.setText(mDoctores.get(i).getNombre());
         viewHolder.orden_obs.setText(ordenes.get(i).getObservaciones());
         viewHolder.orden_vigencia.setText(ordenes.get(i).getFechaVigencia().toString());
     }

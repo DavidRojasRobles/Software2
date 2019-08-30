@@ -4,9 +4,13 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import com.example.uisaludmovilv01.persistencia.LocalDateConverter;
+import com.example.uisaludmovilv01.persistencia.LocalTimeConverter;
 
 import org.threeten.bp.LocalDate;
 
@@ -26,7 +30,24 @@ import java.io.Serializable;
  */
 
 @Entity(tableName = "Ordenes")
+@TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Orden implements Serializable {
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCita(int cita) {
+        this.cita = cita;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setEspecialidad(String especialidad) {
+        this.especialidad = especialidad;
+    }
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -45,6 +66,7 @@ public class Orden implements Serializable {
 
     @NonNull
     @ColumnInfo(name = "fecha")
+    @TypeConverters(LocalDateConverter.class)
     private LocalDate fechaVigencia;
 
     @NonNull

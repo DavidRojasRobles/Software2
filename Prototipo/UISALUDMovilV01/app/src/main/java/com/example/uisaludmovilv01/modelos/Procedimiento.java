@@ -4,9 +4,13 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import com.example.uisaludmovilv01.persistencia.LocalDateConverter;
+import com.example.uisaludmovilv01.persistencia.LocalTimeConverter;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -25,6 +29,7 @@ import java.io.Serializable;
  */
 
 @Entity(tableName = "Procedimientos")
+@TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Procedimiento implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
@@ -47,19 +52,41 @@ public class Procedimiento implements Serializable {
 
     @NonNull
     @ColumnInfo(name = "fecha")
+    @TypeConverters(LocalDateConverter.class)
     private LocalDate fecha;
 
     @NonNull
     @ColumnInfo(name="hora")
+    @TypeConverters(LocalTimeConverter.class)
     private LocalTime hora;
 
     @ColumnInfo(name = "especialidad")
     private String especialidad;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsuario(int usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setDoctor(int doctor) {
+        this.doctor = doctor;
+    }
+
+    public void setOrden(int orden) {
+        this.orden = orden;
+    }
+
+    public void setEspecialidad(String especialidad) {
+        this.especialidad = especialidad;
+    }
+
     /**
      * Constructor para los objetos de la clase Procedimiento.
      */
-    @Ignore
+
     public Procedimiento(int tipo, int usuario, int doctor, int orden, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
         this.tipo = tipo;
         this.usuario = usuario;

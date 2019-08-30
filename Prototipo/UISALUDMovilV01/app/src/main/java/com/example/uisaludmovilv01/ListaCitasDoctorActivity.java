@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.uisaludmovilv01.adaptadores.CitasRecyclerAdapter;
+import com.example.uisaludmovilv01.adaptadores.DoctorCitasRecyclerAdapter;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
@@ -22,7 +23,7 @@ import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRecyclerAdapter.OnCitaListener {
+public class ListaCitasDoctorActivity extends NavigationMenu implements DoctorCitasRecyclerAdapter.OnCitaListener {
     private static final String TAG = "ListaCitasDoctorActivit";
 
     // Ui components
@@ -31,7 +32,8 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRec
 
     // variables
     private ArrayList<Procedimiento> citas = new ArrayList<>();
-    private CitasRecyclerAdapter citasRecyclerAdapter;
+    private ArrayList<Usuario> mUsuarios = new ArrayList<>();
+    private DoctorCitasRecyclerAdapter doctorCitasRecyclerAdapter;
     private Doctor mDoctor;
     private ProjectRepositorio repositorio;
 
@@ -39,8 +41,8 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_citas);
-        recyclerView = findViewById(R.id.citasRV);
+        setContentView(R.layout.activity_lista_citas_doctor);
+        recyclerView = findViewById(R.id.doctor_citasRV);
 
         repositorio = new ProjectRepositorio(this);
 
@@ -50,12 +52,16 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRec
 
             Log.i(TAG, "onCreate: has extra i.");
             Log.i(TAG, "onCreate: " + mDoctor.getNombre());
+
+            insertarCitas();
+            for (Procedimiento cita : citas){
+                insertarUsuarios(cita.getUsuario());
+            }
         }
 
 
         initRecyclerView();
         //insertarCitasFalsas();
-        insertarCitas();
 
         setSupportActionBar((Toolbar) findViewById(R.id.citas_toolbar));
         setTitle("Citas");
@@ -106,6 +112,30 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRec
 //        citasRecyclerAdapter.notifyDataSetChanged();
 //    }
 
+    private void insertarUsuarios(int usuarioId) {
+        try {
+            repositorio.encontrarUsuario(usuarioId).observe(this, new Observer<Usuario>() {
+                @Override
+                public void onChanged(@Nullable Usuario usuario) {
+                    if (usuario != null) {
+                        Log.i(TAG, "onChanged: proc recibido." );
+                        mUsuarios.add(usuario);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "El doctor no existe", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "insertarDoctores: No hay doctores definidos");
+            Toast.makeText(getApplicationContext(),
+                    "No hexiste el doctor", Toast.LENGTH_SHORT).show();
+            finish();
+            Log.i(TAG, "insertarDoctores: " + e.toString());
+        }
+    }
+
+
     private void insertarCitas(){
         try {
             repositorio.getProcedimientosDoctor(mDoctor.getId()).observe(this, new Observer<List<Procedimiento>>() {
@@ -134,8 +164,8 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements CitasRec
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        citasRecyclerAdapter = new CitasRecyclerAdapter(citas, this);
-        recyclerView.setAdapter(citasRecyclerAdapter);
+        doctorCitasRecyclerAdapter = new DoctorCitasRecyclerAdapter(citas, mUsuarios, this);
+        recyclerView.setAdapter(doctorCitasRecyclerAdapter);
     }
 
     @Override

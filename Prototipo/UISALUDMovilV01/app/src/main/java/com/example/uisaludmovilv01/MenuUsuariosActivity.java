@@ -72,11 +72,11 @@ public class MenuUsuariosActivity extends AppCompatActivity {
 
     private void initializeUsuario(int id) {
 
-        repositorio.encontrarUsuario(id).observe(this, new Observer<List<Usuario>>() {
+        repositorio.encontrarUsuario(id).observe(this, new Observer<Usuario>() {
             @Override
-            public void onChanged(@Nullable List<Usuario> usuarios) {
-                if (usuarios != null) {
-                    mUsuario = usuarios.get(0);
+            public void onChanged(@Nullable Usuario usuario) {
+                if (usuario != null) {
+                    mUsuario = usuario;
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "No existe el usuario", Toast.LENGTH_SHORT).show();
@@ -113,7 +113,9 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                 Log.i(TAG, "onClick: usuaruio 1 clicked i.");
                 Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
                 //Change for corresponding user
-                initializeUsuario(1);
+//                initializeUsuario(1);
+                NavigationMenu.setmUsuario(new Usuario());
+                mUsuario = NavigationMenu.getmUsuario();
                 intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
             }

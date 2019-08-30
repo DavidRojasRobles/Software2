@@ -36,6 +36,7 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
 
     // variables
     private ArrayList<Procedimiento> citas = new ArrayList<>();
+    private ArrayList<Doctor> mDoctores = new ArrayList<>();
     private CitasRecyclerAdapter citasRecyclerAdapter;
     private Usuario mUsuario;
     private ProjectRepositorio repositorio;
@@ -54,12 +55,15 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
             mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
 
             Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mUsuario.getNombre());
+            Log.i(TAG, "onCreate: " + mUsuario.toString());
         }
 
         initRecyclerView();
         //insertarCitasFalsas();
         insertarCitas();
+        for(Procedimiento cita : citas){
+            insertarDoctores(cita.getDoctor());
+        }
         setAgendarListener();
 
         setSupportActionBar((Toolbar) findViewById(R.id.citas_toolbar));
@@ -151,10 +155,33 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
         }
     }
 
+    private void insertarDoctores(int doctorId) {
+        try {
+            repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
+                @Override
+                public void onChanged(@Nullable Doctor doctor) {
+                    if (doctor != null) {
+                        Log.i(TAG, "onChanged: proc recibido." );
+                        mDoctores.add(doctor);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "El doctor no existe", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "insertarDoctores: No hay doctores definidos");
+            Toast.makeText(getApplicationContext(),
+                    "No hexiste el doctor", Toast.LENGTH_SHORT).show();
+            finish();
+            Log.i(TAG, "insertarDoctores: " + e.toString());
+        }
+    }
+
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        citasRecyclerAdapter = new CitasRecyclerAdapter(citas, this);
+        citasRecyclerAdapter = new CitasRecyclerAdapter(citas, mDoctores, this);
         recyclerView.setAdapter(citasRecyclerAdapter);
     }
 

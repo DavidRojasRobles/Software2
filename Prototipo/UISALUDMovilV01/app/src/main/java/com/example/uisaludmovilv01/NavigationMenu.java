@@ -14,9 +14,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.uisaludmovilv01.modelos.Usuario;
+
 public class NavigationMenu extends AppCompatActivity{
     private static final String TAG = "NavigationMenu";
-//
+    public static Usuario mUsuario;
+
+    public static Usuario getmUsuario() {
+        return mUsuario;
+    }
+
+    public static void setmUsuario(Usuario usuario) {
+        mUsuario = usuario;
+    }
+
+    //
 //    LinearLayout menu_view, menu_empty, menu_btn_agendar, menu_btn_ordenes, menu_btn_perfil, menu_btn_citas;
 //
 //    FloatingActionButton fb_menu;
@@ -122,24 +134,28 @@ public class NavigationMenu extends AppCompatActivity{
             case R.id.menu_usuario:
                 Log.i(TAG, "onClick: menu_btn_agendar i.");
                 intent = new Intent(this, MenuUsuariosActivity.class);
+                intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
                 return true;
 
             case R.id.menu_ordenes:
                 Log.i(TAG, "onClick: menu_btn_ordenes i.");
                 intent = new Intent(this, ListaOrdenesActivity.class);
+                intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
                 return true;
 
             case R.id.menu_perfil:
                 Log.i(TAG, "onClick: menu_btn_perfil i.");
                 intent = new Intent(this, PerfilActivity.class);
+                intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
                 return true;
 
             case R.id.menu_citas:
                 Log.i(TAG, "onClick: menu_btn_citas i.");
                 intent = new Intent(this, ListaCitasActivity.class);
+                intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
                 return true;
         }

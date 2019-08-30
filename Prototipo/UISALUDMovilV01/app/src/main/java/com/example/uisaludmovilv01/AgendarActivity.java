@@ -3,6 +3,7 @@ package com.example.uisaludmovilv01;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.Observer;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -22,14 +23,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.uisaludmovilv01.modelos.Agenda;
 import com.example.uisaludmovilv01.modelos.Doctor;
+import com.example.uisaludmovilv01.modelos.Especialidad;
+import com.example.uisaludmovilv01.modelos.Horario;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
+import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 public class AgendarActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -42,8 +48,10 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Doctor> doctores = new ArrayList<>();
 
     //Array Spinners
-    private ArrayList<String> especialidades;
+    private ArrayList<Especialidad> especialidades;
+    private ArrayList<String> nombreEsp;
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
+    private ProjectRepositorio repositorio;
 
     //UI elements
     private TextView ag_title;
@@ -66,12 +74,16 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private Doctor doctor;
     private LocalDate fecha;
     private LocalTime hora;
+    private boolean trabajaDia;
+    private boolean fechaEnAgenda;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_agendar);
+
+        repositorio = new ProjectRepositorio(this);
 
         prompt = new Dialog(this);
         prompt.setContentView(R.layout.layout_dialog);
@@ -97,8 +109,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         //initializeFakeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
-        //populateEsp();
-        //setListeners();
+        populateEsp();
+//        setListeners();
         Log.i(TAG, "onCreate: Listeners set i.");
 
 //        selectItems();
@@ -107,175 +119,218 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     }
 
 
-//    public void setListeners() {
-//
-//        ag_back.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.N)
-//            @Override
-//            public void onClick(View view) {
-//                Log.i(TAG, "onClick: ag_back clicked i.");
-//
-//                finish();
-//
-//            }
-//        });
-//
-//        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
-//
-//                especialidad = ag_esp.getSelectedItem().toString();
-//
-//                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
-//
-//                populateDoctores(especialidad);
-//
-//                Log.i(TAG, "onItemSelected: Doctores populates i.");
-//                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//
-//        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
-//
-//                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//
-//        ag_fecha.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.N)
-//            @Override
-//            public void onClick(View view) {
-//                Log.i(TAG, "onClick: ag_fecha clicked i.");
-//
-//                fecha = LocalDate.now();
-//                datePickerDialog = new DatePickerDialog(AgendarActivity.this,
-//                        new DatePickerDialog.OnDateSetListener() {
-//                            @Override
-//                            public void onDateSet(DatePicker view, int year, int month, int day) {
-//                                ag_fecha.setText(day + " / " + (month + 1) + " / " + year);
-//
-//                                //colocar restricciones
-//
-//                                fecha = LocalDate.of(year, month, day);
+    public void setListeners() {
+
+        ag_back.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: ag_back clicked i.");
+
+                finish();
+
+            }
+        });
+
+        ag_esp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
+
+                especialidad = ag_esp.getSelectedItem().toString();
+
+                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
+
+                populateDoctores(especialidad);
+
+                Log.i(TAG, "onItemSelected: Doctores populates i.");
+                Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ag_doctor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
+
+                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ag_fecha.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "onClick: ag_fecha clicked i.");
+
+                fecha = LocalDate.now();
+                datePickerDialog = new DatePickerDialog(AgendarActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int day) {
+                                ag_fecha.setText(day + " / " + (month + 1) + " / " + year);
+
+                                //colocar restricciones
+
+                                fecha = LocalDate.of(year, month, day);
+                                verificarDia(fecha);
+
+                                if(trabajaDia){
+                                    if(fechaEnAgenda){
+                                        getHorasAgenda();
+                                    }
+                                }
+
+
 //                                if (!doctor.verificarFecha(fecha)) {
 //                                    Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
 //                                } else {
 //                                    Log.i(TAG, "onClick: La fecha es valida.");
 //                                }
-//                            }
-//                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
-//                datePickerDialog.show();
-//
-////                do {
-////                    datePickerDialog.show();
-////                    if (!doctor.verificarFecha(fecha)) {
-////                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-////                    }
-////                } while (!doctor.verificarFecha(fecha));
-//            }
-//        });
-//
-//        ag_hora.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(TAG, "onClick: ag_hora clicked i.");
-//                hora = LocalTime.now();
-//
-//                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
-//                        new TimePickerDialog.OnTimeSetListener() {
-//                            @Override
-//                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//
-//                                //colocar restricciones
-//
-//                                hora = LocalTime.of(hourOfDay, minute);
-//
-//                                String meridian = hourOfDay > 11 ? " PM" : " AM";
-//
-//                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
-//
-//                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
-//
-//                            }
-//                        }, hora.getHour(), hora.getMinute(), false);
-//                timePickerDialog.show();
-//            }
-//        });
-//
-//        ag_agendar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(TAG, "onClick: ag_agendar clicked i.");
-//
-//                setPromptDialog();
-//
-//                prompt.show();
-//
-//
-//            }
-//        });
-//    }
+                            }
+                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
+                datePickerDialog.show();
+
+//                do {
+//                    datePickerDialog.show();
+//                    if (!doctor.verificarFecha(fecha)) {
+//                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
+//                    }
+//                } while (!doctor.verificarFecha(fecha));
+            }
+        });
+
+        ag_hora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ag_hora clicked i.");
+                hora = LocalTime.now();
+
+                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                                //colocar restricciones
+
+                                hora = LocalTime.of(hourOfDay, minute);
+
+                                String meridian = hourOfDay > 11 ? " PM" : " AM";
+
+                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
+
+                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
+
+                            }
+                        }, hora.getHour(), hora.getMinute(), false);
+                timePickerDialog.show();
+            }
+        });
+
+        ag_agendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ag_agendar clicked i.");
+
+                setPromptDialog();
+
+                prompt.show();
 
 
-//    private void setPromptDialog() {
-//
-//        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
-//
-//        pd_title.setText("¿AGENDAR ESTA CITA?");
-//        pd_content.setText(cita.getDatos());
-//
-//        pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                prompt.hide();
-//            }
-//        });
-//        pd_accept_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(TAG, "onClick: cita agendada i.");
-//
-//                //Guardar cita
-//                Toast.makeText(getApplicationContext(), "Cita agendada",
-//                        Toast.LENGTH_SHORT).show();
-//                prompt.hide();
-//                finish();
-//            }
-//        });
-//
-//
-//    }
+            }
+        });
+    }
+
+
+    private void setPromptDialog() {
+
+        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
+
+        pd_title.setText("¿AGENDAR ESTA CITA?");
+        pd_content.setText(cita.getDatos());
+
+        pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prompt.hide();
+            }
+        });
+        pd_accept_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: cita agendada i.");
+
+                //Guardar cita
+                Toast.makeText(getApplicationContext(), "Cita agendada",
+                        Toast.LENGTH_SHORT).show();
+                prompt.hide();
+                finish();
+            }
+        });
+
+
+    }
 
     private void populateEsp() {
 
         Log.i(TAG, "populateEsp: called i.");
 
-        especialidades = new ArrayList<String>(treeEspecialidades);
+        insertarEspecialidades();
+        setNombreEsp();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.simple_spinner_item, new ArrayList<String>(especialidades));
+                R.layout.simple_spinner_item, new ArrayList<String>(nombreEsp));
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
         ag_esp.setAdapter(adapter);
 
 
+    }
+
+    private void setNombreEsp(){
+        if (nombreEsp.size() > 0)
+            nombreEsp.clear();
+        for(Especialidad esp: especialidades){
+            nombreEsp.add(esp.getNombre());
+        }
+    }
+
+    private void insertarEspecialidades(){
+        try {
+            repositorio.getEspecialidades().observe(this, new Observer<List<Especialidad>>() {
+                @Override
+                public void onChanged(@Nullable List<Especialidad> esp) {
+                    if (especialidades.size() > 0)
+                        especialidades.clear();
+                    if (esp != null) {
+                        especialidades.addAll(esp);
+                        Log.i(TAG, "onChanged: especialidades.size() = " + especialidades.size());
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "No existen especialidades", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "insertarEsp: No hay especialidades");
+            Toast.makeText(getApplicationContext(),
+                    "No hay especialidades", Toast.LENGTH_SHORT).show();
+            finish();
+            Log.i(TAG, "insertarEsp: " + e.toString());
+        }
     }
 
     private void populateDoctores(String e) {
@@ -355,17 +410,36 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private ArrayList<Doctor> filtrarEsp(String e) {
+    private ArrayList<Doctor> filtrarEsp(String esp) {
 
         Log.i(TAG, "filtrarEsp: called i.");
 
-        ArrayList<Doctor> docEsp = new ArrayList<>();
+        final ArrayList<Doctor> docEsp = new ArrayList<>();
         docEsp.clear();
-        for (Doctor doc : doctores) {
-            if (doc.getEspecialidad().equals(e)) {
-                docEsp.add(doc);
-            }
+
+        try {
+            repositorio.getDoctoresEsp(esp).observe(this, new Observer<List<Doctor>>() {
+                @Override
+                public void onChanged(@Nullable List<Doctor> doctores) {
+                    if (docEsp.size() > 0)
+                        docEsp.clear();
+                    if (doctores != null) {
+                        docEsp.addAll(doctores);
+                        Log.i(TAG, "onChanged: docEsp.size() = " + docEsp.size());
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "No existen doctores para esta especialidad", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "getDoctoresEsp: No hay doctores");
+            Toast.makeText(getApplicationContext(),
+                    "No hay especialidades", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "getDoctoresEsp: " + e.toString());
         }
+
         return docEsp;
     }
 
@@ -377,7 +451,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         try {
             for (Doctor d : filtroDoctores) {
-                if (d.getNombre().equals(esp)) return d;
+                if (d.getEspecialidad().equals(esp)) return d;
                 Log.i(TAG, "findDoctor: doctor found i.");
             }
         } catch (Exception e) {
@@ -385,6 +459,54 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         }
 
         return doc;
+    }
+
+    private void verificarDia(LocalDate fecha){
+
+        try {
+            repositorio.getHorarioDia(doctor.getId(), fecha.getDayOfWeek().toString()).observe(this, new Observer<List<Horario>>() {
+                @Override
+                public void onChanged(@Nullable List<Horario> horarios) {
+
+                    trabajaDia = (horarios.size() > 0) ? true : false;
+                    Log.i(TAG, "onChanged: horarios.size() = " + horarios.size());
+
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "verificarDia: No hay doctores");
+            Toast.makeText(getApplicationContext(),
+                    "No hay especialidades", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "verificarDia: " + e.toString());
+        }
+    }
+
+
+    private void checkFechaEnAgenda(final LocalDate fecha){
+
+        try {
+            repositorio.getAgendaByDia(doctor.getId(), fecha.toString()).observe(this, new Observer<List<Agenda>>() {
+                @Override
+                public void onChanged(@Nullable List<Agenda> agenda) {
+                    if(agenda.size() > 0){
+                        fechaEnAgenda = true;
+                    }else{
+                        fechaEnAgenda = false;
+                        //aniadir a la agenda
+                        checkFechaEnAgenda(fecha);
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "checkFechaEnAgenda: algo salió mal");
+            Toast.makeText(getApplicationContext(),
+                    "Algo salió mal", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "checkFechaEnAgenda: " + e.toString());
+        }
+    }
+
+    public ArrayList<Boolean> getHorasAgenda(int idDoctor, LocalDate fecha){
+        
     }
 
 

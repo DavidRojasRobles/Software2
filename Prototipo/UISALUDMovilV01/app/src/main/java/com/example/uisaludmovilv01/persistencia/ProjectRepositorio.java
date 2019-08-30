@@ -1,6 +1,7 @@
 package com.example.uisaludmovilv01.persistencia;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.example.uisaludmovilv01.modelos.Agenda;
@@ -12,9 +13,11 @@ import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 
-import java.time.LocalDate;
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
+@TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class ProjectRepositorio {
 
     private ProjectDatabase mProjectDatabase;
@@ -35,7 +38,7 @@ public class ProjectRepositorio {
         return mProjectDatabase.getUsuarioDao().getUsuarios();
     }
 
-    public LiveData<List<Usuario>> encontrarUsuario(int id){
+    public LiveData<Usuario> encontrarUsuario(int id){
         return mProjectDatabase.getUsuarioDao().getUnUsuario(id);
     }
 
@@ -72,6 +75,14 @@ public class ProjectRepositorio {
 
     public LiveData<String> getNombreDoctor(int doctorId) {
         return mProjectDatabase.getDoctorDao().getNombreDoctor(doctorId);
+    }
+
+    public LiveData<List<Doctor>> getDoctores() {
+        return mProjectDatabase.getDoctorDao().consultarDoctores();
+    }
+
+    public LiveData<List<Doctor>> getDoctoresEsp(String esp) {
+        return mProjectDatabase.getDoctorDao().getDoctoresEsp(esp);
     }
 
     public void agregarCitaMedica(int cita){}
@@ -114,5 +125,39 @@ public class ProjectRepositorio {
         return mProjectDatabase.getOrdenDao().getOrdenesUsuario(userId);
     }
 
+    //HORARIO
+
+    public LiveData<List<Horario>> getHorarioDia(int idDoctor, String diaSemana){
+        return mProjectDatabase.getHorarioDao().getHorarioByDia(idDoctor, diaSemana);
+    }
+
+    public LiveData<List<Horario>> getDispByDia(int idDoctor, String diaSemana, int mananaTarde){
+        return mProjectDatabase.getHorarioDao().getDispByDia(idDoctor, diaSemana, mananaTarde);
+    }
+
+
+    //AGENDA
+
+    public LiveData<List<Agenda>> getAgendaByDia(int idDoctor, String fecha){
+        return mProjectDatabase.getAgendaDao().getAgendaByDia(idDoctor, fecha);
+    }
+
+    public LiveData<List<Boolean>> getHorasAgenda(int idDoctor, String fecha){
+        return mProjectDatabase.getAgendaDao().getHorasAgenda(idDoctor, fecha);
+    }
+
+    //ESPECIALIDADES
+
+    public LiveData<List<Especialidad>> getEspecialidades(){
+        return mProjectDatabase.getEspecialidadDao().getEspecialidades();
+    }
+
+    public LiveData<Especialidad> getEspecialidadById(int espId){
+        return mProjectDatabase.getEspecialidadDao().getEspecialidadById(espId);
+    }
+
+    public LiveData<Especialidad> getEspecialidadByNombre(String espNombre){
+        return mProjectDatabase.getEspecialidadDao().getEspecialidadByNombre(espNombre);
+    }
 
 }

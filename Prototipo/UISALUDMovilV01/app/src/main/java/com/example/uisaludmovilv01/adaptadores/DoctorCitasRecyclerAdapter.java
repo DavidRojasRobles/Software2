@@ -1,37 +1,31 @@
 package com.example.uisaludmovilv01.adaptadores;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.uisaludmovilv01.R;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
-import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.util.ArrayList;
 
-public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdapter.ViewHolder> {
+public class DoctorCitasRecyclerAdapter extends RecyclerView.Adapter<DoctorCitasRecyclerAdapter.ViewHolder> {
 
-    private static final String TAG = "CitasRecyclerAdapter";
+    private static final String TAG = "DoctorCitasRecyclerAdap";
 
     private ArrayList<Procedimiento> citas = new ArrayList<>();
-    private ArrayList<Doctor> doctores = new ArrayList<>();
+    private ArrayList<Usuario> usuarios = new ArrayList<>();
     private OnCitaListener onCitaListener;
 
-    public CitasRecyclerAdapter(ArrayList<Procedimiento> citas, ArrayList<Doctor> doctores, OnCitaListener onCitaListener) {
+    public DoctorCitasRecyclerAdapter(ArrayList<Procedimiento> citas, ArrayList<Usuario> usuarios, OnCitaListener onCitaListener) {
         this.citas = citas;
-        this.doctores = doctores;
+        this.usuarios = usuarios;
         this.onCitaListener = onCitaListener;
     }
 
@@ -46,27 +40,9 @@ public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.cita_fecha.setText(citas.get(i).getFecha().toString());
-        viewHolder.cita_esp.setText(encontrarDoctor(citas.get(i).getDoctor()).getEspecialidad());
         viewHolder.cita_hora.setText(citas.get(i).getHora().toString());
-        viewHolder.cita_doctor.setText(encontrarDoctor(citas.get(i).getDoctor()).getNombre());
-        viewHolder.cita_consultorio.setText(encontrarDoctor(citas.get(i).getDoctor()).getConsultorio());
+        viewHolder.cita_usuario.setText(usuarios.get(i).getNombre());
     }
-
-    private Doctor encontrarDoctor(int doctorId) {
-
-        try {
-            for (Doctor d : doctores){
-                if(d.getId() == doctorId){
-                    return d;
-                }
-            }
-        } catch (Exception e) {
-            Log.i(TAG, "getDoctor: e.toString()");
-        }
-        return null;
-    }
-
-
 
     @Override
     public int getItemCount() {
@@ -74,17 +50,15 @@ public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView cita_fecha, cita_esp, cita_hora, cita_doctor, cita_consultorio;
+        TextView cita_fecha, cita_hora, cita_usuario;
         OnCitaListener onCitaListener;
 
 
         public ViewHolder(@NonNull View itemView, OnCitaListener onCitaListener) {
             super(itemView);
             cita_fecha = itemView.findViewById(R.id.cita_fecha);
-            cita_esp = itemView.findViewById(R.id.cita_esp);
             cita_hora = itemView.findViewById(R.id.cita_hora);
-            cita_doctor = itemView.findViewById(R.id.cita_doctor);
-            cita_consultorio = itemView.findViewById(R.id.cita_consultorio);
+            cita_usuario = itemView.findViewById(R.id.cita_usuario);
 
             this.onCitaListener = onCitaListener;
 
