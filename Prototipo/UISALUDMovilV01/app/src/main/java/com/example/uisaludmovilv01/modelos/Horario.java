@@ -25,13 +25,18 @@ public class Horario implements Serializable {
     private int doctor;
 
     @NonNull
-    @ColumnInfo(name = "diaSemana")
-    private String diaSemana;
+    @ColumnInfo(name = "fecha")
+    private String fecha;
 
     @NonNull
-    @ColumnInfo(name = "mananaTarde")
-    @TypeConverters(LocalTimeConverter.class)
-    private int mananaTarde; // 0 si es mañana, false si es tarde
+    @ColumnInfo(name = "hora")
+    private String hora;
+
+    public Horario(int doctor, @NonNull String fecha, @NonNull String hora) {
+        this.doctor = doctor;
+        this.fecha = fecha;
+        this.hora = hora;
+    }
 
     public int getId() {
         return id;
@@ -50,19 +55,20 @@ public class Horario implements Serializable {
     }
 
     @NonNull
-    public String getDiaSemana() {
-        return diaSemana;
+    public String getFecha() {
+        return fecha;
     }
 
-    public void setDiaSemana(@NonNull String diaSemana) {
-        this.diaSemana = diaSemana;
+    public void setFecha(@NonNull String fecha) {
+        this.fecha = fecha;
     }
 
-    public int getMananaTarde() {
-        return mananaTarde;
+    @NonNull
+    public String getHora() {
+        return hora;
     }
 
-    public void setMananaTarde(int mananaTarde) {
-        this.mananaTarde = mananaTarde;
+    public void setHora(@NonNull String hora) {
+        this.hora = hora;
     }
 }

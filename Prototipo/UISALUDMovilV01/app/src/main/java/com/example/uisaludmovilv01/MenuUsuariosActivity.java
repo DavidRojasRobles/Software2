@@ -16,9 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.uisaludmovilv01.modelos.Doctor;
+import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuUsuariosActivity extends AppCompatActivity {
@@ -35,6 +40,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
     //vars
     private Usuario mUsuario;
     private Doctor mDoctor;
+    private ArrayList<Procedimiento> a = new ArrayList<>();
     private ProjectRepositorio repositorio;
 
     @Override
@@ -52,6 +58,10 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate: called i.");
 
         repositorio = new ProjectRepositorio(this);
+
+        Log.i(TAG, "onCreate: se va a añadir el proceimiento.");
+        aniadirProcedimientos();
+        Log.i(TAG, "onCreate: se añadio el procedimiento.");
 
         setSupportActionBar((Toolbar) findViewById(R.id.home_toolbar));
         setTitle("UISALUD Movil");
@@ -86,8 +96,45 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         });
     }
 
+    private void aniadirProcedimientos(){
+        Log.i(TAG, "aniadirProcedimientos: called i.");
+
+        Usuario user1 = new Usuario();
+
+        Doctor d1 = new Doctor("Dr. One", "101", "General");
+
+        Procedimiento cita1 = new Procedimiento(
+                0,
+                user1.getId(),
+                d1.getId(),
+                LocalDate.of(2019, 8, 12),
+                LocalTime.of(8, 0),
+                d1.getEspecialidad());
+
+
+        repositorio.insertarProcedimientoTask(cita1);
+
+        checkDB();
+
+    }
+
+    private void checkDB(){
+        Log.i(TAG, "checkDB: called i.");
+        Log.i(TAG, "checkDB: before a.size() = " + a.size());
+        repositorio.getProcedimientos().observe(this, new Observer<List<Procedimiento>>() {
+            @Override
+            public void onChanged(@Nullable List<Procedimiento> procedimientos) {
+                Log.i(TAG, "onChanged: procedimientos.size() i. = " + procedimientos.size());
+                if (procedimientos != null)
+                    a.addAll(procedimientos);
+            }
+        });
+        Log.i(TAG, "checkDB: after a.size() = " + a.size());
+    }
+
 
     private void initializeDoctor(int id) {
+
 
         repositorio.encontrarDoctor(id).observe(this, new Observer<Doctor>() {
             @Override

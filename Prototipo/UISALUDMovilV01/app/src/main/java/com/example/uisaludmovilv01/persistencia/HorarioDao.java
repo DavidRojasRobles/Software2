@@ -20,13 +20,8 @@ public interface HorarioDao {
     //@Insert
 
     //El horario de un Doctor es consultado por un paciente para ver la disponibilidad de citas
-    @Query("SELECT * FROM Horarios WHERE doctor = :idDoctor and diaSemana = :diaSemana")
-    LiveData<List<Horario>> getHorarioByDia(int idDoctor, String diaSemana);
-
-    @Query("SELECT * FROM Horarios WHERE doctor = :idDoctor and diaSemana = :diaSemana and mananaTarde = :mananaTarde")
-    LiveData<List<Horario>> getDispByDia(int idDoctor, String diaSemana, int mananaTarde);
-
-
+    @Query("SELECT * FROM Horarios WHERE doctor = :idDoctor and fecha = :fecha")
+    LiveData<List<Horario>> getHorarioByDia(int idDoctor, String fecha);
 
 
     //@Update

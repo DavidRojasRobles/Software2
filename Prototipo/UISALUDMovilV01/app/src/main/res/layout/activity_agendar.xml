@@ -114,10 +114,12 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_access_time_black_24dp" />
 
-            <TextView
+            <Spinner
                 android:id="@+id/ag_hora"
-                style="@style/behindSingleMenuItemLabel"
-                android:text="00:00 AM" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:contextClickable="true" />
         </LinearLayout>
 
     </LinearLayout>

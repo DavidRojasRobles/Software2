@@ -113,11 +113,14 @@ public class PGrado {
 
         onStart();
         
-        afiliados.get(0).consultarCitas();
-        afiliados.get(0).solicitarCita(doctores, especialidades);
-        afiliados.get(0).consultarCitas();
-        doctores.get(0).crearEvolucion("Tiene diarrea");
-        System.out.println(afiliados.get(0).imprimirHistoria());
+        Boolean b = false;
+        System.out.println(b);
+        
+//        afiliados.get(0).consultarCitas();
+//        afiliados.get(0).solicitarCita(doctores, especialidades);
+//        afiliados.get(0).consultarCitas();
+//        doctores.get(0).crearEvolucion("Tiene diarrea");
+//        System.out.println(afiliados.get(0).imprimirHistoria());
         
 //        afiliados.get(0).solicitarCita(doctores, especialidades);
 //        afiliados.get(1).solicitarCita(doctores, especialidades);

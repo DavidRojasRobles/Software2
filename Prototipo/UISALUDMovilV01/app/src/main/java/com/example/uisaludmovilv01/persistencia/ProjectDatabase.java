@@ -13,7 +13,6 @@ import com.example.uisaludmovilv01.modelos.Horario;
 import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
-import com.example.uisaludmovilv01.persistencia.LocalDateConverter;
 
 
 @Database(entities = {Agenda.class, Doctor.class, Especialidad.class, Evolucion.class, Horario.class, Orden.class, Procedimiento.class, Usuario.class}, version = 1)

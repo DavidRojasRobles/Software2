@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4250085189711e525e9c905ee9912f6b",
+    "identityHash": "61731eb7d2985fdf057bd9293f58f622",
     "entities": [
       {
         "tableName": "Agenda",
@@ -164,7 +164,7 @@
       },
       {
         "tableName": "Horarios",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `diaSemana` TEXT NOT NULL, `mananaTarde` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -179,15 +179,15 @@
             "notNull": true
           },
           {
-            "fieldPath": "diaSemana",
-            "columnName": "diaSemana",
+            "fieldPath": "fecha",
+            "columnName": "fecha",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "mananaTarde",
-            "columnName": "mananaTarde",
-            "affinity": "INTEGER",
+            "fieldPath": "hora",
+            "columnName": "hora",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -371,7 +371,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4250085189711e525e9c905ee9912f6b\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"61731eb7d2985fdf057bd9293f58f622\")"
     ]
   }
 }

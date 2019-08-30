@@ -16,8 +16,8 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface ProcedimientoDao {
 
-    //@Insert
-
+    @Insert
+    long[] insertarProcedimiento(Procedimiento... procedimientos);
 
     @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario")
     LiveData<List<Procedimiento>> getProcedimientosUsuario(int idUsuario);
@@ -33,6 +33,9 @@ public interface ProcedimientoDao {
 
     @Query("SELECT * FROM Procedimientos WHERE id = :id")
     LiveData<Procedimiento> getProcedimientosById(int id);
+
+    @Query("SELECT * FROM Procedimientos")
+    LiveData<List<Procedimiento>> getProcedimientos();
 
     //@Update
 

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.Observer;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -51,6 +52,8 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ArrayList<Especialidad> especialidades;
     private ArrayList<String> nombreEsp;
     private ArrayList<Doctor> filtroDoctores = new ArrayList<>();
+
+    private ArrayList<Horario> mHorarios = new ArrayList<>();
     private ProjectRepositorio repositorio;
 
     //UI elements
@@ -62,20 +65,21 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private ImageButton ag_back;
     private Spinner ag_esp;
     private Spinner ag_doctor;
-    private TextView ag_fecha, ag_hora;
+    private Spinner ag_hora;
+    private TextView ag_fecha;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
     private Button ag_agendar;
 
     //Variables
 
-    private Usuario usuario;
+    private Usuario mUsuario;
     private String especialidad;
     private Doctor doctor;
     private LocalDate fecha;
     private LocalTime hora;
-    private boolean trabajaDia;
-    private boolean fechaEnAgenda;
+    private boolean horarioDia;
+    private boolean agendaDia;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,8 +113,17 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         //initializeFakeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
+
+        if (getIntent().hasExtra("selected_usuario")) {
+            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+
+
+            Log.i(TAG, "onCreate: has extra i.");
+            Log.i(TAG, "onCreate: " + mUsuario.toString());
+        }
+
         populateEsp();
-//        setListeners();
+        setListeners();
         Log.i(TAG, "onCreate: Listeners set i.");
 
 //        selectItems();
@@ -187,57 +200,36 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                                 //colocar restricciones
 
                                 fecha = LocalDate.of(year, month, day);
-                                verificarDia(fecha);
+                                setmHorarios(fecha);
+                                setmAgendas(fecha);
 
-                                if(trabajaDia){
-                                    if(fechaEnAgenda){
-                                        getHorasAgenda();
-                                    }
+                                if (horarioDia || agendaDia) {
+                                    populateHoras();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "El doctor no trabaja los "
+                                            + fecha.getDayOfWeek().toString(), Toast.LENGTH_LONG).show();
                                 }
-
-
-//                                if (!doctor.verificarFecha(fecha)) {
-//                                    Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-//                                } else {
-//                                    Log.i(TAG, "onClick: La fecha es valida.");
-//                                }
                             }
                         }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
                 datePickerDialog.show();
-
-//                do {
-//                    datePickerDialog.show();
-//                    if (!doctor.verificarFecha(fecha)) {
-//                        Log.i(TAG, "onClick: La fecha no es valida. Escoja otra.");
-//                    }
-//                } while (!doctor.verificarFecha(fecha));
             }
         });
 
-        ag_hora.setOnClickListener(new View.OnClickListener() {
+        ag_hora.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ag_hora clicked i.");
-                hora = LocalTime.now();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                timePickerDialog = new TimePickerDialog(AgendarActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Log.i(TAG, "onItemSelected: Selected from ag_hora. Position " + position + " i.");
 
-                                //colocar restricciones
+                hora = LocalTime.parse(ag_hora.getSelectedItem().toString());
 
-                                hora = LocalTime.of(hourOfDay, minute);
+                Log.i(TAG, "onItemSelected: hora seleccionada " + hora + " i.");
 
-                                String meridian = hourOfDay > 11 ? " PM" : " AM";
+            }
 
-                                hourOfDay = hourOfDay % 12 == 0 ? 12 : hourOfDay % 12;
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                                ag_hora.setText(hourOfDay + (minute < 10 ? " : 0" : " : ") + minute + meridian);
-
-                            }
-                        }, hora.getHour(), hora.getMinute(), false);
-                timePickerDialog.show();
             }
         });
 
@@ -255,13 +247,20 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
-
     private void setPromptDialog() {
 
-        Procedimiento cita = new CitaMedica(usuario, fecha, hora, doctor);
+        Procedimiento cita = new Procedimiento(0, mUsuario.getId(), doctor.getId(),
+                0, fecha, hora, especialidad);
 
         pd_title.setText("¿AGENDAR ESTA CITA?");
-        pd_content.setText(cita.getDatos());
+
+        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
+                + "Fecha: " + fecha + "\n"
+                + "Hora: " + hora + "\n"
+                + "Consultorio: " + doctor.getConsultorio() + "\n"
+                + "Doctor: " + doctor.getNombre() + "\n\n";
+
+        pd_content.setText(datos);
 
         pd_cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,15 +299,32 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void setNombreEsp(){
+    private void populateHoras() {
+
+        Log.i(TAG, "populateHoras: called i.");
+        ArrayList<String> horasDisponibles = new ArrayList<>();
+
+        for (Horario h : mHorarios) {
+            horasDisponibles.add(h.getHora());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.simple_spinner_item, new ArrayList<String>(nombreEsp));
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        ag_esp.setAdapter(adapter);
+
+
+    }
+
+    private void setNombreEsp() {
         if (nombreEsp.size() > 0)
             nombreEsp.clear();
-        for(Especialidad esp: especialidades){
+        for (Especialidad esp : especialidades) {
             nombreEsp.add(esp.getNombre());
         }
     }
 
-    private void insertarEspecialidades(){
+    private void insertarEspecialidades() {
         try {
             repositorio.getEspecialidades().observe(this, new Observer<List<Especialidad>>() {
                 @Override
@@ -324,7 +340,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
                     }
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.i(TAG, "insertarEsp: No hay especialidades");
             Toast.makeText(getApplicationContext(),
                     "No hay especialidades", Toast.LENGTH_SHORT).show();
@@ -356,7 +372,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         Log.i(TAG, "llenarArrayDoctores: called i.");
 
-        usuario = new Usuario();
+        mUsuario = new Usuario();
 
         Doctor d1 = new Doctor("Dr. One", "101", "General");
         d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
@@ -433,7 +449,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.i(TAG, "getDoctoresEsp: No hay doctores");
             Toast.makeText(getApplicationContext(),
                     "No hay especialidades", Toast.LENGTH_SHORT).show();
@@ -461,19 +477,25 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         return doc;
     }
 
-    private void verificarDia(LocalDate fecha){
+    private void setmHorarios(LocalDate fecha) {
 
         try {
-            repositorio.getHorarioDia(doctor.getId(), fecha.getDayOfWeek().toString()).observe(this, new Observer<List<Horario>>() {
+            repositorio.getHorarioDia(doctor.getId(), fecha.toString()).observe(this, new Observer<List<Horario>>() {
                 @Override
                 public void onChanged(@Nullable List<Horario> horarios) {
+                    if (mHorarios.size() > 0) {
+                        mHorarios.clear();
+                    }
+                    if (horarios != null) {
+                        mHorarios.addAll(horarios);
+                    }
 
-                    trabajaDia = (horarios.size() > 0) ? true : false;
+                    horarioDia = (horarios.size() > 0) ? true : false;
                     Log.i(TAG, "onChanged: horarios.size() = " + horarios.size());
 
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.i(TAG, "verificarDia: No hay doctores");
             Toast.makeText(getApplicationContext(),
                     "No hay especialidades", Toast.LENGTH_SHORT).show();
@@ -481,34 +503,26 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         }
     }
 
+    private void setmAgendas(LocalDate fecha) {
 
-    private void checkFechaEnAgenda(final LocalDate fecha){
 
         try {
             repositorio.getAgendaByDia(doctor.getId(), fecha.toString()).observe(this, new Observer<List<Agenda>>() {
                 @Override
-                public void onChanged(@Nullable List<Agenda> agenda) {
-                    if(agenda.size() > 0){
-                        fechaEnAgenda = true;
-                    }else{
-                        fechaEnAgenda = false;
-                        //aniadir a la agenda
-                        checkFechaEnAgenda(fecha);
-                    }
+                public void onChanged(@Nullable List<Agenda> agendas) {
+
+                    agendaDia = (agendas.size() > 0) ? true : false;
+                    Log.i(TAG, "onChanged: horarios.size() = " + agendas.size());
+
                 }
             });
-        }catch(Exception e){
-            Log.i(TAG, "checkFechaEnAgenda: algo salió mal");
+        } catch (Exception e) {
+            Log.i(TAG, "verificarDia: No hay doctores");
             Toast.makeText(getApplicationContext(),
-                    "Algo salió mal", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "checkFechaEnAgenda: " + e.toString());
+                    "No hay especialidades", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "verificarDia: " + e.toString());
         }
     }
-
-    public ArrayList<Boolean> getHorasAgenda(int idDoctor, LocalDate fecha){
-        
-    }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

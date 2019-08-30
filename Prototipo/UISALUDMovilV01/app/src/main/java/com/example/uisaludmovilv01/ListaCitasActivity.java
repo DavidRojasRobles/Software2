@@ -80,6 +80,7 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
                 Log.i(TAG, "onClick: agendar called i.");
 
                 Intent intent = new Intent(getApplicationContext(), AgendarActivity.class);
+                intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
 
             }
@@ -131,10 +132,15 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
 **/
 
     private void insertarCitas() {
+        Log.i(TAG, "insertarCitas: called i.");
         try {
+            Log.i(TAG, "insertarCitas: inside try i.");
+            Log.i(TAG, "insertarCitas: mUsuario = " + mUsuario.getNombre());
             repositorio.getProcedimientosUsuario(mUsuario.getId()).observe(this, new Observer<List<Procedimiento>>() {
+
                 @Override
                 public void onChanged(@Nullable List<Procedimiento> procedimientos) {
+                    Log.i(TAG, "onChanged: called i.");
                     if (citas.size() > 0)
                         citas.clear();
                     if (procedimientos != null) {
@@ -156,6 +162,7 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
     }
 
     private void insertarDoctores(int doctorId) {
+        Log.i(TAG, "insertarDoctores: called i.");
         try {
             repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
                 @Override
@@ -179,6 +186,7 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
     }
 
     private void initRecyclerView() {
+        Log.i(TAG, "initRecyclerView: called i.");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         citasRecyclerAdapter = new CitasRecyclerAdapter(citas, mDoctores, this);

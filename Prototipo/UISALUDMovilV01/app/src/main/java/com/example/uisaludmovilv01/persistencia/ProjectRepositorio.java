@@ -3,7 +3,9 @@ package com.example.uisaludmovilv01.persistencia;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.database.Cursor;
 
+import com.example.uisaludmovilv01.async.InsertAsyncTask;
 import com.example.uisaludmovilv01.modelos.Agenda;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Especialidad;
@@ -15,6 +17,7 @@ import com.example.uisaludmovilv01.modelos.Usuario;
 
 import org.threeten.bp.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
@@ -111,6 +114,14 @@ public class ProjectRepositorio {
         return mProjectDatabase.getProcedimientoDao().getProcedimientosDoctor(id);
     }
 
+    public LiveData<List<Procedimiento>> getProcedimientos(){
+        return mProjectDatabase.getProcedimientoDao().getProcedimientos();
+    }
+
+    public void insertarProcedimientoTask(Procedimiento procedimiento){
+        new InsertAsyncTask(mProjectDatabase.getProcedimientoDao()).execute(procedimiento);
+    }
+
 
     //EVOLUCIONES
 
@@ -131,9 +142,7 @@ public class ProjectRepositorio {
         return mProjectDatabase.getHorarioDao().getHorarioByDia(idDoctor, diaSemana);
     }
 
-    public LiveData<List<Horario>> getDispByDia(int idDoctor, String diaSemana, int mananaTarde){
-        return mProjectDatabase.getHorarioDao().getDispByDia(idDoctor, diaSemana, mananaTarde);
-    }
+
 
 
     //AGENDA
@@ -142,9 +151,7 @@ public class ProjectRepositorio {
         return mProjectDatabase.getAgendaDao().getAgendaByDia(idDoctor, fecha);
     }
 
-    public LiveData<List<Boolean>> getHorasAgenda(int idDoctor, String fecha){
-        return mProjectDatabase.getAgendaDao().getHorasAgenda(idDoctor, fecha);
-    }
+
 
     //ESPECIALIDADES
 

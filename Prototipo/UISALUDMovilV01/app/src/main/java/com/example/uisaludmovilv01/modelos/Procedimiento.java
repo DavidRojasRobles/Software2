@@ -87,11 +87,21 @@ public class Procedimiento implements Serializable {
      * Constructor para los objetos de la clase Procedimiento.
      */
 
+    @Ignore
     public Procedimiento(int tipo, int usuario, int doctor, int orden, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
         this.tipo = tipo;
         this.usuario = usuario;
         this.doctor = doctor;
         this.orden = orden;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.especialidad = especialidad;
+    }
+
+    public Procedimiento(int tipo, int usuario, int doctor, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
+        this.tipo = tipo;
+        this.usuario = usuario;
+        this.doctor = doctor;
         this.fecha = fecha;
         this.hora = hora;
         this.especialidad = especialidad;
