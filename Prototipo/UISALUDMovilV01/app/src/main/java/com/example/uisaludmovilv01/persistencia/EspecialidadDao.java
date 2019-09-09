@@ -6,9 +6,12 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.Update;
 
 
+import com.example.uisaludmovilv01.modelos.Agenda;
 import com.example.uisaludmovilv01.modelos.Especialidad;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.util.List;
 
@@ -16,8 +19,8 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface EspecialidadDao {
 
-    //@Insert
-
+    @Insert
+    void insertarEspecialidad(Especialidad... especialidades);
 
     @Query("SELECT * FROM Especialidades")
     LiveData<List<Especialidad>> getEspecialidades();
@@ -29,8 +32,9 @@ public interface EspecialidadDao {
     LiveData<Especialidad> getEspecialidadByNombre(String espNombre);
 
 
-    //@Update
+    @Update
+    int updateEspecialidad(Especialidad... especialidades);
 
-
-    //@Delete
+    @Delete
+    int deleteEspecialidad(Especialidad... especialidades);
 }

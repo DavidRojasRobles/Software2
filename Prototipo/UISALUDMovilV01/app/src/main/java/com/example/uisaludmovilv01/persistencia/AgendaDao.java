@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 import android.database.Cursor;
 
 import com.example.uisaludmovilv01.modelos.Agenda;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,12 +19,15 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface AgendaDao {
 
-    //@Insert
+    @Insert
+    void insertarAgenda(Agenda... agendas);
 
-    @Query("SELECT * FROM Agenda WHERE doctor = :idDoctor and fecha = :fecha")
-    LiveData<List<Agenda>> getAgendaByDia(int idDoctor, String fecha);
+    @Query("SELECT * FROM Agenda WHERE doctor = :doctorId and fecha = :fecha")
+    LiveData<List<Agenda>> getAgendaByFecha(int doctorId, String fecha);
 
-    //@Update
+    @Update
+    int updateAgenda(Agenda... agendas);
 
-    //@Delete
+    @Delete
+    int deleteAgenda(Agenda... agendas);
 }

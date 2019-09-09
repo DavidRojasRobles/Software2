@@ -9,6 +9,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
 import com.example.uisaludmovilv01.modelos.Horario;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,15 +18,17 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface HorarioDao {
 
-    //@Insert
+    @Insert
+    void insertarHorario(Horario... horarios);
 
     //El horario de un Doctor es consultado por un paciente para ver la disponibilidad de citas
-    @Query("SELECT * FROM Horarios WHERE doctor = :idDoctor and fecha = :fecha")
-    LiveData<List<Horario>> getHorarioByDia(int idDoctor, String fecha);
+//    @Query("SELECT * FROM Horarios WHERE doctor = :idDoctor and fecha = :fecha")
+//    LiveData<List<Horario>> getHorarioByDia(int idDoctor, String fecha);
 
+    @Update
+    int updateHorario(Horario... horarios);
 
-    //@Update
+    @Delete
+    int deleteHorario(Horario... horarios);
 
-
-    //@Delete
 }

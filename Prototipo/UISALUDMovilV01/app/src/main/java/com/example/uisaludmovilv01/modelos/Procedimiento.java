@@ -2,6 +2,7 @@ package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
@@ -28,7 +29,19 @@ import java.io.Serializable;
  * @version 14 / 07 / 2019
  */
 
-@Entity(tableName = "Procedimientos")
+@Entity(tableName = "Procedimientos",
+        foreignKeys = {
+            @ForeignKey(
+                    entity = Usuario.class,
+                    parentColumns = "id",
+                    childColumns = "usuario"
+            ),
+            @ForeignKey(
+                    entity = Doctor.class,
+                    parentColumns = "id",
+                    childColumns = "doctor"
+            )
+        })
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Procedimiento implements Serializable {
 
@@ -60,9 +73,6 @@ public class Procedimiento implements Serializable {
     @TypeConverters(LocalTimeConverter.class)
     private LocalTime hora;
 
-    @ColumnInfo(name = "especialidad")
-    private String especialidad;
-
     public void setId(int id) {
         this.id = id;
     }
@@ -79,32 +89,28 @@ public class Procedimiento implements Serializable {
         this.orden = orden;
     }
 
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
-    }
-
     /**
      * Constructor para los objetos de la clase Procedimiento.
      */
 
     @Ignore
-    public Procedimiento(int tipo, int usuario, int doctor, int orden, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
+    public Procedimiento(int tipo, int usuario, int doctor, int orden,
+                         @NonNull LocalDate fecha, @NonNull LocalTime hora) {
         this.tipo = tipo;
         this.usuario = usuario;
         this.doctor = doctor;
         this.orden = orden;
         this.fecha = fecha;
         this.hora = hora;
-        this.especialidad = especialidad;
     }
 
-    public Procedimiento(int tipo, int usuario, int doctor, @NonNull LocalDate fecha, @NonNull LocalTime hora, String especialidad) {
+    public Procedimiento(int tipo, int usuario, int doctor, @NonNull LocalDate fecha,
+                         @NonNull LocalTime hora) {
         this.tipo = tipo;
         this.usuario = usuario;
         this.doctor = doctor;
         this.fecha = fecha;
         this.hora = hora;
-        this.especialidad = especialidad;
     }
 
     public int getId() {
@@ -135,10 +141,6 @@ public class Procedimiento implements Serializable {
     @NonNull
     public LocalTime getHora() {
         return hora;
-    }
-
-    public String getEspecialidad() {
-        return especialidad;
     }
 
     public void setTipo(int tipo) {

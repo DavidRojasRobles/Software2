@@ -47,21 +47,25 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements DoctorCi
         repositorio = new ProjectRepositorio(this);
 
 
-        if (getIntent().hasExtra("selected_doctor")) {
-            mDoctor = (Doctor) getIntent().getSerializableExtra("selected_doctor");
+//        if (getIntent().hasExtra("selected_doctor")) {
+//            mDoctor = (Doctor) getIntent().getSerializableExtra("selected_doctor");
+//
+//            Log.i(TAG, "onCreate: has extra i.");
+//            Log.i(TAG, "onCreate: " + mDoctor.getNombre());
+//
+//            insertarCitas();
+//            for (Procedimiento cita : citas){
+//                insertarUsuarios(cita.getUsuario());
+//            }
+//        }
 
-            Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mDoctor.getNombre());
-
-            insertarCitas();
-            for (Procedimiento cita : citas){
-                insertarUsuarios(cita.getUsuario());
-            }
+        mDoctor = NavigationMenu.getmDoctor();
+        inicializarCitas();
+        for (Procedimiento cita : citas){
+            insertarUsuarios(cita.getUsuario());
         }
 
-
         initRecyclerView();
-        //insertarCitasFalsas();
 
         setSupportActionBar((Toolbar) findViewById(R.id.citas_toolbar));
         setTitle("Citas");
@@ -69,74 +73,10 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements DoctorCi
 
     }
 
-//    private void insertarCitasFalsas() {
-//        Usuario user1 = new Usuario();
-//
-//        Doctor d1 = new Doctor("Dr. One", "101", "General");
-//        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
-//                false, false, false, false, false, false});
-//        d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
-//                false, false, false, true, true, false});
-//
-//        Procedimiento cita1 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 12),
-//                LocalTime.of(8, 0),
-//                d1);
-//        Procedimiento cita2 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 15),
-//                LocalTime.of(10, 0),
-//                d1);
-//        Procedimiento cita3 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 26),
-//                LocalTime.of(9, 0),
-//                d1);
-//        Procedimiento cita4 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 26),
-//                LocalTime.of(8, 0),
-//                d1);
-//        Procedimiento cita5 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 29),
-//                LocalTime.of(16, 0),
-//                d1);
-//        citas.add(cita1);
-//        citas.add(cita2);
-//        citas.add(cita3);
-//        citas.add(cita4);
-//        citas.add(cita5);
-//
-//        citasRecyclerAdapter.notifyDataSetChanged();
-//    }
-
-    private void insertarUsuarios(int usuarioId) {
-        try {
-            repositorio.encontrarUsuario(usuarioId).observe(this, new Observer<Usuario>() {
-                @Override
-                public void onChanged(@Nullable Usuario usuario) {
-                    if (usuario != null) {
-                        Log.i(TAG, "onChanged: proc recibido." );
-                        mUsuarios.add(usuario);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "El doctor no existe", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }catch(Exception e){
-            Log.i(TAG, "insertarDoctores: No hay doctores definidos");
-            Toast.makeText(getApplicationContext(),
-                    "No hexiste el doctor", Toast.LENGTH_SHORT).show();
-            finish();
-            Log.i(TAG, "insertarDoctores: " + e.toString());
-        }
-    }
-
-
-    private void insertarCitas(){
+    /**
+     * Inicializa la lista de citas para RecyclerView
+     */
+    private void inicializarCitas(){
         try {
             repositorio.getProcedimientosDoctor(mDoctor.getId()).observe(this, new Observer<List<Procedimiento>>() {
                 @Override
@@ -158,6 +98,33 @@ public class ListaCitasDoctorActivity extends NavigationMenu implements DoctorCi
                     "No esta definido el doctor", Toast.LENGTH_SHORT).show();
             finish();
             Log.i(TAG, "insertarCitas: " + e.toString());
+        }
+    }
+
+    /**
+     * Crea el obj Usuario desde la BD y lo inserta en la lista mUsuarios
+     * @param usuarioId
+     */
+    private void insertarUsuarios(int usuarioId) {
+        try {
+            repositorio.getUnUsuario(usuarioId).observe(this, new Observer<Usuario>() {
+                @Override
+                public void onChanged(@Nullable Usuario usuario) {
+                    if (usuario != null) {
+                        Log.i(TAG, "onChanged: proc recibido." );
+                        mUsuarios.add(usuario);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "El doctor no existe", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "insertarDoctores: No hay doctores definidos");
+            Toast.makeText(getApplicationContext(),
+                    "No hexiste el doctor", Toast.LENGTH_SHORT).show();
+            finish();
+            Log.i(TAG, "insertarDoctores: " + e.toString());
         }
     }
 

@@ -44,16 +44,16 @@ public abstract class ProjectDatabase extends RoomDatabase {
 
     //USUARIOS
 //    public abstract UsuarioDao getUsuarioDao();
-//    public abstract ProcedimientoDao consultarCitasMedicasDao(int idUsuario);
-//    public abstract HorarioDao consultarHorarioDao(int idDoctor, LocalDate fecha);
-//    public abstract OrdenDao consultarOrdenesMedicamentoDao(int idUsuario);
-//    public abstract OrdenDao consultarOrdenesProcedimientoDao(int idUsuario);
-//    public abstract ProcedimientoDao consultarProcedimientoDao(int idUsuario);
+//    public abstract ProcedimientoDao getCitasMedicasDao(int idUsuario);
+//    public abstract HorarioDao getHorarioDao(int idDoctor, LocalDate fecha);
+//    public abstract OrdenDao getOrdenesMedicamentoDao(int idUsuario);
+//    public abstract OrdenDao getOrdenesProcedimientoDao(int idUsuario);
+//    public abstract ProcedimientoDao getProcedimientoDao(int idUsuario);
 
     //DOCTORES
-//    public abstract DoctorDao consultarDoctoresDao();
-//    public abstract AgendaDao consultarAgendaDao(int idDoctor, LocalDate fecha);
+//    public abstract DoctorDao getDoctoresDao();
+//    public abstract AgendaDao getAgendaDao(int idDoctor, LocalDate fecha);
 //
 //    //ESPECIALIDADES
-//    public abstract EspecialidadDao consultarEspecialidadesDao();
+//    public abstract EspecialidadDao getEspecialidadesDao();
 }

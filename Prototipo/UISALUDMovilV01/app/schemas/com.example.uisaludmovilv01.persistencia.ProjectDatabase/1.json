@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "61731eb7d2985fdf057bd9293f58f622",
+    "identityHash": "5ffcf18bad94108dfe70ed448e658d38",
     "entities": [
       {
         "tableName": "Agenda",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, FOREIGN KEY(`doctor`) REFERENCES `Doctores`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,12 +39,34 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "agenda",
+            "unique": true,
+            "columnNames": [
+              "fecha",
+              "hora"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `agenda` ON `${TABLE_NAME}` (`fecha`, `hora`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Doctores",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "doctor"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Doctores",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `consultorio` TEXT NOT NULL, `especialidad` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `cedula` TEXT NOT NULL, `consultorio` TEXT NOT NULL, `especialidad` INTEGER NOT NULL, FOREIGN KEY(`especialidad`) REFERENCES `Especialidades`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -59,15 +81,21 @@
             "notNull": true
           },
           {
+            "fieldPath": "cedula",
+            "columnName": "cedula",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "consultorio",
             "columnName": "consultorio",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "especialidad",
+            "fieldPath": "esp_id",
             "columnName": "especialidad",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -77,8 +105,29 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "index_Doctores_cedula",
+            "unique": true,
+            "columnNames": [
+              "cedula"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_Doctores_cedula` ON `${TABLE_NAME}` (`cedula`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Especialidades",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "especialidad"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Especialidades",
@@ -103,12 +152,21 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_Especialidades_nombre",
+            "unique": true,
+            "columnNames": [
+              "nombre"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_Especialidades_nombre` ON `${TABLE_NAME}` (`nombre`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
         "tableName": "Evoluciones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT, `hora` TEXT NOT NULL, `evolucion` TEXT NOT NULL, `nombreDoctor` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `procedimiento` INTEGER NOT NULL, `evolucion` TEXT NOT NULL, FOREIGN KEY(`procedimiento`) REFERENCES `Procedimientos`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -117,27 +175,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "usuario",
-            "columnName": "usuario",
+            "fieldPath": "prcedimiento",
+            "columnName": "procedimiento",
             "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "doctor",
-            "columnName": "doctor",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "fecha",
-            "columnName": "fecha",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "hora",
-            "columnName": "hora",
-            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -145,12 +185,6 @@
             "columnName": "evolucion",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "nombreDoctor",
-            "columnName": "nombreDoctor",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -160,11 +194,23 @@
           "autoGenerate": true
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "Procedimientos",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "procedimiento"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Horarios",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `doctor` INTEGER NOT NULL, `dia_semana` TEXT NOT NULL, `hora` TEXT NOT NULL, FOREIGN KEY(`doctor`) REFERENCES `Doctores`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -179,8 +225,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "fecha",
-            "columnName": "fecha",
+            "fieldPath": "diaSemana",
+            "columnName": "dia_semana",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -197,12 +243,34 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "horario",
+            "unique": true,
+            "columnNames": [
+              "dia_semana",
+              "hora"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `horario` ON `${TABLE_NAME}` (`dia_semana`, `hora`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Doctores",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "doctor"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Ordenes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cita` INTEGER NOT NULL, `tipo` INTEGER NOT NULL, `observaciones` TEXT NOT NULL, `fecha` TEXT NOT NULL, `vigencia` INTEGER NOT NULL, `especialidad` TEXT, `reclamado` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cita` INTEGER NOT NULL, `tipo` INTEGER NOT NULL, `observaciones` TEXT NOT NULL, `fechaVIgencia` TEXT NOT NULL, `vigencia` INTEGER NOT NULL, `especialidad` INTEGER NOT NULL, `reclamado` INTEGER NOT NULL, FOREIGN KEY(`cita`) REFERENCES `Procedimientos`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`especialidad`) REFERENCES `Especialidades`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -230,7 +298,7 @@
           },
           {
             "fieldPath": "fechaVigencia",
-            "columnName": "fecha",
+            "columnName": "fechaVIgencia",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -243,8 +311,8 @@
           {
             "fieldPath": "especialidad",
             "columnName": "especialidad",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "INTEGER",
+            "notNull": true
           },
           {
             "fieldPath": "reclamado",
@@ -260,11 +328,34 @@
           "autoGenerate": true
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "Procedimientos",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "cita"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Especialidades",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "especialidad"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Procedimientos",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tipo` INTEGER NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `orden` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, `especialidad` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `tipo` INTEGER NOT NULL, `usuario` INTEGER NOT NULL, `doctor` INTEGER NOT NULL, `orden` INTEGER NOT NULL, `fecha` TEXT NOT NULL, `hora` TEXT NOT NULL, FOREIGN KEY(`usuario`) REFERENCES `Usuarios`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`doctor`) REFERENCES `Doctores`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -307,12 +398,6 @@
             "columnName": "hora",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "especialidad",
-            "columnName": "especialidad",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -322,7 +407,30 @@
           "autoGenerate": true
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "Usuarios",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "usuario"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Doctores",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "doctor"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Usuarios",
@@ -365,13 +473,22 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_Usuarios_cedula",
+            "unique": true,
+            "columnNames": [
+              "cedula"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_Usuarios_cedula` ON `${TABLE_NAME}` (`cedula`)"
+          }
+        ],
         "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"61731eb7d2985fdf057bd9293f58f622\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5ffcf18bad94108dfe70ed448e658d38\")"
     ]
   }
 }

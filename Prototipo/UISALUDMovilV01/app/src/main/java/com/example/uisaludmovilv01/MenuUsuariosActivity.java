@@ -59,15 +59,19 @@ public class MenuUsuariosActivity extends AppCompatActivity {
 
         repositorio = new ProjectRepositorio(this);
 
-        Log.i(TAG, "onCreate: se va a añadir el proceimiento.");
-        aniadirProcedimientos();
-        Log.i(TAG, "onCreate: se añadio el procedimiento.");
+
+//        Log.i(TAG, "onCreate: se va a aniaadir el proceimiento.");
+//        aniadirProcedimientos();
+//        checkDB();
+//        Log.i(TAG, "onCreate: se aniaadio el procedimiento.");
 
         setSupportActionBar((Toolbar) findViewById(R.id.home_toolbar));
         setTitle("UISALUD Movil");
 
-        setMenuProperties();
+        setBaseUsuarios();
+        setBaseDoctores();
         setButtonListeners();
+        setMenuProperties();
 
     }
 
@@ -80,9 +84,68 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         doctor2.setText("doctor2");
     }
 
-    private void initializeUsuario(int id) {
+    /**
+     * Inicializa usuarios en la base de datos si no existen.
+     */
+    private void setBaseUsuarios(){
+        Log.i(TAG, "setBaseUsuarios: called i.");
 
-        repositorio.encontrarUsuario(id).observe(this, new Observer<Usuario>() {
+        repositorio.getUsuarios().observe(this, new Observer<List<Usuario>>() {
+            @Override
+            public void onChanged(@Nullable List<Usuario> usuarios) {
+                if( usuarios.size() < 3){
+                    Log.i(TAG, "onChanged: los usuarios no existen.");
+                    Usuario usuario;
+                    for (int i = 1; i <= 3; i++){
+                        Log.i(TAG, "onChanged: se anadirá el usuario " + i);
+                        usuario = new Usuario("Usuario" + i,
+                                "0" + i, "0" + i, "0" + i);
+
+                        repositorio.insertarUsuarioTask(usuario);
+                    }
+                    Log.i(TAG, "onChanged: Se anadieron los 3 usuarios.");
+                }else{
+                    Log.i(TAG, "onChanged: Los usuarios ya existen.");
+                }
+            }
+        });
+    }
+
+    /**
+     * Inicializa doctores en la base de datos si no existen.
+     */
+    private void setBaseDoctores(){
+        Log.i(TAG, "setBaseUsuarios: called i.");
+
+        repositorio.getDoctores().observe(this, new Observer<List<Doctor>>() {
+            @Override
+            public void onChanged(@Nullable List<Doctor> doctores) {
+                if( doctores.size() < 2){
+                    Log.i(TAG, "onChanged: los doctores no existen.");
+                    Doctor doctor;
+                    for (int i = 1; i <= 2; i++){
+                        Log.i(TAG, "onChanged: se anadirá el doctor " + i);
+                        doctor = new Doctor("Doctor" + i,
+                                "0" + i, "0" + i, i);
+
+                        repositorio.insertarDoctorTask(doctor);
+                    }
+                    Log.i(TAG, "onChanged: Se anadieron los 2 doctores.");
+                }else{
+                    Log.i(TAG, "onChanged: Los doctores ya existen.");
+                }
+            }
+        });
+    }
+
+    /**
+     * Inicializa el usuario deseado
+     * @param id
+     */
+    private void initializeUsuario(int id) {
+        Log.i(TAG, "initializeUsuario: called i.");
+
+        repositorio.getUnUsuario(id).observe(this, new Observer<Usuario>() {
             @Override
             public void onChanged(@Nullable Usuario usuario) {
                 if (usuario != null) {
@@ -96,47 +159,14 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         });
     }
 
-    private void aniadirProcedimientos(){
-        Log.i(TAG, "aniadirProcedimientos: called i.");
-
-        Usuario user1 = new Usuario();
-
-        Doctor d1 = new Doctor("Dr. One", "101", "General");
-
-        Procedimiento cita1 = new Procedimiento(
-                0,
-                user1.getId(),
-                d1.getId(),
-                LocalDate.of(2019, 8, 12),
-                LocalTime.of(8, 0),
-                d1.getEspecialidad());
-
-
-        repositorio.insertarProcedimientoTask(cita1);
-
-        checkDB();
-
-    }
-
-    private void checkDB(){
-        Log.i(TAG, "checkDB: called i.");
-        Log.i(TAG, "checkDB: before a.size() = " + a.size());
-        repositorio.getProcedimientos().observe(this, new Observer<List<Procedimiento>>() {
-            @Override
-            public void onChanged(@Nullable List<Procedimiento> procedimientos) {
-                Log.i(TAG, "onChanged: procedimientos.size() i. = " + procedimientos.size());
-                if (procedimientos != null)
-                    a.addAll(procedimientos);
-            }
-        });
-        Log.i(TAG, "checkDB: after a.size() = " + a.size());
-    }
-
-
+    /**
+     * Inizializa el doctor deseado
+     * @param id
+     */
     private void initializeDoctor(int id) {
+        Log.i(TAG, "initializeDoctor: called i.");
 
-
-        repositorio.encontrarDoctor(id).observe(this, new Observer<Doctor>() {
+        repositorio.getUnDoctor(id).observe(this, new Observer<Doctor>() {
             @Override
             public void onChanged(@Nullable Doctor doctor) {
                 if (doctor != null) {
@@ -151,22 +181,71 @@ public class MenuUsuariosActivity extends AppCompatActivity {
 
     }
 
+//    private void aniadirProcedimientos(){
+//        Log.i(TAG, "aniadirProcedimientos: called i.");
+//
+//        Usuario user1 = new Usuario();
+//
+//        Doctor d1 = new Doctor("Dr. One", "101", "General");
+//
+//        Procedimiento cita1 = new Procedimiento(
+//                0,
+//                user1.getId(),
+//                d1.getId(),
+//                LocalDate.of(2019, 8, 12),
+//                LocalTime.of(8, 0),
+//                d1.getEspecialidad());
+//
+//
+//        repositorio.agregarProcedimiento(cita1);
+//
+//        checkDB();
+//
+//    }
+
+    private void checkDB(){
+        Log.i(TAG, "checkDB: called i.");
+        Log.i(TAG, "checkDB: before a.size() = " + a.size());
+        try {
+            repositorio.getProcedimientos().observe(this, new Observer<List<Procedimiento>>() {
+                @Override
+                public void onChanged(@Nullable List<Procedimiento> procedimientos) {
+                    Log.i(TAG, "onChanged: procedimientos.size() i. = " + procedimientos.size());
+                    if (procedimientos.size() > 0) {
+                        a.addAll(procedimientos);
+                        Log.i(TAG, "onChanged: ");
+                    }
+                }
+            });
+        }catch (Exception e){
+            Log.i(TAG, "checkDB: exception caught. " + e.toString());
+        }
+        Log.i(TAG, "checkDB: after a.size() = " + a.size());
+    }
+
+    /**
+     * Sets the button listeners
+     */
     public void setButtonListeners() {
-        Log.i(TAG, "setButtonListeners: ");
-        Intent intent;
+        Log.i(TAG, "setButtonListeners: called i.");
+
         usuario1.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: usuaruio 1 clicked i.");
                 Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
                 //Change for corresponding user
-//                initializeUsuario(1);
-                NavigationMenu.setmUsuario(new Usuario());
-                mUsuario = NavigationMenu.getmUsuario();
+                initializeUsuario(1);
+                NavigationMenu.setmUsuario(mUsuario);
+//                NavigationMenu.setmUsuario(new Usuario());
+//                mUsuario = new Usuario();
+//                mUsuario = NavigationMenu.getmUsuario();
                 intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
             }
         });
+        Log.i(TAG, "setButtonListeners: passed usuario1");
         usuario2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,10 +253,13 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
                 //Change for corresponding user
                 initializeUsuario(2);
+                NavigationMenu.setmUsuario(mUsuario);
                 intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
             }
         });
+        Log.i(TAG, "setButtonListeners: passed usuario2");
+
         usuario3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,10 +267,13 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ListaCitasActivity.class);
                 //Change for corresponding user
                 initializeUsuario(3);
+                NavigationMenu.setmUsuario(mUsuario);
                 intent.putExtra("selected_usuario", mUsuario);
                 startActivity(intent);
             }
         });
+        Log.i(TAG, "setButtonListeners: passed usuario3");
+
         doctor1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,10 +281,13 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ListaCitasDoctorActivity.class);
                 //Change for corresponding user
                 initializeDoctor(1);
+                NavigationMenu.setmDoctor(mDoctor);
                 intent.putExtra("selected_doctor", mDoctor);
                 startActivity(intent);
             }
         });
+        Log.i(TAG, "setButtonListeners: passed doctor1");
+
         doctor2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,10 +295,13 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ListaCitasDoctorActivity.class);
                 //Change for corresponding user
                 initializeDoctor(2);
+                NavigationMenu.setmDoctor(mDoctor);
                 intent.putExtra("selected_doctor", mDoctor);
                 startActivity(intent);
             }
         });
+        Log.i(TAG, "setButtonListeners: passed doctor2");
+
     }
 
 }

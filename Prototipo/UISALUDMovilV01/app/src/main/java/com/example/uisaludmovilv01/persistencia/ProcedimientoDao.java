@@ -9,6 +9,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
 import com.example.uisaludmovilv01.modelos.Procedimiento;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public interface ProcedimientoDao {
 
     @Insert
-    long[] insertarProcedimiento(Procedimiento... procedimientos);
+    void insertarProcedimiento(Procedimiento... procedimientos);
 
     @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario")
     LiveData<List<Procedimiento>> getProcedimientosUsuario(int idUsuario);
@@ -26,10 +27,10 @@ public interface ProcedimientoDao {
     LiveData<List<Procedimiento>> getProcedimientosDoctor(int idDoctor);
 
     @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario and tipo in (0,1)")
-    LiveData<List<Procedimiento>> consultarCitasMedicas(int idUsuario);
+    LiveData<List<Procedimiento>> getCitasMedicas(int idUsuario);
 
     @Query("SELECT * FROM Procedimientos WHERE usuario = :idUsuario and tipo = 2")
-    LiveData<List<Procedimiento>> consultarProcedimientos(int idUsuario);
+    LiveData<List<Procedimiento>> getProcedimientos(int idUsuario);
 
     @Query("SELECT * FROM Procedimientos WHERE id = :id")
     LiveData<Procedimiento> getProcedimientosById(int id);
@@ -37,9 +38,11 @@ public interface ProcedimientoDao {
     @Query("SELECT * FROM Procedimientos")
     LiveData<List<Procedimiento>> getProcedimientos();
 
-    //@Update
+    @Update
+    int updateProcedimiento(Procedimiento... procedimientos);
 
+    @Delete
+    int deleteProcedimiento(Procedimiento... procedimientos);
 
-    //@Delete
 
 }

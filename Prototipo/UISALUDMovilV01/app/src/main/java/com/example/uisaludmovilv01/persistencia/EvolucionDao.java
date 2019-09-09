@@ -9,6 +9,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.Update;
 
 import com.example.uisaludmovilv01.modelos.Evolucion;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.util.List;
 
@@ -16,17 +17,16 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface EvolucionDao {
 
-//    @Insert
-//    Long[] agregarEvolucion(String texto);
+    @Insert
+    void insertarEvolucion(Evolucion... evoluciones);
 
+//    @Query("SELECT * FROM Evoluciones WHERE usuario = :userId")
+//    LiveData<List<Evolucion>> getEvolucionesUsuario(int userId);
 
-    @Query("SELECT * FROM Evoluciones WHERE usuario = :userId")
-    LiveData<List<Evolucion>> getEvolucionesUsuario(int userId);
+    @Update
+    int updateEvolucion(Evolucion... evoluciones);
 
+    @Delete
+    int deleteEvolucion(Evolucion... evoluciones);
 
-
-    //@Update
-
-
-    //@Delete
 }

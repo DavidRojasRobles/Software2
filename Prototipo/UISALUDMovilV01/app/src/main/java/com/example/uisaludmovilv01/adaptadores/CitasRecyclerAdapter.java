@@ -46,6 +46,7 @@ public class CitasRecyclerAdapter extends RecyclerView.Adapter<CitasRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.cita_fecha.setText(citas.get(i).getFecha().toString());
+
         viewHolder.cita_esp.setText(encontrarDoctor(citas.get(i).getDoctor()).getEspecialidad());
         viewHolder.cita_hora.setText(citas.get(i).getHora().toString());
         viewHolder.cita_doctor.setText(encontrarDoctor(citas.get(i).getDoctor()).getNombre());

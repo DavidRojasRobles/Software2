@@ -32,9 +32,9 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
     private RecyclerView recyclerView;
 
     // variables
-    private ArrayList<Orden> ordenes = new ArrayList<>();
-    private ArrayList<Doctor> mDoctores = new ArrayList<>();
+    private ArrayList<Orden> mOrdenes = new ArrayList<>();
     private ArrayList<Procedimiento> mCitas = new ArrayList<>();
+    private ArrayList<Doctor> mDoctores = new ArrayList<>();
     private OrdenesRecyclerAdapter ordenesRecyclerAdapter;
     private Usuario mUsuario;
     private ProjectRepositorio repositorio;
@@ -49,22 +49,24 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
 
         repositorio = new ProjectRepositorio(this);
 
-        if (getIntent().hasExtra("selected_usuario")) {
-            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//        if (getIntent().hasExtra("selected_usuario")) {
+//            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//
+//            insertarOrdenes();
+//
+//            Log.i(TAG, "onCreate: has extra i.");
+//            Log.i(TAG, "onCreate: " + mUsuario.getNombre());
+//        }
 
-            insertarOrdenes();
+        mUsuario = NavigationMenu.getmUsuario();
+        inicializarOrdenes();
 
-            Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mUsuario.getNombre());
-        }
-
-        for(Orden o : ordenes){
+        for(Orden o : mOrdenes){
             insertarCitas(o.getCita());
             insertarDoctores(mCitas.get(mCitas.size()-1).getDoctor());
         }
 
         initRecyclerView();
-        //insertarOrdenesFalsas();
 
         setSupportActionBar((Toolbar) findViewById(R.id.ordenes_toolbar));
         setTitle("Ordenes");
@@ -72,39 +74,38 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
 
     }
 
-//    private void insertarOrdenesFalsas() {
-//        Usuario user1 = new Usuario();
-//
-//        Doctor d1 = new Doctor("Dr. One", "101", "General");
-//        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
-//                false, false, false, false, false, false});
-//        d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
-//                false, false, false, true, true, false});
-//
-//        Procedimiento cita1 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 12),
-//                LocalTime.of(8, 0),
-//                d1);
-//        Procedimiento cita2 = new CitaMedica(
-//                user1,
-//                LocalDate.of(2019, 8, 15),
-//                LocalTime.of(10, 0),
-//                d1);
-//        Orden orden1 = new OrdenMedicamento((CitaMedica) cita1, "Dolex", LocalDate.of(2019, 9, 12));
-//        Orden orden2 = new OrdenProcedimiento((CitaMedica) cita1, "Odontologia", "Remisión por caries", LocalDate.of(2019, 9, 12));
-//        Orden orden3 = new OrdenMedicamento((CitaMedica) cita2, "Corticoide", LocalDate.of(2019, 8, 15));
-//        Orden orden4 = new OrdenProcedimiento((CitaMedica) cita2, "Dermatologia", "Test alergicos", LocalDate.of(2019, 9, 12));
-//
-//        ordenes.add(orden1);
-//        ordenes.add(orden2);
-//        ordenes.add(orden3);
-//        ordenes.add(orden4);
-//        ordenes.add(orden1);
-//
-//        ordenesRecyclerAdapter.notifyDataSetChanged();
-//    }
+    /**
+     * Obtiene las ordenes de la BD
+     */
+    private void inicializarOrdenes() {
+        try {
+            repositorio.getOrdenesUsuario(mUsuario.getId()).observe(this, new Observer<List<Orden>>() {
+                @Override
+                public void onChanged(@Nullable List<Orden> o) {
+                    if (mOrdenes.size() > 0)
+                        mOrdenes.clear();
+                    if (o != null) {
+                        Log.i(TAG, "onChanged: proc recibidos.size() = " + o.size());
+                        mOrdenes.addAll(o);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "El usuario no tiene ordenes", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }catch(Exception e){
+            Log.i(TAG, "insertarCitas: No esta definido el usuario o doctor");
+            Toast.makeText(getApplicationContext(),
+                    "No esta definido el usuario", Toast.LENGTH_SHORT).show();
+            finish();
+            Log.i(TAG, "insertarCitas: " + e.toString());
+        }
+    }
 
+    /**
+     * Crea el obj cita de la BD y lo inserta en la lista mCitas
+     * @param citaId
+     */
     private void insertarCitas(int citaId) {
         try {
             repositorio.getProcedimientoById(citaId).observe(this, new Observer<Procedimiento>() {
@@ -128,35 +129,13 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
         }
     }
 
-
-    private void insertarOrdenes() {
-        try {
-            repositorio.getOrdenesUsuario(mUsuario.getId()).observe(this, new Observer<List<Orden>>() {
-                @Override
-                public void onChanged(@Nullable List<Orden> o) {
-                    if (ordenes.size() > 0)
-                        ordenes.clear();
-                    if (o != null) {
-                        Log.i(TAG, "onChanged: proc recibidos.size() = " + o.size());
-                        ordenes.addAll(o);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "El usuario no tiene ordenes", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }catch(Exception e){
-            Log.i(TAG, "insertarCitas: No esta definido el usuario o doctor");
-            Toast.makeText(getApplicationContext(),
-                    "No esta definido el usuario", Toast.LENGTH_SHORT).show();
-            finish();
-            Log.i(TAG, "insertarCitas: " + e.toString());
-        }
-    }
-
+    /**
+     * Crea el obj doctor de la BD y lo inserta en la lista mDoctores
+     * @param doctorId
+     */
     private void insertarDoctores(int doctorId) {
         try {
-            repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
+            repositorio.getUnDoctor(doctorId).observe(this, new Observer<Doctor>() {
                 @Override
                 public void onChanged(@Nullable Doctor doctor) {
                     if (doctor != null) {
@@ -180,7 +159,7 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
     private void initRecyclerView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        ordenesRecyclerAdapter = new OrdenesRecyclerAdapter(ordenes, mDoctores, mCitas, this);
+        ordenesRecyclerAdapter = new OrdenesRecyclerAdapter(mOrdenes, mDoctores, mCitas, this);
         recyclerView.setAdapter(ordenesRecyclerAdapter);
     }
 
@@ -190,7 +169,7 @@ public class ListaOrdenesActivity extends NavigationMenu implements OrdenesRecyc
 
         Intent intent = new Intent(this, SingleOrdenActivity.class);
         Log.i(TAG, "onCitaClick: intent created i.");
-        intent.putExtra("selected_orden", ordenes.get(position));
+        intent.putExtra("selected_orden", mOrdenes.get(position));
 
         Log.i(TAG, "onCitaClick: intent extra added i.");
         startActivity(intent);

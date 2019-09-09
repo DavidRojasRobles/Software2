@@ -14,18 +14,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Usuario;
 
-public class NavigationMenu extends AppCompatActivity{
+public class NavigationMenu extends AppCompatActivity {
     private static final String TAG = "NavigationMenu";
     public static Usuario mUsuario;
+    public static Doctor mDoctor;
 
     public static Usuario getmUsuario() {
         return mUsuario;
     }
 
     public static void setmUsuario(Usuario usuario) {
-        mUsuario = usuario;
+        NavigationMenu.mUsuario = usuario;
+    }
+
+    public static Doctor getmDoctor() {
+        return mDoctor;
+    }
+
+    public static void setmDoctor(Doctor mDoctor) {
+        NavigationMenu.mDoctor = mDoctor;
     }
 
     //
@@ -130,7 +140,7 @@ public class NavigationMenu extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_usuario:
                 Log.i(TAG, "onClick: menu_btn_agendar i.");
                 intent = new Intent(this, MenuUsuariosActivity.class);

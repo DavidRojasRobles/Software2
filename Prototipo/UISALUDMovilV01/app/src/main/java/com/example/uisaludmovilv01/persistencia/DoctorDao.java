@@ -17,11 +17,11 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface DoctorDao {
 
-    //@Insert
-
+    @Insert
+    long[] insertarDoctor(Doctor... doctores);
 
     @Query("SELECT * FROM Doctores")
-    LiveData<List<Doctor>> consultarDoctores();
+    LiveData<List<Doctor>> getDoctores();
 
     @Query("SELECT * FROM Doctores WHERE id = :id")
     LiveData<Doctor> getUnDoctor(int id);
@@ -32,10 +32,9 @@ public interface DoctorDao {
     @Query("SELECT nombre FROM Doctores WHERE id = :id")
     LiveData<String> getNombreDoctor(int id);
 
+    @Update
+    int updateDoctor(Doctor... doctores);
 
-
-    //@Update
-
-
-    //@Delete
+    @Delete
+    int deleteDoctor(Doctor... doctores);
 }

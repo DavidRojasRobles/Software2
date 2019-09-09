@@ -2,6 +2,7 @@ package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
@@ -29,7 +30,17 @@ import java.io.Serializable;
  * @version 14 / 07 / 2019
  */
 
-@Entity(tableName = "Ordenes")
+@Entity(tableName = "Ordenes",
+        foreignKeys = {
+            @ForeignKey(
+                    entity = Procedimiento.class,
+                    parentColumns = "id",
+                    childColumns = "cita"),
+            @ForeignKey(
+                    entity = Especialidad.class,
+                    parentColumns = "id",
+                    childColumns = "especialidad")
+        })
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Orden implements Serializable {
 
@@ -45,7 +56,7 @@ public class Orden implements Serializable {
         this.tipo = tipo;
     }
 
-    public void setEspecialidad(String especialidad) {
+    public void setEspecialidad(int especialidad) {
         this.especialidad = especialidad;
     }
 
@@ -65,7 +76,7 @@ public class Orden implements Serializable {
     private String observaciones;
 
     @NonNull
-    @ColumnInfo(name = "fecha")
+    @ColumnInfo(name = "fechaVIgencia")
     @TypeConverters(LocalDateConverter.class)
     private LocalDate fechaVigencia;
 
@@ -74,13 +85,13 @@ public class Orden implements Serializable {
     private Boolean vigencia;
 
     @ColumnInfo(name = "especialidad")
-    private String especialidad;
+    private int especialidad;
 
     @ColumnInfo(name = "reclamado")
     private boolean reclamado;
 
 
-    public Orden(int cita, int tipo, @NonNull String observaciones, @NonNull LocalDate fechaVigencia, @NonNull Boolean vigencia, String especialidad, boolean reclamado) {
+    public Orden(int cita, int tipo, @NonNull String observaciones, @NonNull LocalDate fechaVigencia, @NonNull Boolean vigencia, int especialidad, boolean reclamado) {
         this.cita = cita;
         this.tipo = tipo;
         this.observaciones = observaciones;
@@ -117,7 +128,7 @@ public class Orden implements Serializable {
         return vigencia;
     }
 
-    public String getEspecialidad() {
+    public int getEspecialidad() {
         return especialidad;
     }
 

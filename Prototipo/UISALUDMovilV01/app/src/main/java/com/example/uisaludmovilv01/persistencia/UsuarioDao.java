@@ -17,8 +17,8 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface UsuarioDao {
 
-    //@Insert
-
+    @Insert
+    long[] insertarUsuario(Usuario... usuarios);
 
     @Query("SELECT * FROM Usuarios")
     LiveData<List<Usuario>> getUsuarios();
@@ -26,10 +26,13 @@ public interface UsuarioDao {
     @Query("SELECT * FROM Usuarios WHERE id = :id")
     LiveData<Usuario> getUnUsuario(int id);
 
+    @Query("DELETE FROM Usuarios")
+    void dropUsuarios();
 
-    //@Update
+    @Update
+    int updateUsuario(Usuario... usuarios);
 
-
-    //@Delete
+    @Delete
+    int deleteUsuario(Usuario... usuarios);
 
 }

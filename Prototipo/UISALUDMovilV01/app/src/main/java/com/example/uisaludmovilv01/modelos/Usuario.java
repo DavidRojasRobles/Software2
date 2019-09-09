@@ -3,6 +3,7 @@ package com.example.uisaludmovilv01.modelos;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
@@ -27,20 +28,21 @@ import static java.lang.Math.abs;
 
 /**
  * Esta clase gestiona las funciones del usuario de UISALUD.
- *
+ * <p>
  * UISalud Móvil permite a los usuarios de UISALUD gestionar sus citas médicas y
- * consultar sus datos personales.
- *
+ * get sus datos personales.
+ * <p>
  * Esta clase principal inicaliza todas las demás. Inicializa los datos de
  * prueba (por el momento)
- *
+ * <p>
  * NOTA: La vesión actual está incompleta.
  *
  * @author Marianne Solangel Rojas Robles & Fredy Emanuel Mogollón Velandia
  * @version 14 / 07 / 2019
  */
 
-@Entity(tableName = "Usuarios")
+@Entity(tableName = "Usuarios", indices = {@Index(value = {"cedula"},
+        unique = true)})
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Usuario implements Serializable {
 
@@ -50,10 +52,6 @@ public class Usuario implements Serializable {
     @NonNull
     @ColumnInfo(name = "nombre")
     private String nombre;
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     @NonNull
     @ColumnInfo(name = "cedula")
@@ -93,6 +91,11 @@ public class Usuario implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @NonNull
@@ -156,7 +159,7 @@ public class Usuario implements Serializable {
 
     }
 
-    public String imprimirHistoria(){
+    public String imprimirHistoria() {
         String salida = "";
         /*for(int i=0; i<historia.size(); i++){
             salida = salida+historia.get(i)+"\n\n";
@@ -171,7 +174,7 @@ public class Usuario implements Serializable {
     /**
      * Imprime lista de citas pendientes.
      */
-    public void consultarCitas() {
+    public void getCitas() {
         /*if (citas.isEmpty()) {
             System.out.println("El usuario " + nombre + " no tiene citas agendadas\n\n");
         } else {
@@ -184,7 +187,7 @@ public class Usuario implements Serializable {
     /**
      * Imprime lista de ordenes pendientes vigentes.
      */
-    public void consultarOrdenes() {
+    public void getOrdenes() {
         /*if (ordenes.isEmpty()) {
             System.out.println("El usuario " + nombre + " no tiene órdenes pendientes vigentes\n\n");
         } else {
@@ -346,20 +349,20 @@ public class Usuario implements Serializable {
     }*/
 
     /**private String verificarEspecialidad(TreeSet<String> especialidades) {
-        Scanner scan = new Scanner(System.in);
-        String esp;
-        do { // la especialidad existe
-            System.out.println("Elija una especialidad: ");
-            for (String e : especialidades) {
-                System.out.println("- " + e);
-            }
-            esp = scan.nextLine();
-            esp = esp.substring(0, 1).toUpperCase() + esp.substring(1).toLowerCase();
-            // System.out.println(esp);
-        } while (!especialidades.contains(esp));
+     Scanner scan = new Scanner(System.in);
+     String esp;
+     do { // la especialidad existe
+     System.out.println("Elija una especialidad: ");
+     for (String e : especialidades) {
+     System.out.println("- " + e);
+     }
+     esp = scan.nextLine();
+     esp = esp.substring(0, 1).toUpperCase() + esp.substring(1).toLowerCase();
+     // System.out.println(esp);
+     } while (!especialidades.contains(esp));
 
-        return esp;
-    }*/
+     return esp;
+     }*/
 
     /*private Doctor selecDoctor(ArrayList<Doctor> doctores, String esp) {
         Scanner scan = new Scanner(System.in);

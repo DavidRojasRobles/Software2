@@ -163,7 +163,7 @@ public class SingleCitaActivity extends AppCompatActivity {
 
     private void encontrarDoctor(int doctorId) {
         try {
-            repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
+            repositorio.getUnDoctor(doctorId).observe(this, new Observer<Doctor>() {
                 @Override
                 public void onChanged(@Nullable Doctor doctor) {
                     if (doctor != null) {

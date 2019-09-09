@@ -51,27 +51,30 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
 
         repositorio = new ProjectRepositorio(this);
 
-        if (getIntent().hasExtra("selected_usuario")) {
-            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//        if (getIntent().hasExtra("selected_usuario")) {
+//            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//
+//            Log.i(TAG, "onCreate: has extra i.");
+//            Log.i(TAG, "onCreate: " + mUsuario.toString());
+//        }
 
-            Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mUsuario.toString());
-        }
+        mUsuario = NavigationMenu.getmUsuario();
 
-        initRecyclerView();
-        //insertarCitasFalsas();
-        insertarCitas();
+        inicializarCitas();
         for(Procedimiento cita : citas){
             insertarDoctores(cita.getDoctor());
         }
+
+        initRecyclerView();
         setAgendarListener();
 
         setSupportActionBar((Toolbar) findViewById(R.id.citas_toolbar));
         setTitle("Citas");
-
-
     }
 
+    /**
+     * Sets listener para agendar citas
+     */
     public void setAgendarListener() {
         citas_agendar.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -86,52 +89,11 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
             }
         });
     }
-/**
-    private void insertarCitasFalsas() {
-        Usuario user1 = new Usuario();
 
-        Doctor d1 = new Doctor("Dr. One", "101", "General");
-        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
-                false, false, false, false, false, false});
-        d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
-                false, false, false, true, true, false});
-
-        Procedimiento cita1 = new CitaMedica(
-                user1,
-                LocalDate.of(2019, 8, 12),
-                LocalTime.of(8, 0),
-                d1);
-        Procedimiento cita2 = new CitaMedica(
-                user1,
-                LocalDate.of(2019, 8, 15),
-                LocalTime.of(10, 0),
-                d1);
-        Procedimiento cita3 = new CitaMedica(
-                user1,
-                LocalDate.of(2019, 8, 26),
-                LocalTime.of(9, 0),
-                d1);
-        Procedimiento cita4 = new CitaMedica(
-                user1,
-                LocalDate.of(2019, 8, 26),
-                LocalTime.of(8, 0),
-                d1);
-        Procedimiento cita5 = new CitaMedica(
-                user1,
-                LocalDate.of(2019, 8, 29),
-                LocalTime.of(16, 0),
-                d1);
-        citas.add(cita1);
-        citas.add(cita2);
-        citas.add(cita3);
-        citas.add(cita4);
-        citas.add(cita5);
-
-        citasRecyclerAdapter.notifyDataSetChanged();
-    }
-**/
-
-    private void insertarCitas() {
+    /**
+     * Inicializa la lista de citas del usuario para RecyclerView
+     */
+    private void inicializarCitas() {
         Log.i(TAG, "insertarCitas: called i.");
         try {
             Log.i(TAG, "insertarCitas: inside try i.");
@@ -161,10 +123,14 @@ public class ListaCitasActivity extends NavigationMenu implements CitasRecyclerA
         }
     }
 
+    /**
+     * Crea el objeto doctot desde la BD y lo añade a la lista de doctores para RecyclerView
+     * @param doctorId
+     */
     private void insertarDoctores(int doctorId) {
         Log.i(TAG, "insertarDoctores: called i.");
         try {
-            repositorio.encontrarDoctor(doctorId).observe(this, new Observer<Doctor>() {
+            repositorio.getUnDoctor(doctorId).observe(this, new Observer<Doctor>() {
                 @Override
                 public void onChanged(@Nullable Doctor doctor) {
                     if (doctor != null) {

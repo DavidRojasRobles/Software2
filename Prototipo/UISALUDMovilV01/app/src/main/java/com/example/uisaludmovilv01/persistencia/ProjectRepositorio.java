@@ -3,9 +3,15 @@ package com.example.uisaludmovilv01.persistencia;
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
-import android.database.Cursor;
+import android.util.Log;
 
-import com.example.uisaludmovilv01.async.InsertAsyncTask;
+import com.example.uisaludmovilv01.async.InsertAgendaAsyncTask;
+import com.example.uisaludmovilv01.async.InsertDoctorAsyncTask;
+import com.example.uisaludmovilv01.async.InsertEvolucionAsyncTask;
+import com.example.uisaludmovilv01.async.InsertHorarioAsyncTask;
+import com.example.uisaludmovilv01.async.InsertOrdenAsyncTask;
+import com.example.uisaludmovilv01.async.InsertProcedimientoAsyncTask;
+import com.example.uisaludmovilv01.async.InsertUsuarioAsyncTask;
 import com.example.uisaludmovilv01.modelos.Agenda;
 import com.example.uisaludmovilv01.modelos.Doctor;
 import com.example.uisaludmovilv01.modelos.Especialidad;
@@ -15,13 +21,12 @@ import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 
-import org.threeten.bp.LocalDate;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class ProjectRepositorio {
+
+    private static final String TAG = "ProjectRepositorio";
 
     private ProjectDatabase mProjectDatabase;
 
@@ -31,48 +36,28 @@ public class ProjectRepositorio {
 
 
     //USUARIOS
-    public void agregarUsuario(Usuario usuario){}
+    public void insertarUsuarioTask(Usuario usuario) {
+        new InsertUsuarioAsyncTask(mProjectDatabase.getUsuarioDao()).execute(usuario);
+    }
 
-    public void modificarUsuario(Usuario usuario){}
-
-    public void borrarUsuario(Usuario usuario){}
-
-    public LiveData<List<Usuario>> consultarUsuarios(){
+    public LiveData<List<Usuario>> getUsuarios(){
         return mProjectDatabase.getUsuarioDao().getUsuarios();
     }
 
-    public LiveData<Usuario> encontrarUsuario(int id){
-        return mProjectDatabase.getUsuarioDao().getUnUsuario(id);
+    public LiveData<Usuario> getUnUsuario(int userId){
+        return mProjectDatabase.getUsuarioDao().getUnUsuario(userId);
     }
 
-//    public LiveData<List<Horario>> consultarHorario(int idDoctor, LocalDate fecha) {
-//        return mProjectDatabase.getHorarioDao(idDoctor, fecha).consultarHorario(idDoctor, fecha);
-//    }
-//    public LiveData<List<Orden>> consultarOrdenesMedicamento(int idUsuario) {
-//        return mProjectDatabase.consultarOrdenesMedicamentoDao(idUsuario).consultarOrdenesMedicamento(idUsuario);
-//    }
-//    public LiveData<List<Orden>> consultarOrdenesProcedimiento(int idUsuario) {
-//        return mProjectDatabase.consultarOrdenesProcedimientoDao(idUsuario).consultarOrdenesProcedimiento(idUsuario);
-//    }
-//    public LiveData<List<Procedimiento>> consultarProcedimientos(int idUsuario) {
-//        return mProjectDatabase.consultarProcedimientoDao(idUsuario).consultarProcedimientos(idUsuario);
-//    }
-
     //DOCTORES
-    public void agregarDoctor(Doctor doctor){}
+    public void insertarDoctorTask(Doctor doctor) {
+        new InsertDoctorAsyncTask(mProjectDatabase.getDoctorDao()).execute(doctor);
+    }
 
-    public void modificarDoctor(Doctor doctor){}
+    public LiveData<List<Doctor>> getDoctores() {
+        return mProjectDatabase.getDoctorDao().getDoctores();
+    }
 
-    public void borrarDoctor(Doctor doctor){}
-
-//    public LiveData<List<Agenda>> consultarAgenda(int idDoctor, LocalDate fecha){
-//        return mProjectDatabase.consultarAgendaDao(idDoctor, fecha).consultarAgenda(idDoctor, fecha);
-//    }
-//    public LiveData<List<Doctor>> consultarDoctores() {
-//        return mProjectDatabase.consultarDoctoresDao().consultarDoctores();
-//    }
-
-    public LiveData<Doctor> encontrarDoctor(int id) {
+    public LiveData<Doctor> getUnDoctor(int id) {
         return mProjectDatabase.getDoctorDao().getUnDoctor(id);
     }
 
@@ -80,28 +65,15 @@ public class ProjectRepositorio {
         return mProjectDatabase.getDoctorDao().getNombreDoctor(doctorId);
     }
 
-    public LiveData<List<Doctor>> getDoctores() {
-        return mProjectDatabase.getDoctorDao().consultarDoctores();
-    }
-
     public LiveData<List<Doctor>> getDoctoresEsp(String esp) {
         return mProjectDatabase.getDoctorDao().getDoctoresEsp(esp);
     }
 
-    public void agregarCitaMedica(int cita){}
+    //PROCEDIMIENTOS
+    public void insertarProcedimientoTask(Procedimiento procedimiento) {
+        new InsertProcedimientoAsyncTask(mProjectDatabase.getProcedimientoDao()).execute(procedimiento);
+    }
 
-    public void borrarCitaMedica(int cita){}
-
-//    public LiveData<List<Procedimiento>> consultarCitasMedicas(int idUsuario){
-//        return mProjectDatabase.consultarCitasMedicasDao(idUsuario).consultarCitasMedicas(idUsuario);
-//    }
-//
-//    //ESPECIALIDADES
-//    public LiveData<List<Especialidad>> consultarEspecialidades(){
-//        return mProjectDatabase.consultarEspecialidadesDao().consultarEspecialidades();
-//    }
-
-    //Procedimientos
     public LiveData<Procedimiento> getProcedimientoById(int id){
         return mProjectDatabase.getProcedimientoDao().getProcedimientosById(id);
     }
@@ -118,43 +90,36 @@ public class ProjectRepositorio {
         return mProjectDatabase.getProcedimientoDao().getProcedimientos();
     }
 
-    public void insertarProcedimientoTask(Procedimiento procedimiento){
-        new InsertAsyncTask(mProjectDatabase.getProcedimientoDao()).execute(procedimiento);
+    //AGENDAS
+    public void insertarAgendaTask(Agenda agenda) {
+        new InsertAgendaAsyncTask(mProjectDatabase.getAgendaDao()).execute(agenda);
     }
 
+    public LiveData<List<Agenda>> getAgendaByFecha(int doctorId, String fecha){
+        return mProjectDatabase.getAgendaDao().getAgendaByFecha(doctorId, fecha);
+    }
 
     //EVOLUCIONES
-
-    public LiveData<List<Evolucion>> getEvolucionesUsuario(int userId){
-        return mProjectDatabase.getEvolucionDao().getEvolucionesUsuario(userId);
+    public void insertarEvolucionTask(Evolucion evolucion) {
+        new InsertEvolucionAsyncTask(mProjectDatabase.getEvolucionDao()).execute(evolucion);
     }
 
-
     //ORDENES
+    public void insertarOrdenTask(Orden orden) {
+        new InsertOrdenAsyncTask(mProjectDatabase.getOrdenDao()).execute(orden);
+    }
 
     public LiveData<List<Orden>> getOrdenesUsuario(int userId){
         return mProjectDatabase.getOrdenDao().getOrdenesUsuario(userId);
     }
 
     //HORARIO
-
-    public LiveData<List<Horario>> getHorarioDia(int idDoctor, String diaSemana){
-        return mProjectDatabase.getHorarioDao().getHorarioByDia(idDoctor, diaSemana);
+    public void insertarHorarioTask(Horario horario) {
+        new InsertHorarioAsyncTask(mProjectDatabase.getHorarioDao()).execute(horario);
     }
-
-
-
-
-    //AGENDA
-
-    public LiveData<List<Agenda>> getAgendaByDia(int idDoctor, String fecha){
-        return mProjectDatabase.getAgendaDao().getAgendaByDia(idDoctor, fecha);
-    }
-
 
 
     //ESPECIALIDADES
-
     public LiveData<List<Especialidad>> getEspecialidades(){
         return mProjectDatabase.getEspecialidadDao().getEspecialidades();
     }

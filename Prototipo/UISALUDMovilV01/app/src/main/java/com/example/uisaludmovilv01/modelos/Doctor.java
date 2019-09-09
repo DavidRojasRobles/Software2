@@ -2,6 +2,8 @@ package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
@@ -40,7 +42,11 @@ import java.util.Scanner;
  * @version 14 / 07 / 2019
  */
 
-@Entity(tableName = "Doctores")
+@Entity(tableName = "Doctores",
+        indices = {@Index(value = {"cedula"}, unique = true)},
+        foreignKeys = @ForeignKey(entity = Especialidad.class,
+                parentColumns = "id", childColumns = "especialidad"))
+
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Doctor implements Serializable {
 
@@ -52,12 +58,16 @@ public class Doctor implements Serializable {
     private String nombre;
 
     @NonNull
+    @ColumnInfo(name = "cedula")
+    private String cedula;
+
+    @NonNull
     @ColumnInfo(name = "consultorio")
     private String consultorio;
 
     @NonNull
     @ColumnInfo(name = "especialidad")
-    private String especialidad;
+    private int esp_id;
 
     //private HashMap<String, boolean[]> horario = new HashMap<>();
     //private ArrayList<Procedimiento> citas = new ArrayList<>();
@@ -67,10 +77,11 @@ public class Doctor implements Serializable {
     /**
      * Constructor para los objetos de la clase Doctor.
      */
-    public Doctor(String nombre, String consultorio, String especialidad) {
+    public Doctor(@NonNull String nombre, @NonNull String cedula, @NonNull String consultorio, int esp_id) {
         this.nombre = nombre;
+        this.cedula = cedula;
         this.consultorio = consultorio;
-        this.especialidad = especialidad;
+        this.esp_id = esp_id;
     }
 
     public int getId() {
@@ -91,6 +102,15 @@ public class Doctor implements Serializable {
     }
 
     @NonNull
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(@NonNull String cedula) {
+        this.cedula = cedula;
+    }
+
+    @NonNull
     public String getConsultorio() {
         return consultorio;
     }
@@ -99,13 +119,12 @@ public class Doctor implements Serializable {
         this.consultorio = consultorio;
     }
 
-    @NonNull
-    public String getEspecialidad() {
-        return especialidad;
+    public int getEsp_id() {
+        return esp_id;
     }
 
-    public void setEspecialidad(@NonNull String especialidad) {
-        this.especialidad = especialidad;
+    public void setEsp_id(int esp_id) {
+        this.esp_id = esp_id;
     }
 
     /**
@@ -216,7 +235,7 @@ public class Doctor implements Serializable {
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha.
      *
-     * @param fecha en la que se desea consultar la disponibilidad.
+     * @param fecha en la que se desea get la disponibilidad.
      *
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.
@@ -229,7 +248,7 @@ public class Doctor implements Serializable {
     /**
      * Devuelve los horarios disponibles de un médico en cierta fecha como Str.
      *
-     * @param fecha en la que se desea consultar la disponibilidad como String.
+     * @param fecha en la que se desea get la disponibilidad como String.
      *
      * @return arreglo con el horario de atención del doctor esa fecha. Dirá
      * true si está disponible.

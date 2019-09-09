@@ -10,6 +10,7 @@ import android.arch.persistence.room.Update;
 
 import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
+import com.example.uisaludmovilv01.modelos.Usuario;
 
 import java.util.List;
 
@@ -17,20 +18,22 @@ import java.util.List;
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public interface OrdenDao {
 
-    //@Insert
+    @Insert
+    void insertarOrden(Orden... ordenes);
 
     @Query("SELECT * FROM Ordenes WHERE id = :idUsuario")
     LiveData<List<Orden>> getOrdenesUsuario(int idUsuario);
 
     @Query("SELECT * FROM Ordenes WHERE id = :idUsuario and tipo = 0")
-    LiveData<List<Orden>> consultarOrdenesMedicamento(int idUsuario);
+    LiveData<List<Orden>> getOrdenesMedicamento(int idUsuario);
 
     @Query("SELECT * FROM Ordenes WHERE id = :idUsuario and tipo = 1")
-    LiveData<List<Orden>> consultarOrdenesProcedimiento(int idUsuario);
+    LiveData<List<Orden>> getOrdenesProcedimiento(int idUsuario);
 
+    @Update
+    int updateOrden(Orden... ordenes);
 
-    //@Update
+    @Delete
+    int deleteOrden(Orden... ordenes);
 
-
-    //@Delete
 }
