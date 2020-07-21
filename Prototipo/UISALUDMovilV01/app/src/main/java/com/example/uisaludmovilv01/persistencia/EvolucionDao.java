@@ -20,8 +20,8 @@ public interface EvolucionDao {
     @Insert
     void insertarEvolucion(Evolucion... evoluciones);
 
-//    @Query("SELECT * FROM Evoluciones WHERE usuario = :userId")
-//    LiveData<List<Evolucion>> getEvolucionesUsuario(int userId);
+    @Query("SELECT * FROM Evoluciones WHERE proc_usuario = :userId")
+    LiveData<List<Evolucion>> getEvolucionesUsuario(int userId);
 
     @Update
     int updateEvolucion(Evolucion... evoluciones);

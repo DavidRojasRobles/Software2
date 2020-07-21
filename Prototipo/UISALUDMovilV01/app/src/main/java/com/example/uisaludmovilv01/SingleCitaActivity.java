@@ -151,7 +151,7 @@ public class SingleCitaActivity extends AppCompatActivity {
         }
 
         single_elem_title.setText(title);
-        single_elem_subtitle.setText(mDoctor.getEspecialidad());
+        single_elem_subtitle.setText(mDoctor.getEspecialidad().getEspNombre());
         single_cita_fecha.setText(mCita.getFecha().toString());
         single_cita_hora.setText(mCita.getHora().toString());
         single_cita_doctor.setText(mDoctor.getNombre());

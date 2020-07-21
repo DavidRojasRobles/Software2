@@ -53,11 +53,11 @@ public class Procedimiento implements Serializable {
     private int tipo; // 0 si es cita medica general; 1 si es cita especializada y 2 si es procedimiento (Examen médico)
 
     @NonNull
-    @ColumnInfo(name = "usuario")
+    @ColumnInfo(name = "usuario", index = true)
     private int usuario;
 
     @NonNull
-    @ColumnInfo(name = "doctor")
+    @ColumnInfo(name = "doctor", index = true)
     private int doctor;
 
     @ColumnInfo(name = "orden")

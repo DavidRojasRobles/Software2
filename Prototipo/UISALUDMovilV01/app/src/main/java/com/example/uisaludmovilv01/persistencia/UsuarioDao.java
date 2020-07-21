@@ -20,6 +20,30 @@ public interface UsuarioDao {
     @Insert
     long[] insertarUsuario(Usuario... usuarios);
 
+    @Query("DELETE FROM Agenda")
+    void deleteAgenda();
+
+    @Query("DELETE FROM Doctores")
+    void deleteDoctor();
+
+    @Query("DELETE FROM Especialidades")
+    void deleteEspecialidad();
+
+    @Query("DELETE FROM Evoluciones")
+    void deleteEvoluciones();
+
+    @Query("DELETE FROM Horarios")
+    void deleteHorarios();
+
+    @Query("DELETE FROM Ordenes")
+    void deleteOrdenes();
+
+    @Query("DELETE FROM Procedimientos")
+    void deleteProcedimientos();
+
+    @Query("DELETE FROM Usuarios")
+    void deleteUsuarios();
+
     @Query("SELECT * FROM Usuarios")
     LiveData<List<Usuario>> getUsuarios();
 

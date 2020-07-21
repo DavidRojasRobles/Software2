@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.uisaludmovilv01.modelos.Especialidad;
 import com.example.uisaludmovilv01.modelos.Orden;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
@@ -37,6 +38,7 @@ public class SingleOrdenActivity extends AppCompatActivity {
     private Procedimiento mCita;
     private ProjectRepositorio repositorio;
     private String nombreDoctor;
+    private String espNombre;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,7 +96,8 @@ public class SingleOrdenActivity extends AppCompatActivity {
 
         if (orden.getTipo() == 1) {
             title = "Remisión: ";
-            x = (orden).getEspecialidad();
+            getEspecialidadOrden(orden);
+            x = espNombre;
             single_orden_esp.setVisibility(View.VISIBLE);
             if (orden.getVigencia()) {
                 so_bottom.setVisibility(View.VISIBLE);
@@ -141,7 +144,24 @@ public class SingleOrdenActivity extends AppCompatActivity {
                         nombreDoctor = s;
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
+            Log.i(TAG, "getNombreDoctor: " + e.toString());
+        }
+    }
+
+    private void getEspecialidadOrden(Orden orden) {
+
+        try {
+            repositorio.getEspecialidadById(orden.getEspecialidad()).observe(this, new Observer<Especialidad>() {
+                    @Override
+                    public void onChanged(@Nullable Especialidad especialidad) {
+                        if(!especialidad.equals(null)){
+                            espNombre = especialidad.getEspNombre();
+                        }
+                    }
+                }
+            );
+        } catch (Exception e) {
             Log.i(TAG, "getNombreDoctor: " + e.toString());
         }
     }

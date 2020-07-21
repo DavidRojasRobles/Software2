@@ -1,6 +1,7 @@
 package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
@@ -43,9 +44,10 @@ import java.util.Scanner;
  */
 
 @Entity(tableName = "Doctores",
-        indices = {@Index(value = {"cedula"}, unique = true)},
-        foreignKeys = @ForeignKey(entity = Especialidad.class,
-                parentColumns = "id", childColumns = "especialidad"))
+        indices = {@Index(value = {"cedula"}, unique = true)}
+//        ,foreignKeys = @ForeignKey(entity = Especialidad.class,
+//                parentColumns = "id", childColumns = "especialidad")
+)
 
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Doctor implements Serializable {
@@ -66,8 +68,9 @@ public class Doctor implements Serializable {
     private String consultorio;
 
     @NonNull
-    @ColumnInfo(name = "especialidad")
-    private int esp_id;
+    @Embedded(prefix = "esp_")
+//    @ColumnInfo(name = "especialidad")
+    private Especialidad especialidad;
 
     //private HashMap<String, boolean[]> horario = new HashMap<>();
     //private ArrayList<Procedimiento> citas = new ArrayList<>();
@@ -77,11 +80,11 @@ public class Doctor implements Serializable {
     /**
      * Constructor para los objetos de la clase Doctor.
      */
-    public Doctor(@NonNull String nombre, @NonNull String cedula, @NonNull String consultorio, int esp_id) {
+    public Doctor(@NonNull String nombre, @NonNull String cedula, @NonNull String consultorio, @NonNull Especialidad especialidad) {
         this.nombre = nombre;
         this.cedula = cedula;
         this.consultorio = consultorio;
-        this.esp_id = esp_id;
+        this.especialidad = especialidad;
     }
 
     public int getId() {
@@ -119,12 +122,13 @@ public class Doctor implements Serializable {
         this.consultorio = consultorio;
     }
 
-    public int getEsp_id() {
-        return esp_id;
+    @NonNull
+    public Especialidad getEspecialidad() {
+        return especialidad;
     }
 
-    public void setEsp_id(int esp_id) {
-        this.esp_id = esp_id;
+    public void setEspecialidad(@NonNull Especialidad especialidad) {
+        this.especialidad = especialidad;
     }
 
     /**

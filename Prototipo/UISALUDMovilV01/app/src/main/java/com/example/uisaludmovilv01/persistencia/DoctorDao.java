@@ -26,7 +26,7 @@ public interface DoctorDao {
     @Query("SELECT * FROM Doctores WHERE id = :id")
     LiveData<Doctor> getUnDoctor(int id);
 
-    @Query("SELECT * FROM Doctores WHERE especialidad = :esp")
+    @Query("SELECT * FROM Doctores WHERE esp_nombre = :esp")
     LiveData<List<Doctor>> getDoctoresEsp(String esp);
 
     @Query("SELECT nombre FROM Doctores WHERE id = :id")

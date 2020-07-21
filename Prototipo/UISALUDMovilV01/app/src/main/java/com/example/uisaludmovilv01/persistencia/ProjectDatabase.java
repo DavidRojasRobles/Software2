@@ -15,7 +15,8 @@ import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 
 
-@Database(entities = {Agenda.class, Doctor.class, Especialidad.class, Evolucion.class, Horario.class, Orden.class, Procedimiento.class, Usuario.class}, version = 1)
+@Database(entities = {Agenda.class, Doctor.class, Especialidad.class, Evolucion.class, Horario.class, Orden.class, Procedimiento.class, Usuario.class},
+        version = 2)
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public abstract class ProjectDatabase extends RoomDatabase {
 

@@ -32,7 +32,7 @@ public class Agenda implements Serializable {
     private int id;
 
     @NonNull
-    @ColumnInfo(name = "doctor")
+    @ColumnInfo(name = "doctor", index = true)
     private int doctor;
 
     @NonNull

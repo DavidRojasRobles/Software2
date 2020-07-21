@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.example.uisaludmovilv01.async.InsertAgendaAsyncTask;
 import com.example.uisaludmovilv01.async.InsertDoctorAsyncTask;
+import com.example.uisaludmovilv01.async.InsertEspecialidadAsyncTask;
 import com.example.uisaludmovilv01.async.InsertEvolucionAsyncTask;
 import com.example.uisaludmovilv01.async.InsertHorarioAsyncTask;
 import com.example.uisaludmovilv01.async.InsertOrdenAsyncTask;
@@ -34,6 +35,9 @@ public class ProjectRepositorio {
         mProjectDatabase = ProjectDatabase.getInstance(contexto);
     }
 
+    //MISC
+
+
 
     //USUARIOS
     public void insertarUsuarioTask(Usuario usuario) {
@@ -41,6 +45,7 @@ public class ProjectRepositorio {
     }
 
     public LiveData<List<Usuario>> getUsuarios(){
+        Log.i(TAG, "getUsuarios: called from ProjectRepositorio.");
         return mProjectDatabase.getUsuarioDao().getUsuarios();
     }
 
@@ -104,6 +109,12 @@ public class ProjectRepositorio {
         new InsertEvolucionAsyncTask(mProjectDatabase.getEvolucionDao()).execute(evolucion);
     }
 
+    public LiveData<List<Evolucion>> getEvolucionesUsuario(int userId){
+        return mProjectDatabase.getEvolucionDao().getEvolucionesUsuario(userId);
+    }
+
+
+
     //ORDENES
     public void insertarOrdenTask(Orden orden) {
         new InsertOrdenAsyncTask(mProjectDatabase.getOrdenDao()).execute(orden);
@@ -118,8 +129,16 @@ public class ProjectRepositorio {
         new InsertHorarioAsyncTask(mProjectDatabase.getHorarioDao()).execute(horario);
     }
 
+    public LiveData<List<Horario>> getHorarioByDia(int idDoctor, String diaSemana){
+        return mProjectDatabase.getHorarioDao().getHorarioByDia(idDoctor, diaSemana);
+    }
+
 
     //ESPECIALIDADES
+    public void insertarEspecialidadTask(Especialidad especialidad) {
+        new InsertEspecialidadAsyncTask(mProjectDatabase.getEspecialidadDao()).execute(especialidad);
+    }
+
     public LiveData<List<Especialidad>> getEspecialidades(){
         return mProjectDatabase.getEspecialidadDao().getEspecialidades();
     }

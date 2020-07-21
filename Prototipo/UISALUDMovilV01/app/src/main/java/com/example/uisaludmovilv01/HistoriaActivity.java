@@ -97,8 +97,8 @@ public class HistoriaActivity extends AppCompatActivity {
                 }
 
                 for(Evolucion ev : historia){
-                    getNombreDoctor(ev.getDoctor());
-                    ev.setNombreDoctor(nombreDoctor);
+                    getNombreDoctor(ev.getPrcedimiento().getDoctor());
+//                    ev.setNombreDoctor(nombreDoctor);
                 }
 
             }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.uisaludmovilv01.modelos.Doctor;
+import com.example.uisaludmovilv01.modelos.Especialidad;
 import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
@@ -40,6 +41,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
     //vars
     private Usuario mUsuario;
     private Doctor mDoctor;
+    private Especialidad mEspecialidad;
     private ArrayList<Procedimiento> a = new ArrayList<>();
     private ProjectRepositorio repositorio;
 
@@ -69,9 +71,9 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         setTitle("UISALUD Movil");
 
         setBaseUsuarios();
-        setBaseDoctores();
-        setButtonListeners();
-        setMenuProperties();
+//        setBaseDoctores();
+//        setButtonListeners();
+//        setMenuProperties();
 
     }
 
@@ -91,6 +93,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
         Log.i(TAG, "setBaseUsuarios: called i.");
 
         repositorio.getUsuarios().observe(this, new Observer<List<Usuario>>() {
+
             @Override
             public void onChanged(@Nullable List<Usuario> usuarios) {
                 if( usuarios.size() < 3){
@@ -115,7 +118,7 @@ public class MenuUsuariosActivity extends AppCompatActivity {
      * Inicializa doctores en la base de datos si no existen.
      */
     private void setBaseDoctores(){
-        Log.i(TAG, "setBaseUsuarios: called i.");
+        Log.i(TAG, "setBaseDoctores: called i.");
 
         repositorio.getDoctores().observe(this, new Observer<List<Doctor>>() {
             @Override
@@ -125,8 +128,9 @@ public class MenuUsuariosActivity extends AppCompatActivity {
                     Doctor doctor;
                     for (int i = 1; i <= 2; i++){
                         Log.i(TAG, "onChanged: se anadirá el doctor " + i);
+                        getEspecialidad(i);
                         doctor = new Doctor("Doctor" + i,
-                                "0" + i, "0" + i, i);
+                                "0" + i, "0" + i, mEspecialidad);
 
                         repositorio.insertarDoctorTask(doctor);
                     }
@@ -221,6 +225,28 @@ public class MenuUsuariosActivity extends AppCompatActivity {
             Log.i(TAG, "checkDB: exception caught. " + e.toString());
         }
         Log.i(TAG, "checkDB: after a.size() = " + a.size());
+    }
+
+    /**
+     * Encuentra una especialidad por id
+     */
+    private void getEspecialidad(int id){
+        Log.i(TAG, "getEspecialidad: called i.");
+        repositorio.getEspecialidadById(id).observe(this, new Observer<Especialidad>() {
+            @Override
+            public void onChanged(@Nullable Especialidad especialidad) {
+                if(!especialidad.equals(null)) {
+                    mEspecialidad = especialidad;
+                }else{
+                    Log.i(TAG, "onChanged: No existe la especialidad i.");
+                }
+            }
+        });
+    }
+
+    private void setEspecialidades(){
+        Log.i(TAG, "setEspecialidades: called i.");
+
     }
 
     /**

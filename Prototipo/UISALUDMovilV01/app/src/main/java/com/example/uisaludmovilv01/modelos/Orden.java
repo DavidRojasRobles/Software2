@@ -64,7 +64,7 @@ public class Orden implements Serializable {
     private int id;
 
     @NonNull
-    @ColumnInfo(name = "cita")
+    @ColumnInfo(name = "cita", index = true)
     private int cita;
 
     @NonNull
@@ -84,7 +84,7 @@ public class Orden implements Serializable {
     @ColumnInfo(name = "vigencia")
     private Boolean vigencia;
 
-    @ColumnInfo(name = "especialidad")
+    @ColumnInfo(name = "especialidad", index = true)
     private int especialidad;
 
     @ColumnInfo(name = "reclamado")

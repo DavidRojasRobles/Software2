@@ -30,7 +30,7 @@ public class PerfilActivity extends AppCompatActivity {
 
     //vars
     private Usuario mUsuario;
-    //private ProjectRepositorio repositorio;
+    private ProjectRepositorio repositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +44,22 @@ public class PerfilActivity extends AppCompatActivity {
         perfil_direccion = findViewById(R.id.perfil_direccion);
         perfil_historia = findViewById(R.id.perfil_historia);
 
-        //repositorio = new ProjectRepositorio(this);
+        repositorio = new ProjectRepositorio(this);
 
-        Log.i(TAG, "onCreate: called i.");
-        if (getIntent().hasExtra("selected_usuario")) {
-            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//        Log.i(TAG, "onCreate: called i.");
+//        if (getIntent().hasExtra("selected_usuario")) {
+//            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//
+//            Log.i(TAG, "onCreate: has extra i.");
+//            Log.i(TAG, "onCreate: " + mUsuario.getNombre());
+//        }else{
+//            Log.i(TAG, "onCreate: no se recibió el usuario.");
+//            finish();
+//        }
 
-            Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mUsuario.getNombre());
-        }else{
-            Log.i(TAG, "onCreate: no se recibió el usuario.");
-            finish();
-        }
+        mUsuario = NavigationMenu.getmUsuario();
 
         setPerfilListeners();
-
         setPerfilProperties();
     }
 

@@ -23,10 +23,10 @@ public class Especialidad implements Serializable {
 
     @NonNull
     @ColumnInfo(name = "nombre")
-    private String nombre;
+    private String espNombre;
 
-    public Especialidad(@NonNull String nombre) {
-        this.nombre = nombre;
+    public Especialidad(@NonNull String espNombre) {
+        this.espNombre = espNombre;
     }
 
     public int getId() {
@@ -38,11 +38,11 @@ public class Especialidad implements Serializable {
     }
 
     @NonNull
-    public String getNombre() {
-        return nombre;
+    public String getEspNombre() {
+        return espNombre;
     }
 
-    public void setNombre(@NonNull String nombre) {
-        this.nombre = nombre;
+    public void setEspNombre(@NonNull String espNombre) {
+        this.espNombre = espNombre;
     }
 }

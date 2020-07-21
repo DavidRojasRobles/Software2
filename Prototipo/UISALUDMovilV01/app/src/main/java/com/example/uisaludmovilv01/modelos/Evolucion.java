@@ -1,6 +1,7 @@
 package com.example.uisaludmovilv01.modelos;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
@@ -15,12 +16,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity(tableName = "Evoluciones",
-        foreignKeys = @ForeignKey(
-                entity = Procedimiento.class,
-                parentColumns = "id",
-                childColumns = "procedimiento"
-        ))
+@Entity(tableName = "Evoluciones"
+//        ,foreignKeys = @ForeignKey(
+//                entity = Procedimiento.class,
+//                parentColumns = "id",
+//                childColumns = "procedimiento")
+        )
 @TypeConverters({LocalDateConverter.class, LocalTimeConverter.class})
 public class Evolucion implements Serializable {
 
@@ -28,14 +29,14 @@ public class Evolucion implements Serializable {
     private int id;
 
     @NonNull
-    @ColumnInfo(name = "procedimiento")
-    private int prcedimiento;
+    @Embedded(prefix = "proc_")
+    private Procedimiento prcedimiento;
 
     @NonNull
     @ColumnInfo(name = "evolucion")
     private String evolucion;
 
-    public Evolucion(int prcedimiento, @NonNull String evolucion) {
+    public Evolucion(Procedimiento prcedimiento, @NonNull String evolucion) {
         this.prcedimiento = prcedimiento;
         this.evolucion = evolucion;
     }
@@ -48,11 +49,11 @@ public class Evolucion implements Serializable {
         this.id = id;
     }
 
-    public int getPrcedimiento() {
+    public Procedimiento getPrcedimiento() {
         return prcedimiento;
     }
 
-    public void setPrcedimiento(int prcedimiento) {
+    public void setPrcedimiento(Procedimiento prcedimiento) {
         this.prcedimiento = prcedimiento;
     }
 

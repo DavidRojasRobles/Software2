@@ -67,15 +67,15 @@ public class AtenderCitaActivity extends AppCompatActivity {
 //    private void setListeners() {
 //
 //        ac_back.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.N)
-//            @Override
-//            public void onClick(View view) {
-//                Log.i(TAG, "onClick: ac_back clicked i.");
-//
-//                finish();
-//
-//            }
-//        });
+////            @RequiresApi(api = Build.VERSION_CODES.N)
+////            @Override
+////            public void onClick(View view) {
+////                Log.i(TAG, "onClick: ac_back clicked i.");
+////
+////                finish();
+////
+////            }
+////        });
 //
 //        ac_guardar.setOnClickListener(new View.OnClickListener() {
 //            @Override

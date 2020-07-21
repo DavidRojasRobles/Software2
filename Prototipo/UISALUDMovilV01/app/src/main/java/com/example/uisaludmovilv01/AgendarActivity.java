@@ -32,9 +32,9 @@ import com.example.uisaludmovilv01.modelos.Procedimiento;
 import com.example.uisaludmovilv01.modelos.Usuario;
 import com.example.uisaludmovilv01.persistencia.ProjectRepositorio;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -74,10 +74,10 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     //Variables
 
     private Usuario mUsuario;
-    private String especialidad;
-    private Doctor doctor;
-    private LocalDate fecha;
-    private LocalTime hora;
+    private Doctor mDoctor;
+    private String mEspecialidad;
+    private LocalDate mFecha;
+    private LocalTime mHora;
     private boolean horarioDia;
     private boolean agendaDia;
 
@@ -87,11 +87,11 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
         setContentView(R.layout.activity_agendar);
 
-        repositorio = new ProjectRepositorio(this);
-
         prompt = new Dialog(this);
         prompt.setContentView(R.layout.layout_dialog);
         prompt.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        repositorio = new ProjectRepositorio(this);
 
         ag_title = findViewById(R.id.single_elem_title);
         ag_subtitle = findViewById(R.id.single_elem_subtitle);
@@ -114,13 +114,14 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         //initializeFakeData();
         Log.i(TAG, "onCreate: Se llenaron los doctores i.");
 
-        if (getIntent().hasExtra("selected_usuario")) {
-            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//        if (getIntent().hasExtra("selected_usuario")) {
+//            mUsuario = (Usuario) getIntent().getSerializableExtra("selected_usuario");
+//
+//            Log.i(TAG, "onCreate: has extra i.");
+//            Log.i(TAG, "onCreate: " + mUsuario.toString());
+//        }
 
-
-            Log.i(TAG, "onCreate: has extra i.");
-            Log.i(TAG, "onCreate: " + mUsuario.toString());
-        }
+        mUsuario = NavigationMenu.getmUsuario();
 
         populateEsp();
         setListeners();
@@ -135,7 +136,6 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     public void setListeners() {
 
         ag_back.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick: ag_back clicked i.");
@@ -151,11 +151,11 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                 Log.i(TAG, "onItemSelected: Selected from ag_esp. Position " + position + " i.");
 
-                especialidad = ag_esp.getSelectedItem().toString();
+                mEspecialidad = ag_esp.getSelectedItem().toString();
 
-                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + especialidad + " i.");
+                Log.i(TAG, "onItemSelected: Especialidad seleccionada " + mEspecialidad + " i.");
 
-                populateDoctores(especialidad);
+                populateDoctores(mEspecialidad);
 
                 Log.i(TAG, "onItemSelected: Doctores populates i.");
                 Log.i(TAG, "onItemSelected: ag_doctor.size() = " + ag_doctor.getCount() + " i.");
@@ -172,9 +172,9 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                doctor = findDoctor(ag_doctor.getSelectedItem().toString());
+                mDoctor = findDoctor(ag_doctor.getSelectedItem().toString());
 
-                Log.i(TAG, "onItemSelected: Doctor seleccionado " + doctor.getNombre() + " i.");
+                Log.i(TAG, "onItemSelected: Doctor seleccionado " + mDoctor.getNombre() + " i.");
 
             }
 
@@ -190,7 +190,9 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
             public void onClick(View view) {
                 Log.i(TAG, "onClick: ag_fecha clicked i.");
 
-                fecha = LocalDate.now();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mFecha = LocalDate.now();
+                }
                 datePickerDialog = new DatePickerDialog(AgendarActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -199,18 +201,18 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                                 //colocar restricciones
 
-                                fecha = LocalDate.of(year, month, day);
-                                setmHorarios(fecha);
-                                setmAgendas(fecha);
+                                mFecha = LocalDate.of(year, month, day);
+                                setmHorarios(mFecha);
+                                setmAgendas(mFecha);
 
                                 if (horarioDia || agendaDia) {
                                     populateHoras();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "El doctor no trabaja los "
-                                            + fecha.getDayOfWeek().toString(), Toast.LENGTH_LONG).show();
+                                            + mFecha.getDayOfWeek().toString(), Toast.LENGTH_LONG).show();
                                 }
                             }
-                        }, fecha.getYear(), fecha.getMonthValue(), fecha.getDayOfMonth());
+                        }, mFecha.getYear(), mFecha.getMonthValue(), mFecha.getDayOfMonth());
                 datePickerDialog.show();
             }
         });
@@ -221,9 +223,9 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
                 Log.i(TAG, "onItemSelected: Selected from ag_hora. Position " + position + " i.");
 
-                hora = LocalTime.parse(ag_hora.getSelectedItem().toString());
+                mHora = LocalTime.parse(ag_hora.getSelectedItem().toString());
 
-                Log.i(TAG, "onItemSelected: hora seleccionada " + hora + " i.");
+                Log.i(TAG, "onItemSelected: hora seleccionada " + mHora + " i.");
 
             }
 
@@ -249,16 +251,16 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     private void setPromptDialog() {
 
-        Procedimiento cita = new Procedimiento(0, mUsuario.getId(), doctor.getId(),
-                0, fecha, hora, especialidad);
+        Procedimiento cita = new Procedimiento(0, mUsuario.getId(), mDoctor.getId(),
+                mFecha, mHora);
 
         pd_title.setText("¿AGENDAR ESTA CITA?");
 
-        String datos = "Especialidad: " + doctor.getEspecialidad() + "\n"
-                + "Fecha: " + fecha + "\n"
-                + "Hora: " + hora + "\n"
-                + "Consultorio: " + doctor.getConsultorio() + "\n"
-                + "Doctor: " + doctor.getNombre() + "\n\n";
+        String datos = "Especialidad: " + mDoctor.getEspecialidad() + "\n"
+                + "Fecha: " + mFecha + "\n"
+                + "Hora: " + mHora + "\n"
+                + "Consultorio: " + mDoctor.getConsultorio() + "\n"
+                + "Doctor: " + mDoctor.getNombre() + "\n\n";
 
         pd_content.setText(datos);
 
@@ -320,7 +322,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
         if (nombreEsp.size() > 0)
             nombreEsp.clear();
         for (Especialidad esp : especialidades) {
-            nombreEsp.add(esp.getNombre());
+            nombreEsp.add(esp.getEspNombre());
         }
     }
 
@@ -368,63 +370,63 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private void initializeFakeData() {
-
-        Log.i(TAG, "llenarArrayDoctores: called i.");
-
-        mUsuario = new Usuario();
-
-        Doctor d1 = new Doctor("Dr. One", "101", "General");
-        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
-                false, false, false, false, false, false});
-        d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
-                false, false, false, true, true, false});
-
-
-        doctores.add(d1);
-
-        Doctor d2 = new Doctor("Dr. Two", "102", "Cardiologia");
-        d2.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        d2.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
-                false, false, false, false, false, false});
-        doctores.add(d2);
-
-        Doctor d3 = new Doctor("Dr. Three", "103", "Odontologia");
-        d3.anadirDia("MONDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        d3.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
-                false, false, false, false, false, false});
-        d3.anadirDia("FRIDAY", new boolean[]{true, true, true, true, true,
-                false, false, false, false, false, false});
-        doctores.add(d3);
-
-        Doctor d4 = new Doctor("Dr. Four", "104", "Ginecologia");
-        d4.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        d4.anadirDia("THURSDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        doctores.add(d4);
-
-        Doctor d5 = new Doctor("Dr. Five", "104", "General");
-        d5.anadirDia("WEDNESDAY", new boolean[]{true, true, true, false, false,
-                false, false, false, true, true, false});
-        d5.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
-                false, false, false, true, true, false});
-        doctores.add(d5);
-
-        Doctor d6 = new Doctor("Dr. Six", "104", "Ginecologia");
-        d6.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        d6.anadirDia("THURSDAY", new boolean[]{false, false, false, false, false,
-                false, true, true, true, true, true});
-        doctores.add(d6);
-
-        for (int i = 0; i < doctores.size(); i++) {
-            treeEspecialidades.add(doctores.get(i).getEspecialidad());
-        }
-
-    }
+//    private void initializeFakeData() {
+//
+//        Log.i(TAG, "llenarArrayDoctores: called i.");
+//
+//        mUsuario = new Usuario();
+//
+//        Doctor d1 = new Doctor("Dr. One", "101", "General");
+//        d1.anadirDia("MONDAY", new boolean[]{true, true, false, false, false,
+//                false, false, false, false, false, false});
+//        d1.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
+//                false, false, false, true, true, false});
+//
+//
+//        doctores.add(d1);
+//
+//        Doctor d2 = new Doctor("Dr. Two", "102", "Cardiologia");
+//        d2.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        d2.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
+//                false, false, false, false, false, false});
+//        doctores.add(d2);
+//
+//        Doctor d3 = new Doctor("Dr. Three", "103", "Odontologia");
+//        d3.anadirDia("MONDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        d3.anadirDia("WEDNESDAY", new boolean[]{true, true, true, true, true,
+//                false, false, false, false, false, false});
+//        d3.anadirDia("FRIDAY", new boolean[]{true, true, true, true, true,
+//                false, false, false, false, false, false});
+//        doctores.add(d3);
+//
+//        Doctor d4 = new Doctor("Dr. Four", "104", "Ginecologia");
+//        d4.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        d4.anadirDia("THURSDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        doctores.add(d4);
+//
+//        Doctor d5 = new Doctor("Dr. Five", "104", "General");
+//        d5.anadirDia("WEDNESDAY", new boolean[]{true, true, true, false, false,
+//                false, false, false, true, true, false});
+//        d5.anadirDia("THURSDAY", new boolean[]{true, true, true, false, false,
+//                false, false, false, true, true, false});
+//        doctores.add(d5);
+//
+//        Doctor d6 = new Doctor("Dr. Six", "104", "Ginecologia");
+//        d6.anadirDia("TUESDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        d6.anadirDia("THURSDAY", new boolean[]{false, false, false, false, false,
+//                false, true, true, true, true, true});
+//        doctores.add(d6);
+//
+//        for (int i = 0; i < doctores.size(); i++) {
+//            treeEspecialidades.add(doctores.get(i).getEspecialidad());
+//        }
+//
+//    }
 
     private ArrayList<Doctor> filtrarEsp(String esp) {
 
@@ -480,7 +482,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
     private void setmHorarios(LocalDate fecha) {
 
         try {
-            repositorio.getHorarioDia(doctor.getId(), fecha.toString()).observe(this, new Observer<List<Horario>>() {
+            repositorio.getHorarioByDia(mDoctor.getId(), fecha.toString()).observe(this, new Observer<List<Horario>>() {
                 @Override
                 public void onChanged(@Nullable List<Horario> horarios) {
                     if (mHorarios.size() > 0) {
@@ -507,7 +509,7 @@ public class AgendarActivity extends AppCompatActivity implements AdapterView.On
 
 
         try {
-            repositorio.getAgendaByDia(doctor.getId(), fecha.toString()).observe(this, new Observer<List<Agenda>>() {
+            repositorio.getAgendaByFecha(mDoctor.getId(), fecha.toString()).observe(this, new Observer<List<Agenda>>() {
                 @Override
                 public void onChanged(@Nullable List<Agenda> agendas) {
 
